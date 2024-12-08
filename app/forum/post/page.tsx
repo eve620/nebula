@@ -19,7 +19,7 @@ export default function CreateEditPost() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const action = searchParams.get('action')
-  const id =const id = searchParams.get('id')
+  const id = searchParams.get('id')
   const [post, setPost] = useState<Post>({ id: 0, title: '', content: '', author: '当前用户', date: '' })
 
   useEffect(() => {

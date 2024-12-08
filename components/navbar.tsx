@@ -14,6 +14,10 @@ const navItems = [
     {name: '世界', href: '/world'},
     {name: '新闻', href: '/news'},
     {name: '论坛', href: '/forum'},
+    {name: '项目', href: '/project'},
+    {name: '笔记', href: '/note'},
+    {name: '英语', href: '/english'},
+    {name: '看板', href: '/kanban'},
 ]
 
 interface User {
@@ -79,7 +83,7 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
     }
 
     return (
-        <nav className="bg-white dark:bg-slate-800 text-foreground sticky top-0 z-50 shadow-md dark:shadow-slate-700">
+        <nav className="bg-white dark:bg-slate-900 text-foreground sticky top-0 z-50 shadow-md dark:shadow-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">

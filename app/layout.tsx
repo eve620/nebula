@@ -2,6 +2,7 @@ import {Navbar} from '@/components/navbar'
 import './globals.css'
 import type {Metadata} from 'next'
 import {cookies} from "next/headers";
+import React from "react";
 
 export const metadata: Metadata = {
     title: 'Focus',

@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  account   String    @unique
+  username  String
+  password  String
+  image     String?
+  bio       String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  role      UserRole  @default(User)
+  event     Event[]
+  note      Note[]
+  project   Project[]
+  progress  Progress?
+  tag       Tag?
+}
+
+enum UserRole {
+  User
+  Admin
+}
+
+enum NoteType {
+  Dir
+  Note
+}
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  title       String
+  startTime   DateTime?
+  endTime     DateTime?
+  job         String
+  stacks      String
+  describe    String
+  highlight   String    @default("")
+  imageUrl    String    @default("")
+  createdById Int
+  createdBy   User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Progress {
+  id          Int      @id @default(autoincrement())
+  course      String
+  wordIndex   Int
+  createdById Int      @unique
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DevLog {
+  id        Int      @id @default(autoincrement())
+  time      String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Note {
+  id          Int      @id @default(autoincrement())
+  title       String
+  tags        String   @default("[]")
+  content     String   @db.Text
+  createdById Int
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  toDo        String   @db.Text
+  inProgress  String   @db.Text
+  completed   String   @db.Text
+  createdById Int
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([title, createdById])
+}
+
+model Tag {
+  id          Int      @id @default(autoincrement())
+  tags        String   @default("[]") @db.VarChar(1024)
+  createdById Int      @unique
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
