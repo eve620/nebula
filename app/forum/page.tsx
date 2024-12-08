@@ -29,21 +29,21 @@ export default function Forum() {
   ])
 
   return (
-      <div className="min-h-screen bg-background text-foreground">
-        <main className="container mx-auto px-4 py-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold">绝区零论坛</h1>
-            <Button onClick={() => router.push('/forum/action/new/0')}>发布新帖子</Button>
-          </div>
-          <div className="space-y-6">
-            {posts.map((post) => (
-                <div key={post.id} onClick={() => router.push(`/forum/${post.id}`)} className="cursor-pointer">
-                  <ForumPostSummary post={post} />
-                </div>
-            ))}
-          </div>
-        </main>
-      </div>
+    <div className="min-h-screen bg-background text-foreground">
+      <main className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">绝区零论坛</h1>
+          <Button onClick={() => router.push('/forum/post?action=new')}>发布新帖子</Button>
+        </div>
+        <div className="space-y-6">
+          {posts.map((post) => (
+            <div key={post.id} onClick={() => router.push(`/forum/${post.id}`)} className="cursor-pointer">
+              <ForumPostSummary post={post} />
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
   )
 }
 

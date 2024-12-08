@@ -5,7 +5,7 @@ import { X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Modal } from '@/components/ui/modal'
+import { Modal } from '@/components/modal/modal'
 
 interface LoginModalProps {
   isOpen: boolean

@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
-import { Modal } from '@/components/ui/modal'
+import { Modal } from '@/components/modal/modal'
 import Cropper from 'react-easy-crop'
 import { Point, Area } from 'react-easy-crop/types'
 

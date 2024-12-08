@@ -1,6 +1,6 @@
 'use client'
 
-import { Modal } from "@/components/ui/modal"
+import { Modal } from "@/components/modal/modal"
 import { Progress } from "@/components/ui/progress"
 import Image from 'next/image'
 

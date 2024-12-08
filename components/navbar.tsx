@@ -1,13 +1,12 @@
 'use client'
 
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Link from 'next/link'
-import {Menu, X} from 'lucide-react'
+import {Menu, X, Sun, Moon} from 'lucide-react'
 import {Button} from "@/components/ui/button"
 import {UserMenu} from './user-menu'
-import ThemeToggle from "@/components/ThemeToggle";
-import {LoginModal} from "@/components/login-modal";
-import {EditProfileModal} from "@/components/edit-profile-modal";
+import {LoginModal} from './modal/login-modal'
+import {EditProfileModal} from './modal/edit-profile-modal'
 
 const navItems = [
     {name: '首页', href: '/'},
@@ -17,44 +16,70 @@ const navItems = [
     {name: '论坛', href: '/forum'},
 ]
 
-interface NavbarProps {
-    currentUser?: any
+interface User {
+    id: string;
+    username: string;
+    avatarUrl: string;
+    isAdmin: boolean;
 }
 
-export function Navbar({currentUser}: NavbarProps) {
+interface NavbarProps {
+    currentUser: User | null;
+    curTheme: 'light' | 'dark'
+}
+
+export function Navbar({currentUser, curTheme}: NavbarProps) {
     const [isOpen, setIsOpen] = useState(false)
+
+    const [theme, setTheme] = useState<'light' | 'dark'>(curTheme)
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
+        if (savedTheme) {
+            setTheme(savedTheme)
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark')
+            } else {
+                document.documentElement.classList.remove('dark')
+            }
+        }
+    }, [])
+    useEffect(() => {
+        document.cookie = `theme=${theme}; path=/; max-age=31536000;`
+    }, [theme])
+
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
     const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
-    const [isLoggedIn, setIsLoggedIn] = useState(true)
-    const [username, setUsername] = useState('用户名')
-    const [avatarUrl, setAvatarUrl] = useState('/FF14.png?height=32&width=32')
-
-    const closeLoginModal = () => setIsLoginModalOpen(false)
-    const closeEditProfileModal = () => setIsEditProfileModalOpen(false)
 
     const handleLogin = (username: string, password: string) => {
         // 这里应该有实际的登录逻辑
-        setIsLoggedIn(true)
-        setUsername(username)
-        closeLoginModal()
+        console.log('Login attempted with:', username, password)
+        setIsLoginModalOpen(false)
     }
-    const onLoginClick = () => setIsLoginModalOpen(true)
-    const onEditProfile = () => setIsEditProfileModalOpen(true)
 
-    const handleSaveProfile = (newUsername: string, newAvatarUrl: string | null) => {
-        setUsername(newUsername)
-        if (newAvatarUrl) {
-            setAvatarUrl(newAvatarUrl)
+    const handleLogout = () => {
+        // 这里应该有实际的登出逻辑
+        console.log('User logged out')
+    }
+
+    const handleEditProfile = (username: string, avatarUrl: string) => {
+        // 这里应该有实际的编辑个人资料逻辑
+        console.log('Profile edited:', username, avatarUrl)
+        setIsEditProfileModalOpen(false)
+    }
+
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light'
+        setTheme(newTheme)
+        localStorage.setItem('theme', newTheme)
+        if (newTheme === 'dark') {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
         }
-        closeEditProfileModal()
     }
-    const onLogout = () => {
-        setIsLoggedIn(false)
-        setUsername('用户名')
-        setAvatarUrl('/FF14.png?height=32&width=32')
-    }
+
     return (
-        <nav className="bg-background text-foreground sticky top-0 z-50">
+        <nav className="bg-white dark:bg-slate-800 text-foreground sticky top-0 z-50 shadow-md dark:shadow-slate-700">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
@@ -73,17 +98,25 @@ export function Navbar({currentUser}: NavbarProps) {
                                     {item.name}
                                 </Link>
                             ))}
-                            <ThemeToggle/>
-                            {isLoggedIn ? (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={toggleTheme}
+                                className="ml-4"
+                            >
+                                {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem]"/> :
+                                    <Moon className="h-[1.2rem] w-[1.2rem]"/>}
+                                <span className="sr-only">Toggle theme</span>
+                            </Button>
+                            {currentUser ? (
                                 <UserMenu
-                                    username={username}
-                                    avatarUrl={avatarUrl}
-                                    isAdmin={true}
-                                    onEditProfile={onEditProfile}
-                                    onLogout={onLogout}
+                                    user={currentUser}
+                                    onEditProfile={() => setIsEditProfileModalOpen(true)}
+                                    onLogout={handleLogout}
                                 />
                             ) : (
-                                <Button onClick={onLoginClick} className="bg-cyan-500 hover:bg-cyan-600 text-black">
+                                <Button onClick={() => setIsLoginModalOpen(true)}
+                                        className="bg-cyan-500 hover:bg-cyan-600 text-black">
                                     立即体验
                                 </Button>
                             )}
@@ -108,6 +141,32 @@ export function Navbar({currentUser}: NavbarProps) {
             {isOpen && (
                 <div className="md:hidden">
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                        {currentUser ? (
+                            <div className="px-3 py-2">
+                                <UserMenu
+                                    user={currentUser}
+                                    onEditProfile={() => setIsEditProfileModalOpen(true)}
+                                    onLogout={handleLogout}
+                                />
+                            </div>
+                        ) : (
+                            <Button onClick={() => {
+                                setIsOpen(false);
+                                setIsLoginModalOpen(true);
+                            }} className="w-full mt-2 bg-cyan-500 hover:bg-cyan-600 text-black">
+                                立即体验
+                            </Button>
+                        )}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={toggleTheme}
+                            className="w-full justify-start"
+                        >
+                            {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem] mr-2"/> :
+                                <Moon className="h-[1.2rem] w-[1.2rem] mr-2"/>}
+                            切换主题
+                        </Button>
                         {navItems.map((item) => (
                             <Link
                                 key={item.name}
@@ -118,35 +177,17 @@ export function Navbar({currentUser}: NavbarProps) {
                                 {item.name}
                             </Link>
                         ))}
-                        <ThemeToggle/>
-                        {isLoggedIn ? (
-                            <div className="px-3 py-2">
-                                <UserMenu
-                                    username={username}
-                                    avatarUrl={avatarUrl}
-                                    isAdmin={true}
-                                    onEditProfile={onEditProfile}
-                                    onLogout={onLogout}
-                                />
-                            </div>
-                        ) : (
-                            <Button onClick={() => {
-                                setIsOpen(false);
-                                onLoginClick();
-                            }} className="w-full mt-2 bg-cyan-500 hover:bg-cyan-600 text-black">
-                                立即体验
-                            </Button>
-                        )}
                     </div>
                 </div>
             )}
-            <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} onLogin={handleLogin}/>
+
+            <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} onLogin={handleLogin}/>
             <EditProfileModal
                 isOpen={isEditProfileModalOpen}
-                onClose={closeEditProfileModal}
-                username={username}
-                avatarUrl={avatarUrl}
-                onSave={handleSaveProfile}
+                onClose={() => setIsEditProfileModalOpen(false)}
+                username={currentUser?.username || ''}
+                avatarUrl={currentUser?.avatarUrl || ''}
+                onSave={handleEditProfile}
             />
         </nav>
     )

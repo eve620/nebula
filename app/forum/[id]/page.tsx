@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { ThumbsUp, MessageSquare, Share2, Edit } from 'lucide-react'
-import { ShareModal } from '@/components/share-modal'
+import { ThumbsUp, MessageSquare, Share2, Edit, ArrowLeft } from 'lucide-react'
+import { ShareModal } from '@/components/modal/share-modal'
 
 interface Post {
   id: number
@@ -77,8 +77,17 @@ export default function ForumPost() {
   }
 
   return (
-      <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
         <main className="container mx-auto px-4 py-8">
+          <Button
+            variant="outline"
+            size="sm"
+            className="mb-4"
+            onClick={() => router.back()}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            返回
+          </Button>
           <div className="bg-card text-card-foreground p-6 rounded-lg shadow-md">
             <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
             <p className="text-muted-foreground mb-4">
@@ -99,26 +108,26 @@ export default function ForumPost() {
                 分享
               </Button>
               {post.author === '当前用户' && (
-                  <Button variant="outline" size="sm" onClick={() => router.push(`/forum/action/edit/${post.id}`)}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    编辑
-                  </Button>
+                <Button variant="outline" size="sm" onClick={() => router.push(`/forum/post?action=edit&id=${post.id}`)}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  编辑
+                </Button>
               )}
             </div>
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">评论</h2>
               {post.comments.map((comment) => (
-                  <div key={comment.id} className="bg-muted p-4 rounded">
-                    <p className="font-semibold">{comment.author}</p>
-                    <p className="text-sm text-muted-foreground mb-2">{comment.date}</p>
-                    <p>{comment.content}</p>
-                  </div>
+                <div key={comment.id} className="bg-muted p-4 rounded">
+                  <p className="font-semibold">{comment.author}</p>
+                  <p className="text-sm text-muted-foreground mb-2">{comment.date}</p>
+                  <p>{comment.content}</p>
+                </div>
               ))}
               <form onSubmit={handleComment} className="space-y-2">
                 <Textarea
-                    placeholder="添加评论..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="添加评论..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
                 />
                 <Button type="submit">发表评论</Button>
               </form>

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Button } from "@/components/ui/button"
-import { CharacterDetailModal } from './character-detail-modal'
+import { CharacterDetailModal } from './modal/character-detail-modal'
 
 interface Skill {
   name: string
