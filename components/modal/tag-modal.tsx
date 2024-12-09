@@ -7,10 +7,12 @@ import {Input} from "@/components/ui/input";
 import {Modal} from "@/components/modal/modal";
 
 interface TagModalProps {
+    isOpen: boolean
+    onClose: () => void
     tags: string[]
 }
 
-const TagModal = ({tags}: TagModalProps) => {
+const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
     const [currentTags, setCurrentTags] = useState<string[]>(tags);
     const router = useRouter()
 
@@ -48,16 +50,11 @@ const TagModal = ({tags}: TagModalProps) => {
 
     return (
         <Modal
-            isOpen={false}
-            onClose={() => {
-                let uniqueArr = Array.from(new Set(currentTags.filter(Boolean)))
-                if (tags.toString() !== uniqueArr.toString()) {
-                    updateTags(uniqueArr)
-                }
-                setCurrentTags(uniqueArr)
-            }}
+            isOpen={isOpen}
+            onClose={onClose}
+            title="标签"
         >
-            <div className="space-y-6 h-96 overflow-y-auto pr-4">
+            <div className="space-y-6 h-96 pt-2 px-2 overflow-y-auto pr-4">
                 {currentTags.length ?
                     currentTags.map((item, index) => (
                         <div className={'flex items-center'} key={index}>

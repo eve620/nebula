@@ -55,48 +55,42 @@ export default function Characters() {
     <div className="min-h-screen bg-background text-foreground">
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">角色</h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-1">
-            <Tabs defaultValue={characters[0].id} orientation="vertical" onValueChange={(value) => setSelectedCharacter(characters.find(c => c.id === value) || characters[0])}>
-              <TabsList className="w-full">
-                {characters.map((character) => (
-                  <TabsTrigger key={character.id} value={character.id} className="w-full">
-                    {character.name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-          <div className="md:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>{selectedCharacter.name} - {selectedCharacter.role}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col md:flex-row gap-4">
-                  <Image
-                    src={selectedCharacter.imageUrl}
-                    alt={selectedCharacter.name}
-                    width={300}
-                    height={400}
-                    className="rounded-md"
-                  />
-                  <div className="space-y-4">
-                    <p>{selectedCharacter.description}</p>
-                    <div>
-                      <h3 className="font-semibold mb-2">技能：</h3>
-                      <ul className="list-disc list-inside">
-                        {selectedCharacter.abilities.map((ability, index) => (
-                          <li key={index}>{ability}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
+        <Tabs defaultValue={characters[0].id} orientation="vertical" onValueChange={(value) => setSelectedCharacter(characters.find(c => c.id === value) || characters[0])}>
+          <TabsList className="w-full mb-4">
+            {characters.map((character) => (
+                <TabsTrigger key={character.id} value={character.id} className="w-full">
+                  {character.name}
+                </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        <Card>
+          <CardHeader>
+            <CardTitle>{selectedCharacter.name} - {selectedCharacter.role}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col md:flex-row gap-4">
+              <Image
+                  src={selectedCharacter.imageUrl}
+                  alt={selectedCharacter.name}
+                  width={300}
+                  height={400}
+                  className="rounded-md"
+              />
+              <div className="space-y-4">
+                <p>{selectedCharacter.description}</p>
+                <div>
+                  <h3 className="font-semibold mb-2">技能：</h3>
+                  <ul className="list-disc list-inside">
+                    {selectedCharacter.abilities.map((ability, index) => (
+                        <li key={index}>{ability}</li>
+                    ))}
+                  </ul>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
         <div className="mt-12">
           <h2 className="text-2xl font-bold mb-4">角色画廊</h2>
           <Carousel items={carouselItems} />

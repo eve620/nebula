@@ -24,9 +24,9 @@ export default function CreateEditPost() {
 
   useEffect(() => {
     if (action === 'edit' && id) {
-      // Simulating API call to fetch post data for editing
+      // Simulating API call to fetch action data for editing
       const fetchPost = async () => {
-        // In a real app, you would fetch the post data from an API
+        // In a real app, you would fetch the action data from an API
         const mockPost: Post = {
           id: Number(id),
           title: '绝区零最新更新讨论',
@@ -42,8 +42,8 @@ export default function CreateEditPost() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // In a real app, you would send the post data to an API
-    console.log('Submitting post:', post)
+    // In a real app, you would send the action data to an API
+    console.log('Submitting action:', post)
     router.push('/forum')
   }
 

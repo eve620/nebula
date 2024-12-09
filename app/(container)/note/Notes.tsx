@@ -5,6 +5,7 @@ import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/i
 import NoteList from "@/app/(container)/note/components/NoteList";
 import {Note} from "@/app/(container)/note/page";
 import {Button} from "@/components/ui/button";
+import TagModal from "@/components/modal/tag-modal";
 
 interface NotesProps {
     notes: Note[]
@@ -18,6 +19,7 @@ const Notes: React.FC<NotesProps> = ({notes, tags}) => {
     const [currentTag, setCurrentTag] = useState<String[]>([])
     const [isTagListShow, setIsTagListShow] = useState(false)
     const tagRef = useRef(null)
+    const [tagOpen, setTagOpen] = useState(false)
     useOnClickOutside(tagRef.current, (event) => {
         setIsTagListShow(false)
     })
@@ -32,6 +34,7 @@ const Notes: React.FC<NotesProps> = ({notes, tags}) => {
                 }
                 }>添加笔记</Button>
                 <Button onClick={() => {
+                    setTagOpen(true)
                 }}>编辑标签</Button>
             </div>
             <div className={"flex mt-4"}>
@@ -104,6 +107,9 @@ const Notes: React.FC<NotesProps> = ({notes, tags}) => {
                 </div>
             </div>
             <NoteList notes={noteList}/>
+            <TagModal isOpen={tagOpen} onClose={() => {
+                setTagOpen(false)
+            }} tags={tags}/>
         </div>
     )
 }

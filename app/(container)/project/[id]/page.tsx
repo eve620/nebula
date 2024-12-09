@@ -24,7 +24,7 @@ interface Comment {
   date: string
 }
 
-export default function ForumPost() {
+export default function Project() {
   const router = useRouter()
   const { id } = useParams()
   const [post, setPost] = useState<Post | null>(null)

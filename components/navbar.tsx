@@ -7,11 +7,11 @@ import {Button} from "@/components/ui/button"
 import {UserMenu} from './user-menu'
 import {LoginModal} from './modal/login-modal'
 import {EditProfileModal} from './modal/edit-profile-modal'
+import {usePathname} from "next/navigation";
 
 const navItems = [
     {name: '首页', href: '/'},
     {name: '角色', href: '/characters'},
-    {name: '世界', href: '/world'},
     {name: '新闻', href: '/news'},
     {name: '论坛', href: '/forum'},
     {name: '项目', href: '/project'},
@@ -34,7 +34,10 @@ interface NavbarProps {
 
 export function Navbar({currentUser, curTheme}: NavbarProps) {
     const [isOpen, setIsOpen] = useState(false)
-
+    const pathname = usePathname()
+    const isActive = (path: string) => {
+        return pathname === path
+    }
     const [theme, setTheme] = useState<'light' | 'dark'>(curTheme)
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
@@ -97,7 +100,11 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className="px-3 py-2 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground transition duration-150 ease-in-out"
+                                    className={`px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out ${
+                                        isActive(item.href)
+                                            ? 'bg-foreground text-primary-foreground'
+                                            : 'hover:bg-accent hover:text-accent-foreground'
+                                    }`}
                                 >
                                     {item.name}
                                 </Link>
@@ -175,7 +182,11 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className="block px-3 py-2 rounded-md text-base font-medium hover:bg-accent hover:text-accent-foreground transition duration-150 ease-in-out"
+                                className={`block px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out ${
+                                    isActive(item.href)
+                                        ? 'bg-foreground text-primary-foreground'
+                                        : 'hover:bg-accent hover:text-accent-foreground'
+                                }`}
                                 onClick={() => setIsOpen(false)}
                             >
                                 {item.name}

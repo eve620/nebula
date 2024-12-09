@@ -122,15 +122,15 @@ const NewPage = ({tags}: NewPageProps) => {
             </div>
             <div className="flex gap-4 mt-4">
                 <div className={"flex-1"}></div>
-                <Button label={"保存"} onClick={() => {
+                <Button onClick={() => {
                     addNote()
                     router.push('/note')
                     router.refresh()
                 }
-                }/>
-                <Button label={"取消"} onClick={() => {
+                }>保存</Button>
+                <Button onClick={() => {
                     router.push("/note")
-                }}/>
+                }}>取消</Button>
             </div>
         </div>
     );

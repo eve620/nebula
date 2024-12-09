@@ -3,6 +3,7 @@ import './globals.css'
 import type {Metadata} from 'next'
 import {cookies} from "next/headers";
 import React from "react";
+import {notoSansSC} from "@/app/fonts";
 
 export const metadata: Metadata = {
     title: 'Focus',
@@ -11,9 +12,9 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children,}: { children: React.ReactNode }) {
     const theme = await cookies()
-    const isDark =( theme.get('theme')?.value || 'light') === 'dark'
+    const isDark = (theme.get('theme')?.value || 'light') === 'dark'
     return (
-        <html lang="zh" className={isDark ? 'dark' : ''}>
+        <html lang="zh" className={`${notoSansSC.variable} ${isDark && 'dark'}`}>
         <body>
         <Navbar
             currentUser={{
