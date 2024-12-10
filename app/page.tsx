@@ -5,9 +5,9 @@ import {Button} from "@/components/ui/button"
 import {AnimatedText} from '@/components/animated-text'
 import {CharacterCard} from '@/components/character-card'
 import {Footer} from "@/components/home/footer";
-import TopBar from "@/components/home/topBar";
+import TopBar from "@/components/home/top-bar";
 import Guide from "@/components/home/guide";
-import DevLog from "@/components/home/devLog";
+import Devlog from "@/components/home/devlog";
 import About from "@/components/home/about";
 
 const characters = [
@@ -69,7 +69,7 @@ export default function Home() {
                     <Button
                         onClick={() => {
                         }}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold py-2 px-4 rounded-full transition-transform hover:transition ease-in-out hover:scale-105"
                     >
                         立即体验
                     </Button>
@@ -150,7 +150,7 @@ export default function Home() {
                 <Guide/>
             </section>
             <section className="py-16 px-4 bg-background">
-                <DevLog currentUser={null} list={[]}/>
+                <Devlog currentUser={null} list={[]}/>
             </section>
             <section className="py-16 px-5 bg-background" id="aboutSection">
                 <About/>
@@ -164,7 +164,7 @@ export default function Home() {
 function FeatureCard({title, description, icon}) {
     return (
         <div
-            className="bg-card p-6 rounded-lg hover:bg-accent transition duration-300 ease-in-out transform hover:-translate-y-1">
+            className="bg-card p-6 rounded-lg shadow-lg dark:shadow-slate-800 hover:bg-accent transition-transform hover:transition ease-in-out hover:-translate-y-1">
             <div className="text-4xl mb-4">{icon}</div>
             <h3 className="text-xl font-bold mb-2">{title}</h3>
             <p className="text-muted-foreground">{description}</p>

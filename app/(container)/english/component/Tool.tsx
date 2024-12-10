@@ -144,7 +144,7 @@ const Tool: React.FC<ToolProps> = ({currentCourse, statementIndex, handleCourse,
                     className={`absolute left-0 top-20 w-80 overflow-x-hidden 
                     overflow-y-auto bg-white border-l-4 shadow select-none 
                     border-blue-800 dark:bg-slate-800 px-2
-                    duration-300
+                    duration-300 rounded-lg
                     ${showCourseList ? 'h-64' : 'h-0'}
                     ${showCourseList ? 'opacity-100' : 'opacity-0'}`}
                     style={{scrollbarWidth: "none"}}>
@@ -167,7 +167,7 @@ const Tool: React.FC<ToolProps> = ({currentCourse, statementIndex, handleCourse,
                     className={`absolute left-0 top-20 w-80 overflow-x-hidden 
                     overflow-y-auto bg-white border-l-4 shadow select-none 
                     border-fuchsia-400 dark:bg-slate-800 px-2
-                    duration-300
+                    duration-300 rounded-lg
                     ${showWordList ? 'opacity-100' : 'opacity-0'}
                     ${showWordList ? 'h-64' : 'h-0'}`}
                     style={{scrollbarWidth: "none"}}>

@@ -11,9 +11,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {User, Settings, LogOut, ShieldCheck, UserPlus, Share2} from 'lucide-react'
+import {User, Settings, LogOut, ShieldCheck, UserPlus, Share2, Calendar} from 'lucide-react'
 import {FriendManagementModal} from './modal/friend-management-modal'
 import {ViewSharedPostsModal} from './modal/view-shared-posts-modal'
+import {DailyCheckInModal} from "@/components/modal/daily-check-in-modal";
 
 interface UserMenuProps {
     user: {
@@ -30,7 +31,7 @@ export function UserMenu({user, onEditProfile, onLogout}: UserMenuProps) {
     const router = useRouter()
     const [isFriendManagementModalOpen, setIsFriendManagementModalOpen] = useState(false)
     const [isViewSharedPostsModalOpen, setIsViewSharedPostsModalOpen] = useState(false)
-
+    const [isDailyCheckInModalOpen, setIsDailyCheckInModalOpen] = useState(false)
     return (
         <>
             <DropdownMenu modal={false}>
@@ -62,6 +63,10 @@ export function UserMenu({user, onEditProfile, onLogout}: UserMenuProps) {
                         <Share2 className="mr-2 h-4 w-4"/>
                         <span>查看分享的帖子</span>
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setIsDailyCheckInModalOpen(true)}>
+                        <Calendar className="mr-2 h-4 w-4" />
+                        <span>每日打卡</span>
+                    </DropdownMenuItem>
                     <DropdownMenuItem>
                         <Settings className="mr-2 h-4 w-4"/>
                         <span>设置</span>
@@ -87,6 +92,11 @@ export function UserMenu({user, onEditProfile, onLogout}: UserMenuProps) {
             <ViewSharedPostsModal
                 isOpen={isViewSharedPostsModalOpen}
                 onClose={() => setIsViewSharedPostsModalOpen(false)}
+            />
+            <DailyCheckInModal
+                isOpen={isDailyCheckInModalOpen}
+                onClose={() => setIsDailyCheckInModalOpen(false)}
+                userId={user.id}
             />
         </>
     )

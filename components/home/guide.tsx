@@ -12,7 +12,7 @@ const Guide: React.FC = () => {
                 <span
                     className={"text-3xl leading-loose inline-block"}>It’s because you haven’t used Log yet!</span>
                 <Link className="
-                    w-full py-2 my-8 mx-auto sm:mx-0 sm:w-48 text-center rounded-md font-bold duration-200 block
+                    w-full py-2 my-8 mx-auto sm:mx-0 sm:w-48 text-center rounded-md font-bold hover:duration-200 block
                     text-black dark:text-gray-300
                     bg-gray-200 dark:bg-neutral-800
                     hover:bg-gray-300 dark:hover:bg-neutral-900" href={""}>Github</Link>
@@ -21,7 +21,7 @@ const Guide: React.FC = () => {
                 <div className="overflow-hidden
                                 bg-gray-50 border border-gray-200 dark:border-gray-500
                                 dark:from-[#525252e6] dark:bg-gradient-to-b dark:to-gray-900
-                                rounded-2xl p-4 duration-200
+                                rounded-2xl p-4 hover:duration-200
                                 hover:shadow-lg dark:shadow-md dark:hover:shadow-slate-700/70
                                 ">
                     <div className={"pr-2"}>

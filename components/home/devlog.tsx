@@ -7,7 +7,7 @@ interface DevLogProps {
     list: { time: string, content: string }[]
 }
 
-const DevLog: React.FC<DevLogProps> = ({currentUser, list}) => {
+const Devlog: React.FC<DevLogProps> = ({currentUser, list}) => {
     const [isAdd, setIsAdd] = useState(false)
     const addRef = useRef(null)
     const [logList, setLogList] = useState<{ time: string, content: string }[]>(list)
@@ -102,4 +102,4 @@ const DevLog: React.FC<DevLogProps> = ({currentUser, list}) => {
     )
 }
 
-export default DevLog
+export default Devlog

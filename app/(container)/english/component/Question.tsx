@@ -161,7 +161,7 @@ function Question({word: {chinese, english, soundmark}, failedCount, handleFaile
                 {words.map((word, index) => (
                     <div key={index}
                          style={{minWidth: `${inputWidth(word)}ch`}}
-                         className={`h-[4rem] text-center leading-none border-solid rounded-[2px] border-b-2 text-[3rem] transition-all ${inputWords.length - 1 === index && "border-fuchsia-500"}`}
+                         className={`h-[4rem] text-center leading-none border-solid rounded-[2px] border-b-2 text-[3rem] ${inputWords.length - 1 === index && "border-fuchsia-500"}`}
                     >
                         {inputWords[index]}
                     </div>

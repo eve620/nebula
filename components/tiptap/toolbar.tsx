@@ -6,7 +6,7 @@ import {Toggle} from "@/components/ui/toggle";
 type Props = {
     editor: Editor | null
 }
-const ToolBar = ({editor}: Props) => {
+const Toolbar = ({editor}: Props) => {
     if (!editor) {
         return null
     }
@@ -217,4 +217,4 @@ const ToolBar = ({editor}: Props) => {
     )
 }
 
-export default ToolBar
+export default Toolbar

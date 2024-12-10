@@ -117,7 +117,7 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
                             >
                                 {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem]"/> :
                                     <Moon className="h-[1.2rem] w-[1.2rem]"/>}
-                                <span className="sr-only">Toggle theme</span>
+                                <span className="sr-only">切换主题</span>
                             </Button>
                             {currentUser ? (
                                 <UserMenu

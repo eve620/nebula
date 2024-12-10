@@ -118,7 +118,7 @@ export default function PublishNews() {
           {newsData.images.length > 0 && (
               <div className="grid grid-cols-4 gap-4">
                 <div className="col-start-2 col-span-3">
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="flex gap-4">
                     {newsData.images.map((image, index) => (
                         <div key={index} className="relative w-24 h-24 group">
                           <Image

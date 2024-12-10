@@ -35,12 +35,12 @@ const ProjectList: React.FC<ProjectListProps> = ({projectList}) => {
                                      router.push('/project/1')
                                  }}
                                  className="mb-8 sm:break-inside-avoid rounded-xl shadow-lg
-                             duration-200 bg-content transition-shadow dark:hover:shadow-blue-400/40
+                             bg-content transition-shadow dark:hover:shadow-blue-400/40
                              hover:shadow-2xl hover:shadow-purple-400/50">
                                 <div className={"flex flex-col p-6"}>
                                     <div className={"flex flex-wrap justify-between text-nowrap"}>
                                 <span
-                                    className={"font-bold duration-200 text-black dark:text-white"}>{item.title}</span>
+                                    className={"font-bold text-black dark:text-white"}>{item.title}</span>
                                         <span className={"text-sm"}>{item.job}</span>
                                     </div>
                                     <div className={"mt-4 w-full"}>
@@ -78,7 +78,7 @@ const ProjectList: React.FC<ProjectListProps> = ({projectList}) => {
                 </div> :
                 <Empty/>
             }
-            <Modal isOpen={previewImage} onClose={() => setPreviewImage(false)} title="图片预览">
+            <Modal isOpen={previewImage} autofocus={false} onClose={() => setPreviewImage(false)} title="图片预览">
                 <div className="flex justify-center">
                     {/*<Image*/}
                     {/*    src={previewImage}*/}

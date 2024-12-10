@@ -2,7 +2,7 @@
 
 import {useEditor, EditorContent} from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import ToolBar from "@/components/tiptap/ToolBar";
+import Toolbar from "@/components/tiptap/toolbar";
 
 const Tiptap = ({content, onChange}: { content: string, onChange: any }) => {
     const editor = useEditor({
@@ -20,7 +20,7 @@ const Tiptap = ({content, onChange}: { content: string, onChange: any }) => {
 
     return (
         <div className={'border-2 rounded flex flex-col'}>
-            <ToolBar editor={editor}/>
+            <Toolbar editor={editor}/>
             <EditorContent editor={editor}/>
         </div>
     )

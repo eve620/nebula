@@ -42,7 +42,7 @@ export default function Answer({word: {chinese, english, soundmark}, handleNext}
             </audio>
             <button onClick={handleNext}
                     className="bg-gray-100 text-gray-500 font-bold text-xl px-4 py-1 rounded-lg mt-4
-                    hover:bg-gray-500 hover:text-gray-100 duration-300
+                    hover:bg-gray-500 hover:text-gray-100 hover:duration-300
                     dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
                 next
             </button>

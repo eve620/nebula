@@ -2,7 +2,7 @@
 import {useRouter} from "next/navigation";
 import {useRef, useState} from "react";
 import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/internal/hooks/use-on-click-outside";
-import Tiptap from "@/components/tiptap/Tiptap";
+import Tiptap from "@/components/tiptap/tiptap";
 import {Button} from "@/components/ui/button";
 
 interface NewPageProps {

@@ -53,7 +53,7 @@ const EventBar: React.FC<EventBarProps> = ({events, setEvents, currentEvent, set
                 {events.map((item: any) => (
                     <div style={{transitionProperty: 'background-color'}}
                          key={item.title}
-                         className={`px-8 mb-2 text-xl py-2 rounded-3xl truncate duration-200
+                         className={`px-8 mb-2 text-xl py-2 rounded-3xl truncate hover:duration-200
                         hover:bg-[#deacde] dark:hover:bg-[#2c4885] hover:text-white
                         ${currentEvent && currentEvent.title === item.title && 'text-white bg-[#f1bbf1] dark:bg-[#406cc7]'}`}
                          onClick={() => setCurrentEvent(item)}

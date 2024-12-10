@@ -33,7 +33,7 @@ export default function Forum() {
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">绝区零论坛</h1>
-          <Button onClick={() => router.push('/forum/action?action=new')}>发布新帖子</Button>
+          <Button onClick={() => router.push('/forum/post?action=new')}>发布新帖子</Button>
         </div>
         <div className="space-y-6">
           {posts.map((post) => (

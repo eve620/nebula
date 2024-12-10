@@ -60,7 +60,7 @@ model Progress {
   updatedAt   DateTime @updatedAt
 }
 
-model DevLog {
+model Devlog {
   id        Int      @id @default(autoincrement())
   time      String
   content   String

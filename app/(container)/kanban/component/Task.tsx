@@ -26,7 +26,7 @@ const Task: React.FC<TaskProps> = ({name, details, id, provided, handleUpdate, h
             </div>
             <p className='text-[0.7em] mt-2 text-[#9c9c9c] break-words mb-2'>{details}</p>
             <Minus
-                className={'absolute right-0 bottom-0 w-10 h-8 cursor-pointer hover:scale-125 px-3 py-2 hover:text-red-500 duration-200'}
+                className={'absolute right-0 bottom-0 w-10 h-8 cursor-pointer hover:scale-125 px-3 py-2 hover:text-red-500 hover:duration-200'}
                 onClick={(e) => handleRemove(id, e)}/>
             <div>
             </div>

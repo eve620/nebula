@@ -1,7 +1,7 @@
 "use client"
 import {useRouter} from "next/navigation";
 import React, {createContext, useState} from "react";
-import Viewer from "@/components/tiptap/Viewer";
+import Viewer from "@/components/tiptap/viewer";
 import {Button} from "@/components/ui/button";
 
 interface ContentPageProps {
