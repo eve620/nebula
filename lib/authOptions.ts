@@ -10,14 +10,14 @@ export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             credentials: {
-                name: {},
+                username: {},
                 password: {},
             },
 
             async authorize(credentials) {
                 const user = await prisma.user.findUnique({
                     where: {
-                        account: credentials!.name
+                        username: credentials!.username
                     }
                 })
                 if (!user) return null
@@ -25,23 +25,21 @@ export const authOptions: NextAuthOptions = {
                     credentials!.password || '',
                     user.password
                 )
-                if (passwordCorrect) return {id: String(user.id), name: user.account, image: user.image}
+                if (passwordCorrect) return user
                 return null
             }
         })
     ],
-    // callbacks: {
-    //     async jwt({user, token}) {
-    //         if (user) {  // Note that this if condition is needed
-    //             token.user = {...user}
-    //         }
-    //         return token
-    //     },
-    //     async session({session, token}) {
-    //         if (token?.user) { // Note that this if condition is needed
-    //             session.user = token.user;
-    //         }
-    //         return session
-    //     },
-    // },
+    callbacks: {
+        async jwt({token, user}) {
+            if (user) {
+                return user || token;
+            }
+            return token;
+        },
+        async session({session, token}) {
+            session.user = token;
+            return session;
+        }
+    }
 }

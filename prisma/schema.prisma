@@ -9,19 +9,19 @@ datasource db {
 
 model User {
   id        Int       @id @default(autoincrement())
-  account   String    @unique
-  username  String
+  username  String    @unique
+  nickname  String
   password  String
   image     String?
   bio       String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   role      UserRole  @default(User)
-  event     Event[]
   note      Note[]
   project   Project[]
   progress  Progress?
   tag       Tag?
+  Event     Event[]
 }
 
 enum UserRole {

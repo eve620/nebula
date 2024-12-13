@@ -3,7 +3,6 @@
 import {useState} from 'react'
 import Image from 'next/image'
 import {useRouter} from 'next/navigation'
-import {Button} from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,13 +17,14 @@ import {ViewSharedPostsModal} from "@/components/modal/view-shared-posts-modal";
 import {DailyCheckInModal} from "@/components/modal/daily-check-in-modal";
 import {EditProfileModal} from "@/components/modal/edit-profile-modal";
 import {User} from "@/types";
+import {signOut} from "next-auth/react";
+import {toast} from "@/hooks/use-toast";
 
 interface UserMenuProps {
     user: User;
-    onLogout: () => void;
 }
 
-export function UserMenu({user, onLogout}: UserMenuProps) {
+export function UserMenu({user}: UserMenuProps) {
     const router = useRouter()
     const [isFriendManagementModalOpen, setIsFriendManagementModalOpen] = useState(false)
     const [isViewSharedPostsModalOpen, setIsViewSharedPostsModalOpen] = useState(false)
@@ -41,22 +41,17 @@ export function UserMenu({user, onLogout}: UserMenuProps) {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                        <Image
-                            src={user.image  || '/storage/avatar/avatar1.jpg'}
-                            alt={user.username}
-                            className="rounded-full"
-                            width={32}
-                            height={32}
-                        />
-                    </Button>
+                    <div
+                        className={"w-8 h-8 bg-blue-300 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80"}>
+                        <Image src={user.image || '/avatar.jpg'} alt="avatar" width={100} height={100}/>
+                    </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
-                            <p className="text-sm font-medium leading-none">{user.username || user.account}</p> {/* Display nickname if available */}
+                            <p className="text-sm font-medium leading-none">{user.nickname || user.username}</p> {/* Display nickname if available */}
                             <p className="text-xs leading-none text-muted-foreground">
-                                {user.username}@example.com
+                                {user.username}
                             </p>
                         </div>
                     </DropdownMenuLabel>
@@ -81,14 +76,23 @@ export function UserMenu({user, onLogout}: UserMenuProps) {
                         <Settings className="mr-2 h-4 w-4"/>
                         <span>设置</span>
                     </DropdownMenuItem>
-                    {user.isAdmin && (
+                    {user.role === "Admin" && (
                         <DropdownMenuItem onClick={() => router.push('/admin')}>
                             <ShieldCheck className="mr-2 h-4 w-4"/>
                             <span>后台管理</span>
                         </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator/>
-                    <DropdownMenuItem onClick={onLogout}>
+                    <DropdownMenuItem onClick={() => {
+                        signOut({redirect: false}).then(() => {
+                            router.refresh()
+                            toast({
+                                title: "成功",
+                                description: "退出成功",
+                                variant: "destructive",
+                            })
+                        })
+                    }}>
                         <LogOut className="mr-2 h-4 w-4"/>
                         <span>退出登录</span>
                     </DropdownMenuItem>
@@ -111,8 +115,7 @@ export function UserMenu({user, onLogout}: UserMenuProps) {
             <EditProfileModal
                 isOpen={isEditProfileModalOpen}
                 onClose={() => setIsEditProfileModalOpen(false)}
-                user ={user}
-                onSave={handleEditProfile}
+                user={user}
             />
         </>
     )

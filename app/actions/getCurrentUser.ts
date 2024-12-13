@@ -5,13 +5,13 @@ import {authOptions} from "@/lib/authOptions";
 const getCurrentUser = async () => {
     try {
         const session: Session | null = await getServerSession(authOptions as any)
-        if (!session?.user?.name) {
+        if (!session?.user?.username) {
             return null;
         }
 
         const currentUser = await prisma.user.findUnique({
             where: {
-                account: session.user.name,
+                username: session.user.username,
             }
         });
 
@@ -21,7 +21,7 @@ const getCurrentUser = async () => {
         return {
             id: currentUser.id,
             username: currentUser.username,
-            account: currentUser.account,
+            nickname: currentUser.nickname,
             bio: currentUser.bio,
             image: currentUser.image,
             role: currentUser.role

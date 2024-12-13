@@ -54,11 +54,6 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
         console.log('Login attempted with:', username, password)
         setIsLoginModalOpen(false)
     }
-
-    const handleLogout = () => {
-        // 这里应该有实际的登出逻辑
-        console.log('User logged out')
-    }
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light'
         setTheme(newTheme)
@@ -107,7 +102,6 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
                             {currentUser ? (
                                 <UserMenu
                                     user={currentUser}
-                                    onLogout={handleLogout}
                                 />
                             ) : (
                                 <Button onClick={() => setIsLoginModalOpen(true)}
@@ -140,7 +134,6 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
                             <div className="px-3 py-2">
                                 <UserMenu
                                     user={currentUser}
-                                    onLogout={handleLogout}
                                 />
                             </div>
                         ) : (

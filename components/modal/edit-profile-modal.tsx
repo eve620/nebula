@@ -14,13 +14,12 @@ interface EditProfileModalProps {
     isOpen: boolean
     onClose: () => void
     user: User
-    onSave: (username: string, account: string, bio: string, croppedImage: string | null) => void
 }
 
-export function EditProfileModal({isOpen, onClose, user, onSave}: EditProfileModalProps) {
-    const [username, setUsername] = useState(user.username)
-    const [bio, setBio] = useState(user.bio)
-    const [account, setAccount] = useState(user.account)
+export function EditProfileModal({isOpen, onClose, user}: EditProfileModalProps) {
+    const [username, setUsername] = useState(user.username || '')
+    const [bio, setBio] = useState(user.bio || '')
+    const [nickname, setNickname] = useState(user.nickname || '')
     const [selectedImage, setSelectedImage] = useState<string | null>(null)
     const [croppedImage, setCroppedImage] = useState<string | null>(null)
     const [isCropModalOpen, setIsCropModalOpen] = useState(false)
@@ -48,9 +47,8 @@ export function EditProfileModal({isOpen, onClose, user, onSave}: EditProfileMod
     }
 
     const handleSave = useCallback(() => {
-        onSave(username, account, bio, croppedImage)
         onClose()
-    }, [username, account, bio, croppedImage, onSave, onClose])
+    }, [username, nickname, bio, croppedImage, onClose])
 
     return (
         <>
@@ -62,8 +60,8 @@ export function EditProfileModal({isOpen, onClose, user, onSave}: EditProfileMod
                         </Label>
                         <Input
                             id="username"
-                            value={account}
-                            onChange={(e) => setAccount(e.target.value)}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                             className="col-span-3"
                         />
                     </div>
@@ -73,8 +71,8 @@ export function EditProfileModal({isOpen, onClose, user, onSave}: EditProfileMod
                         </Label>
                         <Input
                             id="nickname"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={nickname}
+                            onChange={(e) => setNickname(e.target.value)}
                             className="col-span-3"
                         />
                     </div>

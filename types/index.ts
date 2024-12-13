@@ -1,8 +1,8 @@
 export interface User {
     id: string;
     username: string;
-    account: string;
+    nickname: string;
     bio: string;
     image: string;
-    isAdmin: boolean;
+    role: "Admin"|"User";
 }
