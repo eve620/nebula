@@ -17,11 +17,14 @@ export default async function RootLayout({children,}: { children: React.ReactNod
         <html lang="zh" className={`${notoSansSC.variable} ${isDark && 'dark'}`}>
         <body>
         <Navbar
+            // currentUser={null}
             currentUser={{
                 id: '1',
-                username: '当前用户',
+                account: 'admin',
+                username: '傻子哥',
+                bio: '这是一个用户描述',
                 avatarUrl: '/placeholder.svg',
-                isAdmin: true
+                isAdmin: false
             }}
             curTheme={isDark ? 'dark' : 'light'}
         />

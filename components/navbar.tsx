@@ -6,8 +6,8 @@ import {Menu, X, Sun, Moon} from 'lucide-react'
 import {Button} from "@/components/ui/button"
 import {UserMenu} from './user-menu'
 import {LoginModal} from './modal/login-modal'
-import {EditProfileModal} from './modal/edit-profile-modal'
 import {usePathname} from "next/navigation";
+import {User} from "@/types";
 
 const navItems = [
     {name: '首页', href: '/'},
@@ -19,13 +19,6 @@ const navItems = [
     {name: '英语', href: '/english'},
     {name: '看板', href: '/kanban'},
 ]
-
-interface User {
-    id: string;
-    username: string;
-    avatarUrl: string;
-    isAdmin: boolean;
-}
 
 interface NavbarProps {
     currentUser: User | null;
@@ -55,7 +48,6 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
     }, [theme])
 
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
-    const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false)
 
     const handleLogin = (username: string, password: string) => {
         // 这里应该有实际的登录逻辑
@@ -67,13 +59,6 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
         // 这里应该有实际的登出逻辑
         console.log('User logged out')
     }
-
-    const handleEditProfile = (username: string, avatarUrl: string) => {
-        // 这里应该有实际的编辑个人资料逻辑
-        console.log('Profile edited:', username, avatarUrl)
-        setIsEditProfileModalOpen(false)
-    }
-
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light'
         setTheme(newTheme)
@@ -122,7 +107,6 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
                             {currentUser ? (
                                 <UserMenu
                                     user={currentUser}
-                                    onEditProfile={() => setIsEditProfileModalOpen(true)}
                                     onLogout={handleLogout}
                                 />
                             ) : (
@@ -156,7 +140,6 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
                             <div className="px-3 py-2">
                                 <UserMenu
                                     user={currentUser}
-                                    onEditProfile={() => setIsEditProfileModalOpen(true)}
                                     onLogout={handleLogout}
                                 />
                             </div>
@@ -197,13 +180,6 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
             )}
 
             <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} onLogin={handleLogin}/>
-            <EditProfileModal
-                isOpen={isEditProfileModalOpen}
-                onClose={() => setIsEditProfileModalOpen(false)}
-                username={currentUser?.username || ''}
-                avatarUrl={currentUser?.avatarUrl || ''}
-                onSave={handleEditProfile}
-            />
         </nav>
     )
 }
