@@ -3,16 +3,17 @@ import {useRouter} from "next/navigation";
 import React, {useRef, useState} from "react";
 import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/internal/hooks/use-on-click-outside";
 import NoteList from "@/app/(container)/note/components/NoteList";
-import {Note} from "@/app/(container)/note/page";
 import {Button} from "@/components/ui/button";
 import TagModal from "@/components/modal/tag-modal";
+import {Note} from "@/types";
+import {useTag} from "@/contexts/tag-context";
 
 interface NotesProps {
     notes: Note[]
-    tags: string[]
 }
 
-const Notes: React.FC<NotesProps> = ({notes, tags}) => {
+const Notes: React.FC<NotesProps> = ({notes}) => {
+    const tags = useTag()
     const router = useRouter()
     const [noteList, setNoteList] = useState<Note[]>(notes)
     // const tagList = ["react", 'vue', 'ts', 'js', 'css', 'html', 'java', 'python', 'go', 'c', 'c++', 'c#', 'php', 'ruby', 'swift', 'kotlin', 'dart', 'scala', 'groovy', 'r', 'matlab', 'lua', 'perl', 'bash', 'sql', 'nosql', 'mongodb', 'redis', 'mysql', 'oracle', 'sqlserver', 'postgresql', 'sqlite', 'elasticsearch', 'kafka', 'rabbitmq', 'rocketmq', 'dubbo', 'spring', 'springboot', 'spring']

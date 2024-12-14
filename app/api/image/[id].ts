@@ -1,4 +1,4 @@
-// pages/api/images/[id].js
+// pages/api/images/edit.js
 import fs from 'fs';
 import path from 'path';
 

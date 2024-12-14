@@ -1,15 +1,12 @@
 import NoteItem from "@/app/(container)/note/components/NoteItem";
 import Empty from "@/components/empty";
 import React from "react";
+import {Note} from "@/types";
 
 interface NoteListProps {
     notes: Note[]
 }
 
-export type Note = {
-    id: number
-    title: string,
-}
 const NoteList: React.FC<NoteListProps> = ({notes}: { notes: Note[] }) => {
     return (
         <>

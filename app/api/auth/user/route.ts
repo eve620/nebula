@@ -7,11 +7,11 @@ import {saveBase64Image} from "@/app/api/auth/user/utils";
 
 export async function POST(request: NextRequest) {
     try {
-        const {username, account, password} = await request.json()
+        const {username, nickname, password} = await request.json()
         // 判断是否存在
         const user = await prisma.user.findUnique({
             where: {
-                account
+                username
             }
         })
         if (user) return NextResponse.json({error: "该账号已存在"}, {status: 409})
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
         const newUser = await prisma.user.create({
             data: {
                 username,
-                account,
+                nickname,
                 password: hashedPassword
             }
         })

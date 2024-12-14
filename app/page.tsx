@@ -1,5 +1,3 @@
-'use client'
-
 import Image from 'next/image'
 import {Button} from "@/components/ui/button"
 import {AnimatedText} from '@/components/animated-text'
@@ -9,6 +7,7 @@ import TopBar from "@/components/home/top-bar";
 import Guide from "@/components/home/guide";
 import Devlog from "@/components/home/devlog";
 import About from "@/components/home/about";
+import getDevLogList from "@/app/actions/getDevLogList";
 
 const characters = [
     {
@@ -46,7 +45,8 @@ const characters = [
     }
 ]
 
-export default function Home() {
+export default async function Home() {
+    const devList = await getDevLogList()
 
     return (
         <div className="min-h-screen bg-background text-foreground">
@@ -66,11 +66,7 @@ export default function Home() {
                     <p className="text-xl mb-8">
                         <AnimatedText text="探索未来都市的秘密"/>
                     </p>
-                    <Button
-                        onClick={() => {
-                        }}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold py-2 px-4 rounded-full transition-transform hover:transition ease-in-out hover:scale-105"
-                    >
+                    <Button>
                         立即体验
                     </Button>
                 </div>
@@ -126,8 +122,7 @@ export default function Home() {
                             <p className="text-muted-foreground mb-6">
                                 在这个充满高科技和低生活的未来世界中,巨型企业掌控着一切,而普通人则在霓虹灯下挣扎求生。街头充满了危险与机遇,每个人都在寻找属于自己的一席之地。
                             </p>
-                            <Button onClick={() => {
-                            }} className="bg-primary text-primary-foreground hover:bg-primary/90">
+                            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
                                 立即体验
                             </Button>
                         </div>
@@ -150,7 +145,7 @@ export default function Home() {
                 <Guide/>
             </section>
             <section className="py-16 px-4 bg-background">
-                <Devlog currentUser={null} list={[]}/>
+                <Devlog list={devList}/>
             </section>
             <section className="py-16 px-5 bg-background" id="aboutSection">
                 <About/>

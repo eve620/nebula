@@ -20,7 +20,7 @@ interface NewsData {
   images: string[]
 }
 
-export default function PublishNews() {
+export default function PublishProject() {
   const router = useRouter()
   const [newsData, setNewsData] = useState<NewsData>({
     title: '',
@@ -57,9 +57,9 @@ export default function PublishNews() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Here you would typically send the data to your backend
-    console.log('Publishing news:', newsData)
-    // After publishing, redirect to the news list page
-    router.push('/news')
+    console.log('Publishing notice:', newsData)
+    // After publishing, redirect to the notice list page
+    router.push('/notice')
   }
 
   return (

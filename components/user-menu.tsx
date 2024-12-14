@@ -16,15 +16,12 @@ import {FriendManagementModal} from "@/components/modal/friend-management-modal"
 import {ViewSharedPostsModal} from "@/components/modal/view-shared-posts-modal";
 import {DailyCheckInModal} from "@/components/modal/daily-check-in-modal";
 import {EditProfileModal} from "@/components/modal/edit-profile-modal";
-import {User} from "@/types";
 import {signOut} from "next-auth/react";
 import {toast} from "@/hooks/use-toast";
+import {useUser} from "@/contexts/user-context";
 
-interface UserMenuProps {
-    user: User;
-}
-
-export function UserMenu({user}: UserMenuProps) {
+export function UserMenu() {
+    const currentUser = useUser()
     const router = useRouter()
     const [isFriendManagementModalOpen, setIsFriendManagementModalOpen] = useState(false)
     const [isViewSharedPostsModalOpen, setIsViewSharedPostsModalOpen] = useState(false)
@@ -43,15 +40,15 @@ export function UserMenu({user}: UserMenuProps) {
                 <DropdownMenuTrigger asChild>
                     <div
                         className={"w-8 h-8 bg-blue-300 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80"}>
-                        <Image src={user.image || '/avatar.jpg'} alt="avatar" width={100} height={100}/>
+                        <Image src={currentUser?.image || '/avatar.jpg'} alt="avatar" width={100} height={100}/>
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
-                            <p className="text-sm font-medium leading-none">{user.nickname || user.username}</p> {/* Display nickname if available */}
+                            <p className="text-sm font-medium leading-none">{currentUser?.nickname || currentUser?.username}</p> {/* Display nickname if available */}
                             <p className="text-xs leading-none text-muted-foreground">
-                                {user.username}
+                                {currentUser?.username}
                             </p>
                         </div>
                     </DropdownMenuLabel>
@@ -76,7 +73,7 @@ export function UserMenu({user}: UserMenuProps) {
                         <Settings className="mr-2 h-4 w-4"/>
                         <span>设置</span>
                     </DropdownMenuItem>
-                    {user.role === "Admin" && (
+                    {currentUser?.role === "Admin" && (
                         <DropdownMenuItem onClick={() => router.push('/admin')}>
                             <ShieldCheck className="mr-2 h-4 w-4"/>
                             <span>后台管理</span>
@@ -110,12 +107,11 @@ export function UserMenu({user}: UserMenuProps) {
             <DailyCheckInModal
                 isOpen={isDailyCheckInModalOpen}
                 onClose={() => setIsDailyCheckInModalOpen(false)}
-                userId={user.id}
+                userId={currentUser?.id}
             />
             <EditProfileModal
                 isOpen={isEditProfileModalOpen}
                 onClose={() => setIsEditProfileModalOpen(false)}
-                user={user}
             />
         </>
     )

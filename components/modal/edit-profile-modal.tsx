@@ -9,17 +9,18 @@ import {Modal} from '@/components/modal/modal'
 import {CropImageModal} from './crop-image-modal'
 import {Textarea} from "@/components/ui/textarea"
 import {User} from "@/types";
+import {useUser} from "@/contexts/user-context";
 
 interface EditProfileModalProps {
     isOpen: boolean
     onClose: () => void
-    user: User
 }
 
-export function EditProfileModal({isOpen, onClose, user}: EditProfileModalProps) {
-    const [username, setUsername] = useState(user.username || '')
-    const [bio, setBio] = useState(user.bio || '')
-    const [nickname, setNickname] = useState(user.nickname || '')
+export function EditProfileModal({isOpen, onClose}: EditProfileModalProps) {
+    const currentUser = useUser()
+    const [username, setUsername] = useState(currentUser?.username || '')
+    const [bio, setBio] = useState(currentUser?.bio || '')
+    const [nickname, setNickname] = useState(currentUser?.nickname || '')
     const [selectedImage, setSelectedImage] = useState<string | null>(null)
     const [croppedImage, setCroppedImage] = useState<string | null>(null)
     const [isCropModalOpen, setIsCropModalOpen] = useState(false)

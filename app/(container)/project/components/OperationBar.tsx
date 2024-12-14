@@ -12,7 +12,7 @@ const OperationBar: React.FC<OperationBarProps> = () => {
         <div className={"flex justify-between pb-6 pr-6"}>
             <span className={"font-bold ml-10"}>我的项目：</span>
             <Button onClick={() => {
-                router.push('/project/action?action=edit&id=1')
+                router.push('/project/new')
             }}>添加项目</Button>
         </div>
     )

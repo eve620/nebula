@@ -5,6 +5,8 @@ import {cookies} from "next/headers";
 import React from "react";
 import {notoSansSC} from "@/app/fonts";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import {UserProvider} from "@/contexts/user-context";
+import {Toaster} from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
     title: 'Focus',
@@ -18,11 +20,15 @@ export default async function RootLayout({children,}: { children: React.ReactNod
     return (
         <html lang="zh" className={`${notoSansSC.variable} ${isDark && 'dark'}`}>
         <body>
-        <Navbar
-            currentUser={currentUser}
-            curTheme={isDark ? 'dark' : 'light'}
-        />
-        {children}
+        <UserProvider value={currentUser}>
+            <Navbar
+                curTheme={isDark ? 'dark' : 'light'}
+            />
+            <main>
+                {children}
+            </main>
+        </UserProvider>
+        <Toaster />
         </body>
         </html>
     )

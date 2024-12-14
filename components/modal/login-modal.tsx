@@ -38,11 +38,31 @@ export function LoginModal({isOpen, onClose}: LoginModalProps) {
             if (isRegistering) {
                 registerSchema.parse({username, password, nickname})
                 // 这里应该有注册逻辑
-                const user = await fetch("/api/auth/register", {
+                const user = await fetch("/api/auth/user", {
                     method: "POST",
-                    body: JSON.stringify({})
+                    body: JSON.stringify({
+                        username,
+                        password,
+                        nickname
+                    })
                 })
                 if (user.ok) {
+                    const response = await signIn('credentials', {
+                        username,
+                        password,
+                        redirect: false
+                    })
+                    if (!response?.error) {
+                        router.push("/")
+                        router.refresh()
+                    }
+                    setPassword("")
+                    setUsername("")
+                    setNickname("")
+                    setIsRegistering(false)
+                } else {
+                    const message = await user.json()
+                    console.log(message)
                 }
             } else {
                 loginSchema.parse({username, password})

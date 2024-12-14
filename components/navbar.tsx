@@ -8,11 +8,12 @@ import {UserMenu} from './user-menu'
 import {LoginModal} from './modal/login-modal'
 import {usePathname} from "next/navigation";
 import {User} from "@/types";
+import {useUser} from "@/contexts/user-context";
 
 const navItems = [
     {name: '首页', href: '/'},
     {name: '角色', href: '/characters'},
-    {name: '新闻', href: '/news'},
+    {name: '公告', href: '/notice'},
     {name: '论坛', href: '/forum'},
     {name: '项目', href: '/project'},
     {name: '笔记', href: '/note'},
@@ -21,15 +22,15 @@ const navItems = [
 ]
 
 interface NavbarProps {
-    currentUser: User | null;
     curTheme: 'light' | 'dark'
 }
 
-export function Navbar({currentUser, curTheme}: NavbarProps) {
+export function Navbar({curTheme}: NavbarProps) {
+    const currentUser = useUser()
     const [isOpen, setIsOpen] = useState(false)
     const pathname = usePathname()
     const isActive = (path: string) => {
-        return pathname === path
+        return path === "/" ? pathname === path : pathname.startsWith(path)
     }
     const [theme, setTheme] = useState<'light' | 'dark'>(curTheme)
     useEffect(() => {
@@ -99,11 +100,7 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
                                     <Moon className="h-[1.2rem] w-[1.2rem]"/>}
                                 <span className="sr-only">切换主题</span>
                             </Button>
-                            {currentUser ? (
-                                <UserMenu
-                                    user={currentUser}
-                                />
-                            ) : (
+                            {currentUser ? (<UserMenu/>) : (
                                 <Button onClick={() => setIsLoginModalOpen(true)}
                                         className="bg-cyan-500 hover:bg-cyan-600 text-black">
                                     立即体验
@@ -132,9 +129,7 @@ export function Navbar({currentUser, curTheme}: NavbarProps) {
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         {currentUser ? (
                             <div className="px-3 py-2">
-                                <UserMenu
-                                    user={currentUser}
-                                />
+                                <UserMenu/>
                             </div>
                         ) : (
                             <Button onClick={() => {

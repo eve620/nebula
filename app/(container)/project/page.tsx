@@ -1,7 +1,8 @@
-import ProjectList from "@/app/(container)/project/ProjectList";
-import OperationBar from "@/app/(container)/project/OperationBar";
+import ProjectList from "@/app/(container)/project/components/ProjectList";
+import OperationBar from "@/app/(container)/project/components/OperationBar";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getProjectList from "@/app/actions/getProjectList";
+import TagModal from "@/components/modal/tag-modal";
 
 export type Project = {
     id: number;

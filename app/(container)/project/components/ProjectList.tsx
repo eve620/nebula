@@ -1,7 +1,7 @@
 "use client"
 import React, {useState} from "react";
 import {Project} from "@/app/(container)/project/page";
-import './antdModal.css'
+import '../antdModal.css'
 import Empty from "@/components/empty";
 import {format} from "date-fns/format";
 import {useRouter} from "next/navigation";

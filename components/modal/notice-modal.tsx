@@ -16,22 +16,22 @@ interface NewsModalProps {
   news: NewsItem;
 }
 
-export function NewsModal({ isOpen, onClose, news }: NewsModalProps) {
+export function NoticeModal({ isOpen, onClose, notice }: NewsModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={news.title}>
+    <Modal isOpen={isOpen} onClose={onClose} title={notice.title}>
       <div className="space-y-4">
         <Image
-          src={news.imageUrl}
-          alt={news.title}
+          src={notice.imageUrl}
+          alt={notice.title}
           width={600}
           height={400}
           className="w-full h-auto rounded-md"
         />
         <div className="flex justify-between text-sm text-muted-foreground">
-          <span>作者: {news.author}</span>
-          <span>发布日期: {news.date}</span>
+          <span>作者: {notice.author}</span>
+          <span>发布日期: {notice.date}</span>
         </div>
-        <p className="text-foreground">{news.content}</p>
+        <p className="text-foreground">{notice.content}</p>
       </div>
     </Modal>
   )

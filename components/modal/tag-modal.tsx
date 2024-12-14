@@ -5,11 +5,12 @@ import {Toggle} from "@/components/ui/toggle";
 import {useRouter} from "next/navigation";
 import {Input} from "@/components/ui/input";
 import {Modal} from "@/components/modal/modal";
+import {Button} from "@/components/ui/button";
 
 interface TagModalProps {
     isOpen: boolean
     onClose: () => void
-    tags: string[]
+    tags: string[] | null
 }
 
 const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
@@ -51,7 +52,15 @@ const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
     return (
         <Modal
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={() => {
+                onClose()
+                const uniqueArr = Array.from(new Set(currentTags.filter(Boolean)))
+                if (tags.toString() !== uniqueArr.toString()) {
+                    updateTags(uniqueArr)
+                }
+                setCurrentTags(uniqueArr)
+            }}
+            description="编辑标签。"
             title="标签"
         >
             <div className="space-y-6 h-96 pt-2 px-2 overflow-y-auto pr-4">
@@ -69,6 +78,7 @@ const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
                     )) :
                     <div className={'flex justify-center items-center h-full'}>暂无标签...</div>}
             </div>
+            <Button onClick={handleOnSubmit}>添加</Button>
         </Modal>
     );
 };
