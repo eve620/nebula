@@ -85,7 +85,7 @@ export function EditProfileModal({isOpen, onClose}: EditProfileModalProps) {
                             id="bio"
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
-                            className="col-span-3"
+                            className="col-span-3 max-h-28"
                         />
                     </div>
                     <div className="flex flex-col items-center gap-4">
