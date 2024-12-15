@@ -1,5 +1,5 @@
 "use client"
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {X} from "lucide-react";
 import {Toggle} from "@/components/ui/toggle";
 import {useRouter} from "next/navigation";
@@ -16,7 +16,13 @@ interface TagModalProps {
 const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
     const [currentTags, setCurrentTags] = useState<string[]>(tags);
     const router = useRouter()
+    const latestInputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        if (latestInputRef.current) {
+            latestInputRef.current.focus();
+        }
+    }, [currentTags.length]);
     const updateTags = async (newTags: String[]) => {
         const update = await fetch('/api/tag', {
             method: "PUT",
@@ -48,7 +54,6 @@ const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
     const handleOnSubmit = () => {
         setCurrentTags([...currentTags, '']);
     };
-
     return (
         <Modal
             isOpen={isOpen}
@@ -68,11 +73,12 @@ const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
                     currentTags.map((item, index) => (
                         <div className={'flex items-center'} key={index}>
                             <Input value={currentTags[index]}
+                                   ref={index === currentTags.length - 1 ? latestInputRef : null}
                                    onChange={(e) => handleInputChange(index, e.target.value)}/>
-                            <Toggle pressed={false} size={"sm"}>
-                                <X onClick={() => {
-                                    handleDeleteTag(index)
-                                }}/>
+                            <Toggle pressed={false} onClick={() => {
+                                handleDeleteTag(index)
+                            }} size={"sm"}>
+                                <X/>
                             </Toggle>
                         </div>
                     )) :

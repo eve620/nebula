@@ -8,11 +8,8 @@ import {Modal} from '@/components/modal/modal'
 import {z} from 'zod'
 import {signIn} from "next-auth/react";
 import {useRouter} from "next/navigation";
-
-interface LoginModalProps {
-    isOpen: boolean
-    onClose: () => void
-}
+import showMessage from "@/components/message";
+import useLoginModal from "@/hooks/use-login-modal";
 
 const loginSchema = z.object({
     username: z.string().min(3, '用户名至少需要3个字符'),
@@ -23,7 +20,8 @@ const registerSchema = loginSchema.extend({
     nickname: z.string().min(2, '昵称至少需要2个字符'),
 })
 
-export function LoginModal({isOpen, onClose}: LoginModalProps) {
+export function LoginModal() {
+    const loginStore = useLoginModal()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [nickname, setNickname] = useState('')
@@ -53,6 +51,7 @@ export function LoginModal({isOpen, onClose}: LoginModalProps) {
                         redirect: false
                     })
                     if (!response?.error) {
+                        showMessage("注册成功！")
                         router.push("/")
                         router.refresh()
                     }
@@ -73,15 +72,16 @@ export function LoginModal({isOpen, onClose}: LoginModalProps) {
                     redirect: false
                 })
                 if (!response?.error) {
-                    setNickname("")
-                    setUsername("")
-                    setPassword("")
+                    showMessage("登录成功！")
+                    router.push("/")
                     router.refresh()
-                } else {
                 }
+                setNickname("")
+                setUsername("")
+                setPassword("")
             }
             // 为演示目的，我们仍然关闭模态框
-            onClose()
+            loginStore.onClose()
         } catch (error) {
             if (error instanceof z.ZodError) {
                 setErrors(error.flatten().fieldErrors)
@@ -90,12 +90,13 @@ export function LoginModal({isOpen, onClose}: LoginModalProps) {
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title={isRegistering ? "注册" : "登录"}
+        <Modal isOpen={loginStore.isOpen} onClose={loginStore.onClose} title={isRegistering ? "注册" : "登录"}
                description="输入您的账号信息以访问绝区零的世界。">
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="username">用户名</Label>
                     <Input
+                        autoComplete="username"
                         id="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -107,6 +108,7 @@ export function LoginModal({isOpen, onClose}: LoginModalProps) {
                 <div className="space-y-2">
                     <Label htmlFor="password">密码</Label>
                     <Input
+                        autoComplete={'current-password'}
                         id="password"
                         type="password"
                         value={password}

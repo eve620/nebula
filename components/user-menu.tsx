@@ -19,6 +19,7 @@ import {EditProfileModal} from "@/components/modal/edit-profile-modal";
 import {signOut} from "next-auth/react";
 import {toast} from "@/hooks/use-toast";
 import {useUser} from "@/contexts/user-context";
+import showMessage from "@/components/message";
 
 export function UserMenu() {
     const currentUser = useUser()
@@ -82,12 +83,9 @@ export function UserMenu() {
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem onClick={() => {
                         signOut({redirect: false}).then(() => {
+                            router.push("/")
                             router.refresh()
-                            toast({
-                                title: "成功",
-                                description: "退出成功",
-                                variant: "destructive",
-                            })
+                            showMessage("退出成功！")
                         })
                     }}>
                         <LogOut className="mr-2 h-4 w-4"/>

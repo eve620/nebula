@@ -7,12 +7,11 @@ import {Button} from "@/components/ui/button"
 import {UserMenu} from './user-menu'
 import {LoginModal} from './modal/login-modal'
 import {usePathname} from "next/navigation";
-import {User} from "@/types";
 import {useUser} from "@/contexts/user-context";
+import useLoginModal from "@/hooks/use-login-modal";
 
 const navItems = [
     {name: '首页', href: '/'},
-    {name: '角色', href: '/characters'},
     {name: '公告', href: '/notice'},
     {name: '论坛', href: '/forum'},
     {name: '项目', href: '/project'},
@@ -29,6 +28,7 @@ export function Navbar({curTheme}: NavbarProps) {
     const currentUser = useUser()
     const [isOpen, setIsOpen] = useState(false)
     const pathname = usePathname()
+    const loginStore = useLoginModal()
     const isActive = (path: string) => {
         return path === "/" ? pathname === path : pathname.startsWith(path)
     }
@@ -48,13 +48,6 @@ export function Navbar({curTheme}: NavbarProps) {
         document.cookie = `theme=${theme}; path=/; max-age=31536000;`
     }, [theme])
 
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
-
-    const handleLogin = (username: string, password: string) => {
-        // 这里应该有实际的登录逻辑
-        console.log('Login attempted with:', username, password)
-        setIsLoginModalOpen(false)
-    }
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light'
         setTheme(newTheme)
@@ -101,7 +94,9 @@ export function Navbar({curTheme}: NavbarProps) {
                                 <span className="sr-only">切换主题</span>
                             </Button>
                             {currentUser ? (<UserMenu/>) : (
-                                <Button onClick={() => setIsLoginModalOpen(true)}
+                                <Button onClick={() => {
+                                    loginStore.onOpen()
+                                }}
                                         className="bg-cyan-500 hover:bg-cyan-600 text-black">
                                     立即体验
                                 </Button>
@@ -134,7 +129,7 @@ export function Navbar({curTheme}: NavbarProps) {
                         ) : (
                             <Button onClick={() => {
                                 setIsOpen(false);
-                                setIsLoginModalOpen(true);
+                                loginStore.onOpen()
                             }} className="w-full mt-2 bg-cyan-500 hover:bg-cyan-600 text-black">
                                 立即体验
                             </Button>
@@ -167,7 +162,7 @@ export function Navbar({curTheme}: NavbarProps) {
                 </div>
             )}
 
-            <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} onLogin={handleLogin}/>
+            <LoginModal/>
         </nav>
     )
 }

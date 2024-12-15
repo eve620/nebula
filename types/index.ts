@@ -15,11 +15,10 @@ export interface Note {
     createdById: number
 }
 
-export interface Tag {
-    id: string;
-    username: string;
-    nickname: string;
-    bio: string;
-    image: string;
-    role: "Admin" | "User";
+export interface EventType {
+    id: number,
+    title: string,
+    toDo: string[],
+    inProgress: string[],
+    completed: string[]
 }
