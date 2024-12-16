@@ -6,7 +6,7 @@ export default async function Layout({children}: Readonly<{ children: React.Reac
     const tagList: string[] = await getTagList() || []
     return (
         <TagProvider value={tagList}>
-            <div className="container px-4 py-8  mx-auto">
+            <div className="container px-4 py-8 mx-auto h-[calc(100vh-4rem)] min-h-fit">
                 {children}
             </div>
         </TagProvider>

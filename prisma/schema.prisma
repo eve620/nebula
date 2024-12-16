@@ -22,6 +22,10 @@ model User {
   progress  Progress?
   tag       Tag?
   Event     Event[]
+  // Announcements Announcement[]
+  // Posts         ForumPost[]
+  // Comments      Comment[]
+  // Likes         Like[]
 }
 
 enum UserRole {
@@ -101,3 +105,59 @@ model Tag {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+// model Announcement {
+//   id          String   @id
+//   title       String
+//   content     String
+//   createdById Int      @unique
+//   createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+//   isPinned    Boolean  @default(false)
+//   isActive    Boolean  @default(true)
+// }
+//
+// model ForumPost {
+//   id          String    @id
+//   title       String
+//   content     String
+//   createdById Int       @unique
+//   createdBy   User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
+//   createdAt   DateTime  @default(now())
+//   updatedAt   DateTime  @updatedAt
+//   viewCount   Int       @default(0)
+//   isPinned    Boolean   @default(false)
+//   isLocked    Boolean   @default(false)
+//   comments    Comment[]
+//   likes       Like[]
+// }
+//
+// model Comment {
+//   id              String    @id
+//   postId          String
+//   post            ForumPost @relation(fields: [postId], references: [id])
+//   createdById     Int       @unique
+//   createdBy       User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
+//   content         String
+//   createdAt       DateTime  @default(now())
+//   updatedAt       DateTime  @updatedAt
+//   parentCommentId String?
+//   parentComment   Comment?  @relation("CommentToComment", fields: [parentCommentId], references: [id])
+//   childComments   Comment[] @relation("CommentToComment")
+//   likes           Like[]
+// }
+//
+// model Like {
+//   id        String     @id
+//   userId    Int
+//   user      User       @relation(fields: [userId], references: [id])
+//   postId    String?
+//   post      ForumPost? @relation(fields: [postId], references: [id])
+//   commentId String?
+//   comment   Comment?   @relation(fields: [commentId], references: [id])
+//   createdAt DateTime   @default(now())
+//
+//   @@unique([userId, postId])
+//   @@unique([userId, commentId])
+// }
