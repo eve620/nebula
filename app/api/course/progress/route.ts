@@ -1,7 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
-import prisma from "@/prisma/client";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-
+import {prisma} from "@/lib/prisma";
 
 // 假设您的默认 course 和 wordIndex 值是 0
 const defaultCourse = "01";

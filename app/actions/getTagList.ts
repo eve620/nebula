@@ -1,7 +1,4 @@
-import prisma from "@/prisma/client";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-
-const defaultTag = "[]";
 
 export default async function getTagList() {
     try {

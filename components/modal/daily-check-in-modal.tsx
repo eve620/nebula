@@ -1,6 +1,6 @@
 'use client'
 
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {Modal} from "@/components/modal/modal"
 import {Button} from "@/components/ui/button"
 import {ChevronLeft, ChevronRight} from 'lucide-react'
@@ -11,63 +11,78 @@ interface DailyCheckInModalProps {
     userId: string
 }
 
-interface CheckInData {
-    userId: string
+
+interface CalendarDay {
     date: string
+    isCheckedIn: boolean
 }
 
-interface RankingItem {
-    userId: string
+interface LeaderboardEntry {
+    id: string
     username: string
-    checkInCount: number
+    avatarUrl: string
+    monthlyCheckIns: number
+    currentStreak: number
 }
+
 
 const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate()
 const today = new Date()
 
 export function DailyCheckInModal({isOpen, onClose, userId}: DailyCheckInModalProps) {
     const [currentDate, setCurrentDate] = useState(new Date())
-    const [checkIns, setCheckIns] = useState<CheckInData[]>([])
-    const [ranking, setRanking] = useState<RankingItem[]>([])
-    const [userCheckInCount, setUserCheckInCount] = useState(0)
+    const [calendarData, setCalendarData] = useState<CalendarDay[]>([])
+    const [currentStreak, setCurrentStreak] = useState(0)
+    const [monthlyCheckIns, setMonthlyCheckIns] = useState(0)
+    const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+    const [isLoading, setIsLoading] = useState(false)
 
-    useEffect(() => {
-        if (isOpen) {
-            fetchCheckIns()
-            fetchRanking()
+    const fetchCalendarData = async () => {
+        setIsLoading(true)
+        try {
+            // const year = currentDate.getFullYear()
+            // const month = currentDate.getMonth() + 1
+            // const response = await fetch(`/api/daily-check-in?userId=${userId}&year=${year}&month=${month}`)
+            // if (!response.ok) throw new Error('获取打卡记录失败')
+            // const data = await response.json()
+            // setCalendarData(data.calendarData)
+            // setCurrentStreak(data.currentStreak)
+            // setMonthlyCheckIns(data.monthlyCheckIns)
+        } catch (error) {
+            console.error('获取打卡记录失败:', error)
+        } finally {
+            setIsLoading(false)
         }
-    }, [isOpen, currentDate])
-
-    const fetchCheckIns = async () => {
-        // 模拟API调用获取用户的打卡数据
-        const mockCheckIns: CheckInData[] = [
-            {userId, date: '2023-12-01'},
-            {userId, date: '2023-12-02'},
-            {userId, date: '2023-12-03'},
-            // ... 更多模拟数据
-        ]
-        setCheckIns(mockCheckIns)
-        setUserCheckInCount(mockCheckIns.length)
     }
 
-    const fetchRanking = async () => {
-        // 模拟API调用获取排行榜数据
-        const mockRanking: RankingItem[] = [
-            {userId: '1', username: '用户A', checkInCount: 30},
-            {userId: '2', username: '用户B', checkInCount: 28},
-            {userId: '3', username: '用户C', checkInCount: 25},
-            // ... 更多模拟数据
-        ]
-        setRanking(mockRanking)
+    const fetchLeaderboard = async () => {
+        try {
+            const response = await fetch('/api/leaderboard')
+            if (!response.ok) throw new Error('获取排行榜失败')
+            const data = await response.json()
+            setLeaderboard(data)
+        } catch (error) {
+            console.error('获取排行榜失败:', error)
+        }
     }
 
     const handleCheckIn = async () => {
-        // 模拟API调用进行打卡
-        const newCheckIn: CheckInData = {userId, date: new Date().toISOString().split('T')[0]}
-        setCheckIns([...checkIns, newCheckIn])
-        setUserCheckInCount(userCheckInCount + 1)
+        setIsLoading(true)
+        try {
+            // const response = await fetch('/api/daily-check-in', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ userId }),
+            // })
+            // if (!response.ok) throw new Error('打卡失败')
+            // await fetchCalendarData()
+            // await fetchLeaderboard()
+        } catch (error) {
+            console.error('打卡失败:', error)
+        } finally {
+            setIsLoading(false)
+        }
     }
-
     const changeMonth = (delta: number) => {
         const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + delta, 1)
         if (newDate <= today) {
@@ -78,21 +93,20 @@ export function DailyCheckInModal({isOpen, onClose, userId}: DailyCheckInModalPr
     const renderCalendar = () => {
         const year = currentDate.getFullYear()
         const month = currentDate.getMonth()
-        const totalDays = daysInMonth(year, month)
-        const firstDayOfMonth = new Date(year, month, 1).getDay()
+        const firstDay = new Date(year, month, 1).getDay()
+        const daysInMonth = new Date(year, month + 1, 0).getDate()
         const calendarDays = []
         for (let i = 0; i < 42; i++) {
-            const dayNumber = i - firstDayOfMonth + 1
-            const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`
-            const isCurrentMonth = dayNumber > 0 && dayNumber <= totalDays
-            const isCheckedIn = checkIns.some(checkIn => checkIn.date === date)
+            const dayNumber = i - firstDay + 1
+            const isCurrentMonth = dayNumber > 0 && dayNumber <= daysInMonth
+            const calendarDay = calendarData.find(day => new Date(day.date).getDate() === dayNumber)
 
             calendarDays.push(
                 <div
                     key={i}
                     className={`w-4 h-4 rounded mx-auto ${
                         isCurrentMonth
-                            ? isCheckedIn
+                            ? calendarDay?.isCheckedIn
                                 ? 'ring-green-500 ring-[1px] bg-green-500/60 dark:bg-slate-400 dark:ring-slate-600'
                                 : 'ring-ring ring-[1px] bg-gray-200 dark:bg-white'
                             : 'bg-transparent'
@@ -117,31 +131,41 @@ export function DailyCheckInModal({isOpen, onClose, userId}: DailyCheckInModalPr
                         ))}
                         {renderCalendar()}
                     </div>
-                    <div className="flex items-center space-x-2 text-sm">
-                        <Button variant="outline" size="sm" onClick={() => changeMonth(-1)}>
-                            <ChevronLeft className="h-4 w-4"/>
-                        </Button>
-                        <span
-                            className="w-32 text-center">{currentDate.getFullYear()}年{currentDate.getMonth() + 1}月</span>
-                        <Button disabled={!canGoForward} variant="outline" size="sm" onClick={() => changeMonth(1)}>
-                            <ChevronRight className="h-4 w-4"/>
+                    <div className="flex justify-between items-center">
+                        <span>已连续打卡 {currentStreak} 天</span>
+                        <Button onClick={handleCheckIn} disabled={isLoading}>
+                            {isLoading ? '处理中...' : '打卡'}
                         </Button>
                     </div>
-                </div>
-                <div className="flex justify-between items-center">
-                    <span>已连续打卡 {userCheckInCount} 天</span>
-                    <Button onClick={handleCheckIn}>打卡</Button>
-                </div>
-                <div className="h-[200px] overflow-y-auto">
-                    <h3 className="text-lg font-semibold mb-2">打卡排行榜</h3>
-                    <ul className="space-y-2">
-                        {ranking.map((item, index) => (
-                            <li key={item.userId} className="flex justify-between items-center">
-                                <span>{index + 1}. {item.username}</span>
-                                <span>{item.checkInCount} 天</span>
-                            </li>
-                        ))}
-                    </ul>
+                    <div>
+                        <h3 className="text-lg font-semibold mb-2">打卡统计</h3>
+                        <p>本月打卡次数：{monthlyCheckIns} 次</p>
+                    </div>
+                    <div>
+                        <div className="flex items-center space-x-2 text-sm">
+                            <Button variant="outline" size="sm" onClick={() => changeMonth(-1)}>
+                                <ChevronLeft className="h-4 w-4"/>
+                            </Button>
+                            <span
+                                className="w-32 text-center">{currentDate.getFullYear()}年{currentDate.getMonth() + 1}月</span>
+                            <Button disabled={!canGoForward} variant="outline" size="sm" onClick={() => changeMonth(1)}>
+                                <ChevronRight className="h-4 w-4"/>
+                            </Button>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold mb-2">排行榜</h3>
+                        <ul className="space-y-2">
+                            {leaderboard.map((entry, index) => (
+                                <li key={entry.id} className="flex items-center space-x-2">
+                                    <span className="font-bold">{index + 1}.</span>
+                                    <img src={entry.avatarUrl} alt={entry.username} className="w-6 h-6 rounded-full"/>
+                                    <span>{entry.username}</span>
+                                    <span className="ml-auto">{entry.monthlyCheckIns} 次</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </Modal>

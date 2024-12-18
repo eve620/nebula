@@ -1,4 +1,3 @@
-import prisma from "@/prisma/client";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import {eventDataProps} from "@/app/(frontend)/kanban/page";
 import {NextResponse} from "next/server";

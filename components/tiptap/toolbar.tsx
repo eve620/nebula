@@ -13,42 +13,42 @@ const Toolbar = ({editor}: Props) => {
 
     return (
         <div className="border-b-2 p-1">
-            <Toggle size={'sm'}
+            <Toggle size={'sm'} title={"H1"}
                     pressed={editor.isActive('heading', {level: 1})}
                     onPressedChange={() => editor?.chain().focus().toggleHeading({level: 1}).run()}>
                 <Heading1 className={'text-neutral-600 dark:text-gray-200 h-5 w-5'}></Heading1>
             </Toggle>
-            <Toggle size={'sm'}
+            <Toggle size={'sm'} title={"H2"}
                     pressed={editor.isActive('heading', {level: 2})}
                     onPressedChange={() => editor?.chain().focus().toggleHeading({level: 2}).run()}>
                 <Heading2 className={'text-neutral-600 dark:text-gray-200 h-5 w-5'}></Heading2>
             </Toggle>
-            <Toggle size={'sm'}
+            <Toggle size={'sm'} title={"H3"}
                     pressed={editor.isActive('heading', {level: 3})}
                     onPressedChange={() => editor?.chain().focus().toggleHeading({level: 3}).run()}>
                 <Heading3 className={'text-neutral-600 dark:text-gray-200 h-5 w-5'}></Heading3>
             </Toggle>
-            <Toggle size={'sm'}
+            <Toggle size={'sm'} title={"粗体"}
                     pressed={editor.isActive('bold')}
                     onPressedChange={() => editor?.chain().focus().toggleBold().run()}>
                 <Bold className={'text-neutral-600 dark:text-gray-200 h-5 w-5'}></Bold>
             </Toggle>
-            <Toggle size={'sm'}
+            <Toggle size={'sm'} title={"斜体"}
                     pressed={editor.isActive('italic')}
                     onPressedChange={() => editor?.chain().focus().toggleItalic().run()}>
                 <Italic className={'text-neutral-600 dark:text-gray-200 h-5 w-5'}></Italic>
             </Toggle>
-            <Toggle size={'sm'}
+            <Toggle size={'sm'} title={"删除线"}
                     pressed={editor.isActive('strike')}
                     onPressedChange={() => editor?.chain().focus().toggleStrike().run()}>
                 <Strikethrough className={'text-neutral-600 dark:text-gray-200 h-5 w-5'}></Strikethrough>
             </Toggle>
-            <Toggle size={'sm'}
+            <Toggle size={'sm'} title={"无序列表"}
                     pressed={editor.isActive('bulletList')}
                     onPressedChange={() => editor?.chain().focus().toggleBulletList().run()}>
                 <List className={'text-neutral-600 dark:text-gray-200 h-5 w-5'}></List>
             </Toggle>
-            <Toggle size={'sm'}
+            <Toggle size={'sm'} title={"有序列表"}
                     pressed={editor.isActive('orderedList')}
                     onPressedChange={() => editor?.chain().focus().toggleOrderedList().run()}>
                 <ListOrdered className={'text-neutral-600 dark:text-gray-200 h-5 w-5'}></ListOrdered>

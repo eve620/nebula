@@ -1,4 +1,3 @@
-import prisma from "@/prisma/client";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import path from "path";
 import fs from "fs";

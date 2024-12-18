@@ -1,10 +1,9 @@
 import {NextRequest, NextResponse} from "next/server";
-import prisma from "@/prisma/client";
 import {compare, hash} from "bcrypt"
 import fs from "fs";
 import path from "path";
 import {saveBase64Image} from "@/app/api/auth/user/utils";
-
+import {prisma} from "@/lib/prisma";
 export async function POST(request: NextRequest) {
     try {
         const {username, nickname, password} = await request.json()

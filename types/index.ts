@@ -22,3 +22,23 @@ export interface EventType {
     inProgress: string[],
     completed: string[]
 }
+
+export interface Post {
+    id: number;
+    title: string;
+    content: string;
+    createdById: number;
+    createdAt: Date;
+    updatedAt: Date;
+    viewCount: number;
+    isPinned: boolean;
+    isLocked: boolean;
+    createdBy: {
+        username: string;
+        nickname: string; // 增加了nickname
+    };
+    comments: any;
+    _count: {
+        likes: number
+    }
+}

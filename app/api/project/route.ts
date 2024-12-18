@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
-import prisma from "@/prisma/client";
 import {deleteFiles, extractFormData, saveFiles} from "@/app/api/project/utils";
+import {prisma} from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
     const {searchParams} = new URL(request.url);

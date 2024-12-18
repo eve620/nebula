@@ -105,19 +105,6 @@ export function LoginModal() {
                     />
                     {errors.username && <p className="text-sm text-red-500">{errors.username}</p>}
                 </div>
-                <div className="space-y-2">
-                    <Label htmlFor="password">密码</Label>
-                    <Input
-                        autoComplete={'current-password'}
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="输入密码"
-                        required
-                    />
-                    {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
-                </div>
                 {isRegistering && (
                     <div className="space-y-2">
                         <Label htmlFor="nickname">昵称</Label>
@@ -131,6 +118,19 @@ export function LoginModal() {
                         {errors.nickname && <p className="text-sm text-red-500">{errors.nickname}</p>}
                     </div>
                 )}
+                <div className="space-y-2">
+                    <Label htmlFor="password">密码</Label>
+                    <Input
+                        autoComplete={'current-password'}
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="输入密码"
+                        required
+                    />
+                    {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
+                </div>
                 <Button type="submit" className="w-full">{isRegistering ? "注册" : "登录"}</Button>
             </form>
             <div className="mt-4 text-center">

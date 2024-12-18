@@ -1,9 +1,9 @@
 import {NextRequest, NextResponse} from "next/server";
-import prisma from "@/prisma/client";
 import fs from "fs";
 import path from "path";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import {saveBase64Image} from "@/app/api/auth/user/utils";
+import {prisma} from "@/lib/prisma";
 
 const AVATAR_DIR = path.join(process.cwd(), 'public', 'storage', 'avatar');
 

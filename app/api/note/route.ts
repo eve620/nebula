@@ -1,7 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
-import prisma from "@/prisma/client";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-
+import {prisma} from "@/lib/prisma";
 export async function GET(request: NextRequest) {
     const currentUser = await getCurrentUser()
     if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});

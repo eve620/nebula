@@ -10,22 +10,22 @@ import {usePathname} from "next/navigation";
 import {useUser} from "@/contexts/user-context";
 import useLoginModal from "@/hooks/use-login-modal";
 
-const navItems = [
-    {name: '首页', href: '/'},
-    {name: '公告', href: '/notice'},
-    {name: '论坛', href: '/forum'},
-    {name: '项目', href: '/project'},
-    {name: '笔记', href: '/note'},
-    {name: '英语', href: '/english'},
-    {name: '看板', href: '/kanban'},
-]
-
 interface NavbarProps {
     curTheme: 'light' | 'dark'
 }
 
 export function Navbar({curTheme}: NavbarProps) {
     const currentUser = useUser()
+    const navItems = [
+        {name: '首页', href: '/'},
+        {name: '公告', href: '/notice'},
+        {name: '总结', href: '/forum'},
+        // {name: '项目', href: '/project'},
+        // {name: '笔记', href: '/note'},
+        {name: '我的', href: '/my'},
+        {name: '英语', href: '/english'},
+        {name: '看板', href: '/kanban'},
+    ]
     const [isOpen, setIsOpen] = useState(false)
     const pathname = usePathname()
     const loginStore = useLoginModal()
@@ -65,15 +65,16 @@ export function Navbar({curTheme}: NavbarProps) {
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
                         <Link href="/" className="flex-shrink-0">
-                            <span className="text-2xl font-bold">绝区零</span>
+                            <span className="text-xl font-semibold italic">SUZVC</span>
                         </Link>
                     </div>
                     <div className="hidden md:block">
                         <div className="ml-10 flex items-center space-x-4">
                             {navItems.map((item) => (
                                 <Link
+                                    title={item.name}
                                     key={item.name}
-                                    href={item.href}
+                                    href={item.name==="我的"?item.href+"/article":item.href}
                                     className={`px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out ${
                                         isActive(item.href)
                                             ? 'bg-foreground text-primary-foreground'

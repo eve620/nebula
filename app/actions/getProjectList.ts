@@ -1,4 +1,3 @@
-import prisma from "@/prisma/client";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export default async function getProjectList() {

@@ -1,46 +1,100 @@
 'use client'
 
-import {useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {Button} from "@/components/ui/button"
-import {ForumPostSummary} from '@/components/forum-post-summary'
+import {ForumPost} from '@/components/forum-post'
+import {usePost} from "@/contexts/post-context";
+import Empty from "@/components/empty";
+import {useMemo, useState} from "react";
+import {Input} from "@/components/ui/input"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
 
 export default function Forum() {
     const router = useRouter()
-    const [posts, setPosts] = useState([
-        {
-            id: 1,
-            title: '绝区零最新更新讨论',
-            content: '大家对最新的游戏更新有什么看法？新增的角色平衡性如何？',
-            author: '游戏迷小王',
-            date: '2023-06-15',
-            likes: 42,
-            comments: 18,
-        },
-        {
-            id: 2,
-            title: '新手求助：如何快速上手？',
-            content: '刚开始玩绝区零，有什么快速上手的技巧吗？哪些角色比较适合新手？',
-            author: '新人玩家',
-            date: '2023-06-14',
-            likes: 15,
-            comments: 7,
-        },
-    ])
+    const posts = usePost() || []
+    const [currentPage, setCurrentPage] = useState(1)
+    const [searchTerm, setSearchTerm] = useState('')
+    const postsPerPage = 3
+    const filteredPosts = useMemo(() => {
+        setCurrentPage(1)
+        return posts.filter(post =>
+            post.title.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    }, [posts, searchTerm])
+    const indexOfLastPost = currentPage * postsPerPage
+    const indexOfFirstPost = indexOfLastPost - postsPerPage
+    const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost)
 
+    const totalPages = Math.ceil(filteredPosts.length / postsPerPage)
+
+    const handlePageChange = (pageNumber: number) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber)
+        }
+    }
     return (
         <>
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-3xl font-bold">绝区零论坛</h1>
-                <Button onClick={() => router.push('/forum/new')}>发布新帖子</Button>
+                <Button onClick={() => router.push('/forum/new')}>发布帖子</Button>
             </div>
-            <div className="space-y-6">
-                {posts.map((post) => (
-                    <div key={post.id} onClick={() => router.push(`/forum/${post.id}`)} className="cursor-pointer">
-                        <ForumPostSummary post={post}/>
-                    </div>
-                ))}
+            <div className="mb-6">
+                <Input
+                    type="text"
+                    placeholder="搜索帖子..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="max-w-sm"
+                />
             </div>
+            {currentPosts.length ?
+                <div className="space-y-6">
+                    {currentPosts.map((post) => (
+                        <div key={post.id} onClick={() => router.push(`/forum/${post.id}`)}
+                             className="cursor-pointer">
+                            <ForumPost post={post}/>
+                        </div>
+                    ))}
+
+                </div> :
+                <Empty/>}
+            {filteredPosts.length > 0 && (
+                <Pagination className={'mt-5'}>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                            />
+                        </PaginationItem>
+                        <>
+                            {[...Array(totalPages)].map((_, index) => (
+                                <PaginationItem key={index}>
+                                    <PaginationLink
+                                        onClick={() => handlePageChange(index + 1)}
+                                        isActive={currentPage === index + 1}
+                                    >
+                                        {index + 1}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            ))}
+                        </>
+                        <PaginationItem>
+                            <PaginationNext
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+            )}
         </>
     )
 }
