@@ -141,12 +141,11 @@ export default function Page() {
                 <div className={"flex-1"}></div>
                 <Button onClick={() => {
                     editNote()
-                    router.push(`/note/${note.id}`)
+                    router.push(`/my/article/${note.id}`)
                     router.refresh()
                 }}>保存</Button>
                 <Button label={""} onClick={() => {
-                    router.push(`/note/${note.id}`)
-                    router.refresh()
+                    router.back()
                 }}>取消</Button>
             </div>
         </div>

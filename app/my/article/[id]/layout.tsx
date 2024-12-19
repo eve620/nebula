@@ -1,6 +1,6 @@
 import React from 'react';
 import {NoteProvider} from "@/contexts/note-context";
-import EmptyState from "@/components/empty-state";
+import {prisma} from "@/lib/prisma";
 
 export default async function AdminLayout({params, children}: Readonly<{ children: React.ReactNode; }>) {
     const {id} = await params
@@ -10,7 +10,7 @@ export default async function AdminLayout({params, children}: Readonly<{ childre
         }
     })
     if (!note) {
-        return <EmptyState/>
+        // return <EmptyState/>
     }
     return (
         <NoteProvider value={note}>

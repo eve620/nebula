@@ -42,13 +42,13 @@ export default function Forum() {
     return (
         <>
             <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold">绝区零论坛</h1>
-                <Button onClick={() => router.push('/forum/new')}>发布帖子</Button>
+                <h1 className="text-3xl font-bold">论坛</h1>
+                <Button onClick={() => router.push('/forum/new')}>发布文章</Button>
             </div>
             <div className="mb-6">
                 <Input
                     type="text"
-                    placeholder="搜索帖子..."
+                    placeholder="搜索..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="max-w-sm"
@@ -62,7 +62,6 @@ export default function Forum() {
                             <ForumPost post={post}/>
                         </div>
                     ))}
-
                 </div> :
                 <Empty/>}
             {filteredPosts.length > 0 && (

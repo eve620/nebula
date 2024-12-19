@@ -9,7 +9,7 @@ interface EmptyStateProps {
     showReset?: boolean;
 }
 
-const EmptyState: React.FC<EmptyStateProps> = ({
+const EmptyStaaate: React.FC<EmptyStateProps> = ({
                                                    title = "No exact matches",
                                                    subtitle = "Try changing or removing some of your filters.",
                                                    showReset
@@ -48,4 +48,4 @@ const EmptyState: React.FC<EmptyStateProps> = ({
     );
 }
 
-export default EmptyState;
+export default EmptyStaaate;

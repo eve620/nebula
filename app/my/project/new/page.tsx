@@ -74,16 +74,10 @@ export default function PublishProject() {
 
     return (
         <>
-            <Button
-                variant="outline"
-                size="sm"
-                className="mb-4"
-                onClick={() => router.back()}
-            >
-                <ArrowLeft className="mr-2 h-4 w-4"/>
-                返回
-            </Button>
-            <h1 className="text-3xl font-bold mb-8">新建项目</h1>
+            <span
+                className="flex flex-wrap text-gray-500 dark:text-gray-300 items-center gap-1.5 break-words text-2xl text-muted-foreground sm:gap-2.5">
+                新建项目
+            </span>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="title" className="text-right">标题</Label>
@@ -238,8 +232,12 @@ export default function PublishProject() {
                         </div>
                     </div>
                 )}
-                <div className="flex justify-end space-x-2">
-                    <Button type="submit">发布</Button>
+                <div className="flex gap-4 justify-end mt-4">
+                    <div className={"flex-1"}></div>
+                    <Button type={"submit"}>发布</Button>
+                    <Button type={"button"} onClick={() => {
+                        router.back()
+                    }}>取消</Button>
                 </div>
             </form>
             {previewImage && (

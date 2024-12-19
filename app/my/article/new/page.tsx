@@ -62,12 +62,10 @@ export default function Page() {
     }
     return (
         <div>
-            <div>
-                <span
-                    className="flex flex-wrap text-gray-500 dark:text-gray-300 items-center gap-1.5 break-words text-2xl text-muted-foreground sm:gap-2.5">
+            <span
+                className="flex flex-wrap text-gray-500 dark:text-gray-300 items-center gap-1.5 break-words text-2xl text-muted-foreground sm:gap-2.5">
                 创建文章
-                </span>
-            </div>
+            </span>
             <form onSubmit={handleSubmit}>
                 <div className={"flex mt-4"}>
                     <div className={"w-1/2 flex flex-col pr-4"}>

@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function Page() {
-    const {toast} = useToast()
     const note = useNote()
     const router = useRouter()
     const [tags, setTags] = useState<String[]>(JSON.parse(note?.tags))
@@ -52,7 +51,7 @@ export default function Page() {
                 }
                 <div className={"flex-1"}></div>
                 <Button onClick={() => {
-                    router.push(`/note/${note?.id}/edit`)
+                    router.push(`/my/article/${note?.id}/edit`)
                 }}>编辑</Button>
                 <Button onClick={() => {
                     showMessage("adsad")
@@ -75,7 +74,7 @@ export default function Page() {
                     </AlertDialogContent>
                 </AlertDialog>
                 <Button onClick={() => {
-                    router.push("/note")
+                    router.push("/my/article")
                 }}>返回</Button>
             </div>
             <div>

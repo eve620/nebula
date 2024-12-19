@@ -19,9 +19,7 @@ export function Navbar({curTheme}: NavbarProps) {
     const navItems = [
         {name: '首页', href: '/'},
         {name: '公告', href: '/notice'},
-        {name: '总结', href: '/forum'},
-        // {name: '项目', href: '/project'},
-        // {name: '笔记', href: '/note'},
+        {name: '论坛', href: '/forum'},
         {name: '我的', href: '/my'},
         {name: '英语', href: '/english'},
         {name: '看板', href: '/kanban'},
@@ -74,7 +72,7 @@ export function Navbar({curTheme}: NavbarProps) {
                                 <Link
                                     title={item.name}
                                     key={item.name}
-                                    href={item.name==="我的"?item.href+"/article":item.href}
+                                    href={item.name === "我的" ? item.href + "/article" : item.href}
                                     className={`px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out ${
                                         isActive(item.href)
                                             ? 'bg-foreground text-primary-foreground'

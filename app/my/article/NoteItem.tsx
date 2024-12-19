@@ -28,7 +28,7 @@ const NoteItem: React.FC<NoteItemProps> = ({note}) => {
                              dark:bg-gray-700 dark:hover:shadow-blue-700/30
                              hover:-translate-y-1
                              hover:shadow-xl hover:shadow-black/10" onClick={() => {
-            router.push(`/note/${note.id}`)
+            router.push(`/my/article/${note.id}`)
         }}>
             {note.title}
         </div>
