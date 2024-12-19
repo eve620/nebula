@@ -5,9 +5,9 @@ import {CharacterCard} from '@/components/character-card'
 import {Footer} from "@/components/home/footer";
 import TopBar from "@/components/home/top-bar";
 import Guide from "@/components/home/guide";
-import Devlog from "@/components/home/devlog";
+import Notice from "@/components/home/notice";
 import About from "@/components/home/about";
-import getDevLogList from "@/app/actions/getDevLogList";
+import getNoticeList from "@/app/actions/getNoticeList";
 
 const characters = [
     {
@@ -46,8 +46,7 @@ const characters = [
 ]
 
 export default async function Home() {
-    const devList = await getDevLogList()
-
+    const notices = await getNoticeList()
     return (
         <div className="min-h-screen bg-background text-foreground">
             {/* Hero Section */}
@@ -145,7 +144,7 @@ export default async function Home() {
                 <Guide/>
             </section>
             <section className="py-16 px-4 bg-background">
-                <Devlog list={devList}/>
+                <Notice notices={notices}/>
             </section>
             <section className="py-16 px-5 bg-background" id="aboutSection">
                 <About/>

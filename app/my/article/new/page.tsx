@@ -6,6 +6,7 @@ import Tiptap from "@/components/tiptap/tiptap";
 import {Button} from "@/components/ui/button";
 import {useTag} from "@/contexts/tag-context";
 import showMessage from "@/components/message";
+import {useUser} from "@/contexts/user-context";
 
 export default function Page() {
     const tags = useTag()
@@ -15,22 +16,28 @@ export default function Page() {
     const [title, setTitle] = useState('')
     const [currentTags, setCurrentTags] = useState<string[]>(JSON.parse('[]'))
     const [content, setContent] = useState('')
+    const user = useUser()
 
     function contentChange(value: string) {
         setContent(value)
     }
 
     async function addNote() {
-        const addNote = await fetch("/api/note", {
+        const addNote = await fetch("/api/article", {
             method: "POST",
             body: JSON.stringify({
                 title,
                 tags: JSON.stringify(currentTags),
-                content
+                content,
+                createdById: user?.id
             })
         })
         if (addNote.ok) {
             showMessage("添加成功！")
+            router.push("/my/article")
+            router.refresh()
+        } else {
+            showMessage("添加失败")
         }
     }
 
@@ -57,8 +64,6 @@ export default function Page() {
     const handleSubmit = (e) => {
         e.preventDefault()
         addNote()
-        router.push("/my/article")
-        router.refresh()
     }
     return (
         <div>

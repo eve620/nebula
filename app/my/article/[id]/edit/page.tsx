@@ -4,34 +4,34 @@ import React, {useRef, useState} from "react";
 import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/internal/hooks/use-on-click-outside";
 import Tiptap from "@/components/tiptap/tiptap";
 import {Button} from "@/components/ui/button";
-import {useNote} from "@/contexts/note-context";
 import {useTag} from "@/contexts/tag-context";
+import {useArticle} from "@/contexts/article-context";
 
 export default function Page() {
-    const note = useNote()
+    const article = useArticle()
     const tags = useTag() || []
     const router = useRouter()
     const [isTagListShow, setIsTagListShow] = useState(false)
     const tagRef = useRef(null)
-    const [title, setTitle] = useState(note.title)
-    const [currentTags, setCurrentTags] = useState<String[]>(JSON.parse(note.tags))
-    const [content, setContent] = useState(note.content)
+    const [title, setTitle] = useState(article?.title)
+    const [currentTags, setCurrentTags] = useState<string[]>(JSON.parse(article?.tags || "[]"))
+    const [content, setContent] = useState(article?.content)
 
     function contentChange(value: string) {
         setContent(value)
     }
 
-    async function editNote() {
-        const editNote = await fetch("/api/note", {
+    async function editArticle() {
+        const editArticle = await fetch("/api/article", {
             method: "PUT",
             body: JSON.stringify({
-                id: note.id,
+                id: article?.id,
                 title,
                 tags: JSON.stringify(currentTags),
                 content
             })
         })
-        if (editNote.ok) {
+        if (editArticle.ok) {
         }
     }
 
@@ -53,7 +53,7 @@ export default function Page() {
         setCurrentTags(oldTags.concat(newCurrentTags));
     };
 
-    useOnClickOutside(tagRef.current, (event) => {
+    useOnClickOutside(tagRef.current, () => {
         setIsTagListShow(false)
     })
     return (
@@ -135,13 +135,13 @@ export default function Page() {
             </div>
             <div>
                 <div className={"my-2"}>内容</div>
-                <Tiptap content={content} onChange={contentChange}/>
+                <Tiptap content={content || ""} onChange={contentChange}/>
             </div>
             <div className="flex gap-4 mt-4">
                 <div className={"flex-1"}></div>
                 <Button onClick={() => {
-                    editNote()
-                    router.push(`/my/article/${note.id}`)
+                    editArticle()
+                    router.push(`/my/article/${article?.id}`)
                     router.refresh()
                 }}>保存</Button>
                 <Button label={""} onClick={() => {

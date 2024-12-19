@@ -1,20 +1,20 @@
 import React from 'react';
-import {NoteProvider} from "@/contexts/note-context";
 import {prisma} from "@/lib/prisma";
+import {ArticleProvider} from "@/contexts/article-context";
 
 export default async function AdminLayout({params, children}: Readonly<{ children: React.ReactNode; }>) {
     const {id} = await params
-    const note = await prisma.note.findUnique({
+    const article = await prisma.article.findUnique({
         where: {
             id: Number(id)
         }
     })
-    if (!note) {
+    if (!article) {
         // return <EmptyState/>
     }
     return (
-        <NoteProvider value={note}>
+        <ArticleProvider value={article}>
             {children}
-        </NoteProvider>
+        </ArticleProvider>
     );
 }

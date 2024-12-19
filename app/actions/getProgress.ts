@@ -1,6 +1,7 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import path from "path";
 import fs from "fs";
+import {prisma} from "@/lib/prisma";
 
 export default async function getProgress() {
     try {

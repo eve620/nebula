@@ -67,9 +67,9 @@ export default function PublishProject() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         // Here you would typically send the data to your backend
-        console.log('Publishing notice:', newsData)
-        // After publishing, redirect to the notice list page
-        router.push('/notice')
+        console.log('Publishing demo:', newsData)
+        // After publishing, redirect to the demo list page
+        router.push('/demo')
     }
 
     return (

@@ -3,7 +3,6 @@
 import {useRouter} from 'next/navigation'
 import {Button} from "@/components/ui/button"
 import {ForumPost} from '@/components/forum-post'
-import {usePost} from "@/contexts/post-context";
 import Empty from "@/components/empty";
 import {useMemo, useState} from "react";
 import {Input} from "@/components/ui/input"
@@ -15,19 +14,20 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import {useArticles} from "@/contexts/articles-context";
 
 export default function Forum() {
     const router = useRouter()
-    const posts = usePost() || []
+    const articles = useArticles() || []
     const [currentPage, setCurrentPage] = useState(1)
     const [searchTerm, setSearchTerm] = useState('')
     const postsPerPage = 3
     const filteredPosts = useMemo(() => {
         setCurrentPage(1)
-        return posts.filter(post =>
+        return articles.filter(post =>
             post.title.toLowerCase().includes(searchTerm.toLowerCase())
         )
-    }, [posts, searchTerm])
+    }, [articles, searchTerm])
     const indexOfLastPost = currentPage * postsPerPage
     const indexOfFirstPost = indexOfLastPost - postsPerPage
     const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost)
@@ -43,7 +43,7 @@ export default function Forum() {
         <>
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-3xl font-bold">论坛</h1>
-                <Button onClick={() => router.push('/forum/new')}>发布文章</Button>
+                <Button onClick={() => router.push('/article/new')}>发布文章</Button>
             </div>
             <div className="mb-6">
                 <Input

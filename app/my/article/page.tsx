@@ -1,11 +1,11 @@
-import getNoteList from "@/app/actions/getNoteList";
-import {Note} from "@/types";
-import Notes from "@/app/my/article/Notes";
+import Articles from "@/app/my/article/Articles";
+import getArticleList from "@/app/actions/getArticleList";
+import {Article} from "@/types";
 
 export default async function Page() {
-    const noteList: Note[] = await getNoteList() || []
+    const articles: Article[] = await getArticleList() || []
     return (
-        <Notes notes={noteList}/>
+        <Articles articles={articles}/>
     );
 }
 

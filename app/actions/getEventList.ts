@@ -1,12 +1,11 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import {eventDataProps} from "@/app/(frontend)/kanban/page";
-import {NextResponse} from "next/server";
+import {prisma} from "@/lib/prisma";
 
 export default async function getEventList() {
     try {
         const currentUser = await getCurrentUser()
         if (!currentUser) return []
-        let events = await prisma.event.findMany({
+        const events = await prisma.event.findMany({
             where: {
                 createdById: currentUser.id,
             }

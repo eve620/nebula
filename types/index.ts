@@ -7,14 +7,6 @@ export interface User {
     role: "Admin" | "User";
 }
 
-export interface Note {
-    id: number,
-    title: string,
-    tags: string,
-    content: string,
-    createdById: number
-}
-
 export interface EventType {
     id: number,
     title: string,
@@ -23,16 +15,26 @@ export interface EventType {
     completed: string[]
 }
 
-export interface Post {
+export interface Notice {
+    id: number,
+    title: string,
+    content: string;
+    version: string;
+    time: Date;
+}
+
+export interface Article {
     id: number;
     title: string;
     content: string;
+    tags: string,
     createdById: number;
     createdAt: Date;
     updatedAt: Date;
     viewCount: number;
     isPinned: boolean;
     isLocked: boolean;
+    visibility: "PRIVATE" | "FRIENDS_ONLY" | "PUBLIC",
     createdBy: {
         username: string;
         nickname: string; // 增加了nickname

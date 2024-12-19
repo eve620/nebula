@@ -2,32 +2,31 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/internal/hooks/use-on-click-outside";
 import TagModal from "@/components/modal/tag-modal";
-import {Note} from "@/types";
 import {useTag} from "@/contexts/tag-context";
 import useTagModal from "@/hooks/use-tag-modal";
-import NoteList from "@/app/my/article/NoteList";
+import ArticleList from "@/app/my/article/ArticleList";
+import {Article} from "@/types";
 
-interface NotesProps {
-    notes: Note[]
+interface ArticlesProps {
+    articles: Article[]
 }
 
-const Notes: React.FC<NotesProps> = ({notes}) => {
+const Articles: React.FC<ArticlesProps> = ({articles}) => {
     const tags = useTag() || []
-    const [noteList, setNoteList] = useState<Note[]>(notes)
-    // const tagList = ["react", 'vue', 'ts', 'js', 'css', 'html', 'java', 'python', 'go', 'c', 'c++', 'c#', 'php', 'ruby', 'swift', 'kotlin', 'dart', 'scala', 'groovy', 'r', 'matlab', 'lua', 'perl', 'bash', 'sql', 'nosql', 'mongodb', 'redis', 'mysql', 'oracle', 'sqlserver', 'postgresql', 'sqlite', 'elasticsearch', 'kafka', 'rabbitmq', 'rocketmq', 'dubbo', 'spring', 'springboot', 'spring']
+    const [articleList, setArticleList] = useState<Article[]>(articles)
     const [currentTags, setCurrentTags] = useState<string[]>([])
     const [isTagListShow, setIsTagListShow] = useState(false)
     const tagRef = useRef(null)
     const tagStore = useTagModal()
     const [searchKeyword, setSearchKeyword] = useState<string>(''); // 搜索关键字
-    useOnClickOutside(tagRef.current, (event) => {
+    useOnClickOutside(tagRef.current, () => {
         setIsTagListShow(false)
     })
 
-    const filterNotes = () => {
-        return notes.filter(note =>
-            (searchKeyword === '' || note.title.toLowerCase().includes(searchKeyword.toLowerCase())) &&
-            (currentTags.length === 0 || currentTags.every(tag => note.tags.includes(tag)))
+    const filterArticles = () => {
+        return articles.filter(article =>
+            (searchKeyword === '' || article.title.toLowerCase().includes(searchKeyword.toLowerCase())) &&
+            (currentTags.length === 0 || currentTags.every(tag => article.tags.includes(tag)))
         );
     };
 
@@ -52,9 +51,9 @@ const Notes: React.FC<NotesProps> = ({notes}) => {
     };
 
     useEffect(() => {
-        const filteredNotes = filterNotes();
-        setNoteList(filteredNotes);
-    }, [searchKeyword, currentTags, notes]);
+        const filteredArticles = filterArticles();
+        setArticleList(filteredArticles);
+    }, [searchKeyword, currentTags, articles]);
     return (
         <>
             <div className={"flex h-16"}>
@@ -135,9 +134,9 @@ const Notes: React.FC<NotesProps> = ({notes}) => {
                     </div>
                 </div>
             </div>
-            <NoteList notes={noteList}/>
+            <ArticleList articles={articleList}/>
             <TagModal isOpen={tagStore.isOpen} onClose={tagStore.onClose} tags={tags}/>
         </>
     )
 }
-export default Notes
+export default Articles

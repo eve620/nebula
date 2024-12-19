@@ -1,4 +1,5 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import {prisma} from "@/lib/prisma";
 
 export default async function getTagList() {
     try {

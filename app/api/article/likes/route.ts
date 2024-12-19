@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     try {
         const likes = await prisma.like.findMany({
             where: {userId},
-            select: {postId: true},
+            select: {articleId: true},
         })
 
         return NextResponse.json(likes)
@@ -24,10 +24,10 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     const body = await request.json()
-    const {userId, postId, commentId} = body
+    const {userId, articleId, commentId} = body
 
-    if (!postId && !commentId) {
-        return NextResponse.json({error: 'Either postId or commentId is required'}, {status: 400})
+    if (!articleId && !commentId) {
+        return NextResponse.json({error: 'Either articleId or commentId is required'}, {status: 400})
     }
 
     // 查找是否已经存在点赞记录
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
         where: {
             userId,
             OR: [
-                {postId: postId ?? undefined},
+                {articleId: articleId ?? undefined},
                 {commentId: commentId ?? undefined}
             ]
         }
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
         const like = await prisma.like.create({
             data: {
                 userId,
-                postId,
+                articleId,
                 commentId
             }
         })
@@ -66,17 +66,17 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
     const {searchParams} = new URL(request.url)
     const userId = searchParams.get('userId')
-    const postId = searchParams.get('postId')
+    const articleId = searchParams.get('articleId')
     const commentId = searchParams.get('commentId')
 
-    if (!userId || (!postId && !commentId)) {
-        return NextResponse.json({error: 'UserId and either postId or commentId are required'}, {status: 400})
+    if (!userId || (!articleId && !commentId)) {
+        return NextResponse.json({error: 'UserId and either articleId or commentId are required'}, {status: 400})
     }
 
     await prisma.like.deleteMany({
         where: {
             userId,
-            ...(postId ? {postId} : {commentId}),
+            ...(articleId ? {articleId} : {commentId}),
         },
     })
 

@@ -1,6 +1,7 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import {prisma} from "@/lib/prisma";
 
-export default async function getProjectList() {
+export default async function getArticleList() {
     try {
         const currentUser = await getCurrentUser()
         const data = await prisma.project.findMany({

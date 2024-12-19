@@ -16,7 +16,7 @@ export default function CreateEditPost() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!user) return
-        const request = await fetch("/api/forum", {
+        const request = await fetch("/api/article", {
             method: "POST",
             body: JSON.stringify({
                 title,

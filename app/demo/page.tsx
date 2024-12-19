@@ -1,6 +1,4 @@
 'use client'
-import NoticePublish from "@/app/notice/notice-publish";
-import NoticeList from "@/app/notice/notice-list";
 import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import Image from "next/image";
@@ -8,24 +6,6 @@ import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious}
 import React, {useState} from "react";
 
 export default function Notice() {
-    const notice = [
-        {
-            id: '1',
-            title: '绝区零最新版本更新',
-            content: '新版本带来全新角色和任务系统，玩家可以体验更丰富的游戏内容。',
-            author: '官方团队',
-            date: '2023-06-20',
-            imageUrl: '/placeholder.svg'
-        },
-        {
-            id: '2',
-            title: '年度电竞赛事即将开启',
-            content: '年度绝区零电竞赛事将于下月举行，顶尖玩家将展开激烈对决。',
-            author: '赛事组委会',
-            date: '2023-06-18',
-            imageUrl: '/placeholder.svg'
-        },
-    ]
 
     interface Character {
         id: string;
@@ -63,21 +43,11 @@ export default function Notice() {
         }
     ]
 
-    const carouselItems = [
-        {id: '1', imageUrl: '/placeholder.svg', caption: '角色互动场景'},
-        {id: '2', imageUrl: '/placeholder.svg', caption: '战斗画面'},
-        {id: '3', imageUrl: '/placeholder.svg', caption: '角色特写'},
-    ]
-
     const [selectedCharacter, setSelectedCharacter] = useState<Character>(characters[0])
 
     return (
         <div className="container px-4 py-8  mx-auto">
-            <h1 className="text-3xl font-bold mb-8">公告</h1>
-            {/*发布公告表单*/}
-            <NoticePublish/>
-            {/* 公告列表 */}
-            <NoticeList notice={notice}/>
+            <h1 className="text-3xl font-bold mb-8">DEMO</h1>
             <h1 className="text-3xl font-bold mb-8">角色</h1>
             <Tabs defaultValue={characters[0].id} orientation="vertical"
                   onValueChange={(value) => setSelectedCharacter(characters.find(c => c.id === value) || characters[0])}>

@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
+
 export async function GET(request: NextRequest) {
     try {
         const data = await prisma.devLog.findMany()
@@ -13,12 +14,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const {time, content} = await request.json()
-        const devLog = await prisma.devLog.create({
+        await prisma.notice.create({
             data: {
-                time,
-                content
+                time: new Date(),
+                content,
+                version: "213",
+                title: "321"
             }
-        })
+        });
         return NextResponse.json({message: "添加成功"});
     } catch (error) {
         throw new Error("服务器出错")

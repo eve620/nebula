@@ -18,7 +18,7 @@ export function Navbar({curTheme}: NavbarProps) {
     const currentUser = useUser()
     const navItems = [
         {name: '首页', href: '/'},
-        {name: '公告', href: '/notice'},
+        // {name: 'demo', href: '/demo'},
         {name: '论坛', href: '/forum'},
         {name: '我的', href: '/my'},
         {name: '英语', href: '/english'},

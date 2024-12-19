@@ -28,7 +28,7 @@ export default async function RootLayout({children,}: { children: React.ReactNod
                 {children}
             </main>
         </UserProvider>
-        <Toaster />
+        <Toaster/>
         </body>
         </html>
     )

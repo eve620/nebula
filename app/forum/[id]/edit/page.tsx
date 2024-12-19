@@ -7,24 +7,24 @@ import {Input} from "@/components/ui/input"
 import Tiptap from "@/components/tiptap/tiptap";
 import {useUser} from "@/contexts/user-context";
 import showMessage from "@/components/message";
-import {usePost} from "@/contexts/post-context";
+import {useArticles} from "@/contexts/articles-context";
 
 export default function CreateEditPost() {
     const router = useRouter()
     const {id} = useParams()
-    const posts = usePost() || []
-    const post = posts.filter((post) => post.id === Number(id))[0]
+    const articles = useArticles() || []
+    const article = articles.filter((article) => article.id === Number(id))[0]
     const user = useUser()
-    if (!user || !post || user.username !== post.createdBy.username) {
+    if (!user || !article || user.username !== article.createdBy.username) {
         showMessage("错误访问！")
         router.back()
     }
-    const [title, setTitle] = useState(post.title)
-    const [content, setContent] = useState(post.content)
+    const [title, setTitle] = useState(article.title)
+    const [content, setContent] = useState(article.content)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!user) return
-        const request = await fetch("/api/forum", {
+        const request = await fetch("/api/article", {
             method: "POST",
             body: JSON.stringify({
                 title,
@@ -32,7 +32,6 @@ export default function CreateEditPost() {
                 createdById: user.id
             })
         })
-        console.log(await request.json())
         if (request.ok) {
             showMessage("添加成功。")
             router.back()

@@ -1,12 +1,12 @@
 import {useRouter} from "next/navigation";
 import React from "react";
-import {Note} from "@/types";
+import {Article} from "@/types";
 
 interface NoteItemProps {
-    note: Note,
+    article: Article,
 }
 
-const NoteItem: React.FC<NoteItemProps> = ({note}) => {
+const ArticleItem: React.FC<NoteItemProps> = ({article}) => {
     const router = useRouter()
     return (
         <div className="
@@ -28,11 +28,11 @@ const NoteItem: React.FC<NoteItemProps> = ({note}) => {
                              dark:bg-gray-700 dark:hover:shadow-blue-700/30
                              hover:-translate-y-1
                              hover:shadow-xl hover:shadow-black/10" onClick={() => {
-            router.push(`/my/article/${note.id}`)
+            router.push(`/my/article/${article.id}`)
         }}>
-            {note.title}
+            {article.title}
         </div>
     )
 }
 
-export default NoteItem
+export default ArticleItem
