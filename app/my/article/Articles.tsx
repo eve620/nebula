@@ -6,6 +6,7 @@ import {useTag} from "@/contexts/tag-context";
 import useTagModal from "@/hooks/use-tag-modal";
 import ArticleList from "@/app/my/article/ArticleList";
 import {Article} from "@/types";
+import {Input} from "@/components/ui/input";
 
 interface ArticlesProps {
     articles: Article[]
@@ -59,7 +60,7 @@ const Articles: React.FC<ArticlesProps> = ({articles}) => {
             <div className={"flex h-16"}>
                 <div className={"w-1/2 flex flex-col pr-4"}>
                     <label
-                        className={"flex items-center text-nowrap"}
+                        className={"flex items-center text-nowrap mb-1"}
                     >
                         标题
                         {searchKeyword.length !== 0 &&
@@ -75,12 +76,12 @@ const Articles: React.FC<ArticlesProps> = ({articles}) => {
                         placeholder="输入关键字搜索..."
                         value={searchKeyword}
                         onChange={handleSearchChange}
-                        className={"bg-transparent dark:focus:border-white py-1 px-2 mt-1 border-2 rounded-md outline-none disabled:opacity-70 disabled:cursor-n border-neutral-300 focus:border-black"}
+                        className={"flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"}
                     />
                 </div>
                 <div className={"w-1/2 flex flex-col pl-4"}>
                     <label
-                        className={"flex items-center text-nowrap"}
+                        className={"flex items-center text-nowrap mb-1"}
                     >
                         标签
                         {currentTags.length !== 0 &&
@@ -94,7 +95,7 @@ const Articles: React.FC<ArticlesProps> = ({articles}) => {
                     </label>
                     <div className="relative" ref={tagRef}>
                         <button onClick={() => setIsTagListShow(!isTagListShow)}
-                                className="relative w-full bg-transparent dark:focus:border-white py-1 px-2 mt-1 border-2 rounded-md outline-none disabled:opacity-70 disabled:cursor-n border-neutral-300 focus:border-black">
+                                className={"flex h-9 items-center w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"}>
                             <div className="w-11/12 text-left truncate">
                                 {currentTags.length ? currentTags.map((item, index) => <span key={index}
                                                                                              className="ml-2 bg-pink-300/20 dark:bg-blue-300/30 px-2 rounded-lg">{item}</span>)
@@ -110,12 +111,12 @@ const Articles: React.FC<ArticlesProps> = ({articles}) => {
                               </span>
                         </button>
                         {isTagListShow &&
-                            <ul className="absolute dark:ring-white bg-white dark:bg-slate-900 z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-transparent py-1 text-base shadow-lg dark:shadow-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                            <ul className="absolute border border-input bg-white dark:bg-slate-900 z-10 mt-1 max-h-56 w-full overflow-auto rounded-md py-1 text-base shadow-lg dark:shadow-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                                 tabIndex={-1} role="listbox">
                                 {tags.length ? tags.map((item, index) =>
                                         <li key={index}
                                             onClick={() => handleTagToggle(item)}
-                                            className="relative  hover:bg-pink-200/20 dark:hover:bg-blue-300/30 cursor-default select-none py-2 pl-3 pr-9">
+                                            className="relative hover:bg-pink-200/20 dark:hover:bg-blue-300/30 cursor-default select-none py-2 pl-3 pr-9">
                                             <div className="flex items-center">
                                                 <span className="ml-3 block truncate font-normal">{item}</span>
                                             </div>

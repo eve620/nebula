@@ -1,20 +1,15 @@
-"use client"
-import {useEffect, useRef, useState} from "react";
-import {X} from "lucide-react";
-import {Toggle} from "@/components/ui/toggle";
-import {useRouter} from "next/navigation";
+'use client'
+
 import {Input} from "@/components/ui/input";
-import {Modal} from "@/components/modal/modal";
+import {Toggle} from "@/components/ui/toggle";
+import {X} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {useEffect, useRef, useState} from "react";
+import {useRouter} from "next/navigation";
+import {toast} from "@/hooks/use-toast";
 
-interface TagModalProps {
-    isOpen: boolean
-    onClose: () => void
-    tags: string[] | null
-}
-
-const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
-    const [currentTags, setCurrentTags] = useState<string[]>(tags);
+export function TagManagement() {
+    const [currentTags, setCurrentTags] = useState<string[]>([]);
     const router = useRouter()
     const latestInputRef = useRef<HTMLInputElement>(null);
 
@@ -23,6 +18,28 @@ const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
             latestInputRef.current.focus();
         }
     }, [currentTags.length]);
+
+    useEffect(() => {
+        fetchTags()
+    }, [])
+
+    const fetchTags = async () => {
+        try {
+            const response = await fetch('/api/tag')
+            if (!response.ok) {
+                throw new Error('获取文章列表失败')
+            }
+            const data = await response.json()
+            setCurrentTags(JSON.parse(data.tags))
+        } catch (error) {
+            toast({
+                title: "错误",
+                description: "获取标签列表失败",
+                variant: "destructive",
+            })
+        }
+    }
+
     const updateTags = async (newTags: string[]) => {
         const update = await fetch('/api/tag', {
             method: "PUT",
@@ -55,19 +72,7 @@ const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
         setCurrentTags([...currentTags, '']);
     };
     return (
-        <Modal
-            isOpen={isOpen}
-            onClose={() => {
-                onClose()
-                const uniqueArr = Array.from(new Set(currentTags.filter(Boolean)))
-                if (tags.toString() !== uniqueArr.toString()) {
-                    updateTags(uniqueArr)
-                }
-                setCurrentTags(uniqueArr)
-            }}
-            description="编辑标签。"
-            title="标签"
-        >
+        <div className="space-y-4">
             <div className="space-y-6 h-96 pt-2 px-2 overflow-y-auto pr-4">
                 {currentTags.length ?
                     currentTags.map((item, index) => (
@@ -85,7 +90,7 @@ const TagModal = ({isOpen, onClose, tags}: TagModalProps) => {
                     <div className={'flex justify-center items-center h-full'}>暂无标签...</div>}
             </div>
             <Button onClick={handleOnSubmit}>添加</Button>
-        </Modal>
-    );
-};
-export default TagModal
+        </div>
+    )
+}
+

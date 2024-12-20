@@ -40,13 +40,12 @@ export default function Page() {
                         <span
                             className="flex flex-nowrap text-nowrap text-gray-500 dark:text-gray-300 items-center gap-1.5 break-words text-xl text-muted-foreground sm:gap-2.5">
                             <span className={"cursor-pointer"} onClick={() => {
-                                router.push("/article")
+                                router.push("/my/article")
                             }}>Home</span><span
                             className={"cursor-default select-none"}>/</span><span>{article?.title}</span>
                         </span>
-                {tags.length ? tags.map((item, index) => <span key={index}
-                                                               className="ml-1 bg-pink-300/20 dark:bg-blue-300/30 px-2 rounded-lg">{item}</span>)
-                    : <span className="ml-3">...</span>
+                {tags.map((item, index) =>
+                    <span key={index} className="ml-1 bg-pink-300/20 dark:bg-blue-300/30 px-2 rounded-lg">{item}</span>)
                 }
                 <div className={"flex-1"}></div>
                 <Button onClick={() => {

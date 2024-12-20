@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
             }
         })
         if (!tag) return NextResponse.json({error: '查询失败'}, {status: 404});
-        return NextResponse.json({tag});
+        return NextResponse.json(tag);
     } catch (error) {
         // 如果发生错误，返回404
         throw new Error("服务器出错")

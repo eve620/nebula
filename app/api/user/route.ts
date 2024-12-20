@@ -2,8 +2,21 @@ import {NextRequest, NextResponse} from "next/server";
 import {compare, hash} from "bcrypt"
 import fs from "fs";
 import path from "path";
-import {saveBase64Image} from "@/app/api/auth/user/utils";
+import {saveBase64Image} from "@/app/api/user/utils";
 import {prisma} from "@/lib/prisma";
+import getCurrentUser from "@/app/actions/getCurrentUser";
+
+export async function GET() {
+    const currentUser = await getCurrentUser()
+    if (!currentUser || currentUser.role !== "Admin") return NextResponse.json({error: '无权限'}, {status: 401});
+    try {
+        const users = await prisma.user.findMany()
+        return NextResponse.json(users)
+    } catch (e) {
+        return NextResponse.json({error: '服务器内部错误'}, {status: 500});
+    }
+}
+
 export async function POST(request: NextRequest) {
     try {
         const {username, nickname, password} = await request.json()

@@ -2,10 +2,10 @@
 
 import {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
-import {Navbar} from '@/components/navbar'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
 import {UserManagement} from '@/components/admin/user-management'
-import {PostManagement} from '@/components/admin/post-management'
+import {ArticleManagement} from '@/components/admin/article-management'
+import {TagManagement} from "@/components/admin/tag-management";
 
 export default function AdminDashboard() {
     const router = useRouter()
@@ -36,13 +36,17 @@ export default function AdminDashboard() {
                 <Tabs defaultValue="users">
                     <TabsList>
                         <TabsTrigger value="users">用户管理</TabsTrigger>
-                        <TabsTrigger value="posts">帖子管理</TabsTrigger>
+                        <TabsTrigger value="articles">文章管理</TabsTrigger>
+                        <TabsTrigger value="tags">标签管理</TabsTrigger>
                     </TabsList>
                     <TabsContent value="users">
                         <UserManagement/>
                     </TabsContent>
-                    <TabsContent value="posts">
-                        <PostManagement/>
+                    <TabsContent value="articles">
+                        <ArticleManagement/>
+                    </TabsContent>
+                    <TabsContent value="tags">
+                        <TagManagement/>
                     </TabsContent>
                 </Tabs>
             </main>

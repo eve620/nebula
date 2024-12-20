@@ -35,7 +35,8 @@ const Notice: React.FC<DevLogProps> = ({notices}) => {
                                 hover:shadow-xl dark:shadow-md dark:hover:shadow-blue-700/70
                                 ">
                                 <div className={"overflow-y-auto pr-2 h-32"}>
-                                    <span>{format(new Date(notice.time), 'yyyy年MM月dd日 HH:mm:ss')}</span>
+                                    <span>{format(new Date(notice.time), 'yyyy.MM.dd')}</span>
+                                    <p className={"whitespace-pre-wrap"}>{notice.version}</p>
                                     <p className={"whitespace-pre-wrap"}>{notice.content}</p>
                                 </div>
                             </div>

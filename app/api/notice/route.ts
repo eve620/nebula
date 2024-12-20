@@ -13,13 +13,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const {time, content} = await request.json()
+        const {time, content, version, title} = await request.json()
         await prisma.notice.create({
             data: {
-                time: new Date(),
+                time,
                 content,
-                version: "213",
-                title: "321"
+                version,
+                title
             }
         });
         return NextResponse.json({message: "添加成功"});
