@@ -1,24 +1,10 @@
-import getCurrentUser from "@/app/actions/getCurrentUser";
 import {prisma} from "@/lib/prisma";
 
 export default async function getTagList() {
     try {
-        const currentUser = await getCurrentUser()
-        if (!currentUser) return []
-        let tag = await prisma.tag.findUnique({
-            where: {
-                createdById: currentUser.id
-            }
-        })
-        if (!tag) {
-            tag = await prisma.tag.create({
-                data: {
-                    tags: '[]',
-                    createdById: currentUser.id
-                }
-            })
-        }
-        return JSON.parse(tag.tags)
+        const tag = await prisma.tag.findMany()
+        const tagArray = tag.map((item) => item.content)
+        return tagArray || []
     } catch (error: any) {
         throw new Error(error);
     }

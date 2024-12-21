@@ -9,7 +9,7 @@ import {useArticle} from "@/contexts/article-context";
 
 export default function Page() {
     const article = useArticle()
-    const tags = useTag() || []
+    const tags = useTag()
     const router = useRouter()
     const [isTagListShow, setIsTagListShow] = useState(false)
     const tagRef = useRef(null)
@@ -35,22 +35,23 @@ export default function Page() {
         }
     }
 
+    // 一种保留旧标签（已移除标签）的逻辑
+    // const updateCurrentTags = (tag) => {
+    //     let newCurrentTags = [...currentTags];
+    //     const oldTags = currentTags.filter(tag => !tags.includes(tag))
+    //     if (newCurrentTags.includes(tag)) {
+    //         newCurrentTags = newCurrentTags.filter(item => item !== tag);
+    //     } else newCurrentTags.push(tag);
+    //     newCurrentTags = tags.filter(tag => newCurrentTags.includes(tag));
+    //     setCurrentTags(oldTags.concat(newCurrentTags));
+    // };
     const updateCurrentTags = (tag) => {
-        // 创建一个新的 currentTags 数组副本
         let newCurrentTags = [...currentTags];
-        const oldTags = currentTags.filter(tag => !tags.includes(tag))
-        // 如果 tag 已经在 currentTags 中，则移除它；否则添加它
         if (newCurrentTags.includes(tag)) {
             newCurrentTags = newCurrentTags.filter(item => item !== tag);
-        } else {
-            newCurrentTags.push(tag);
-        }
-
-        // 根据原始 tags 数组的顺序对 newCurrentTags 进行排序
+        } else newCurrentTags.push(tag);
         newCurrentTags = tags.filter(tag => newCurrentTags.includes(tag));
-
-        // 设置新的 currentTags
-        setCurrentTags(oldTags.concat(newCurrentTags));
+        setCurrentTags(newCurrentTags);
     };
 
     useOnClickOutside(tagRef.current, () => {

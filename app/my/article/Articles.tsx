@@ -1,24 +1,20 @@
 "use client"
 import React, {useEffect, useRef, useState} from "react";
 import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/internal/hooks/use-on-click-outside";
-import TagModal from "@/components/modal/tag-modal";
 import {useTag} from "@/contexts/tag-context";
-import useTagModal from "@/hooks/use-tag-modal";
 import ArticleList from "@/app/my/article/ArticleList";
 import {Article} from "@/types";
-import {Input} from "@/components/ui/input";
 
 interface ArticlesProps {
     articles: Article[]
 }
 
 const Articles: React.FC<ArticlesProps> = ({articles}) => {
-    const tags = useTag() || []
+    const tags = useTag()
     const [articleList, setArticleList] = useState<Article[]>(articles)
     const [currentTags, setCurrentTags] = useState<string[]>([])
     const [isTagListShow, setIsTagListShow] = useState(false)
     const tagRef = useRef(null)
-    const tagStore = useTagModal()
     const [searchKeyword, setSearchKeyword] = useState<string>(''); // 搜索关键字
     useOnClickOutside(tagRef.current, () => {
         setIsTagListShow(false)
@@ -136,7 +132,6 @@ const Articles: React.FC<ArticlesProps> = ({articles}) => {
                 </div>
             </div>
             <ArticleList articles={articleList}/>
-            <TagModal isOpen={tagStore.isOpen} onClose={tagStore.onClose} tags={tags}/>
         </>
     )
 }

@@ -9,6 +9,7 @@ import {LoginModal} from './modal/login-modal'
 import {usePathname} from "next/navigation";
 import {useUser} from "@/contexts/user-context";
 import useLoginModal from "@/hooks/use-login-modal";
+import showMessage from "@/components/message";
 
 interface NavbarProps {
     curTheme: 'light' | 'dark'
@@ -18,7 +19,6 @@ export function Navbar({curTheme}: NavbarProps) {
     const currentUser = useUser()
     const navItems = [
         {name: '首页', href: '/'},
-        // {name: 'demo', href: '/demo'},
         {name: '论坛', href: '/forum'},
         {name: '我的', href: '/my'},
         {name: '英语', href: '/english'},
@@ -56,7 +56,6 @@ export function Navbar({curTheme}: NavbarProps) {
             document.documentElement.classList.remove('dark')
         }
     }
-
     return (
         <nav className="bg-white dark:bg-slate-900 text-foreground sticky top-0 z-50 shadow-md dark:shadow-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,9 +69,16 @@ export function Navbar({curTheme}: NavbarProps) {
                         <div className="ml-10 flex items-center space-x-4">
                             {navItems.map((item) => (
                                 <Link
+                                    onClick={(e) => {
+                                        if (item.name === "我的" && !currentUser) {
+                                            showMessage("请先登录以访问功能！")
+                                            loginStore.onOpen()
+                                            e.preventDefault()
+                                        }
+                                    }}
                                     title={item.name}
                                     key={item.name}
-                                    href={item.name === "我的" ? item.href + "/article" : item.href}
+                                    href={item.href}
                                     className={`px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out ${
                                         isActive(item.href)
                                             ? 'bg-foreground text-primary-foreground'
@@ -88,8 +94,8 @@ export function Navbar({curTheme}: NavbarProps) {
                                 onClick={toggleTheme}
                                 className="ml-4"
                             >
-                                {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem]"/> :
-                                    <Moon className="h-[1.2rem] w-[1.2rem]"/>}
+                                <>{theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem]"/> :
+                                    <Moon className="h-[1.2rem] w-[1.2rem]"/>}</>
                                 <span className="sr-only">切换主题</span>
                             </Button>
                             {currentUser ? (<UserMenu/>) : (
@@ -139,12 +145,20 @@ export function Navbar({curTheme}: NavbarProps) {
                             onClick={toggleTheme}
                             className="w-full justify-start"
                         >
-                            {theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem] mr-2"/> :
-                                <Moon className="h-[1.2rem] w-[1.2rem] mr-2"/>}
+                            <>{theme === 'dark' ? <Sun className="h-[1.2rem] w-[1.2rem] mr-2"/> :
+                                <Moon className="h-[1.2rem] w-[1.2rem] mr-2"/>}</>
                             切换主题
                         </Button>
                         {navItems.map((item) => (
                             <Link
+                                onClick={(e) => {
+                                    if (item.name === "我的" && !currentUser) {
+                                        showMessage("请先登录以访问功能！")
+                                        loginStore.onOpen()
+                                        e.preventDefault()
+                                    }
+                                    setIsOpen(false)
+                                }}
                                 key={item.name}
                                 href={item.href}
                                 className={`block px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out ${
@@ -152,7 +166,6 @@ export function Navbar({curTheme}: NavbarProps) {
                                         ? 'bg-foreground text-primary-foreground'
                                         : 'hover:bg-accent hover:text-accent-foreground'
                                 }`}
-                                onClick={() => setIsOpen(false)}
                             >
                                 {item.name}
                             </Link>

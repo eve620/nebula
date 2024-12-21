@@ -91,7 +91,7 @@ export function LoginModal() {
 
     return (
         <Modal isOpen={loginStore.isOpen} onClose={loginStore.onClose} title={isRegistering ? "注册" : "登录"}
-               description="输入您的账号信息以访问绝区零的世界。">
+               description="输入您的账号信息以访问知识的世界。">
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="username">用户名</Label>

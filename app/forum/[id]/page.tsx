@@ -37,7 +37,16 @@ export default function ForumPost() {
             showMessage("请先登录")
         }
     }
-
+    const copyLink = async () => {
+        try {
+            const currentUrl = window.location.href
+            await navigator.clipboard.writeText(currentUrl)
+            showMessage("已复制链接！")
+        } catch (err) {
+            console.error('Failed to copy link:', err)
+            // 如果需要，这里可以添加错误处理逻辑，比如显示一个错误提示
+        }
+    }
     const handleComment = async (e: React.FormEvent) => {
         e.preventDefault()
         if (article && newComment.trim()) {
@@ -66,7 +75,8 @@ export default function ForumPost() {
                 <div className={"flex items-center mb-4"}>
                     <h1 className="text-3xl font-bold mr-4">{article.title}</h1>
                     {tags.map((item, index) =>
-                        <span key={index} className="ml-1 bg-pink-300/20 dark:bg-blue-300/30 px-2 rounded-lg">{item}</span>)
+                        <span key={index}
+                              className="ml-1 bg-pink-300/20 dark:bg-blue-300/30 px-2 rounded-lg">{item}</span>)
                     }
                 </div>
                 <p className="text-muted-foreground mb-4">
@@ -82,7 +92,13 @@ export default function ForumPost() {
                         <MessageSquare className="mr-2 h-4 w-4"/>
                         {article.comments.length}
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => setIsShareModalOpen(true)}>
+                    <Button variant="outline" size="sm" onClick={() => {
+                        if (user) {
+                            setIsShareModalOpen(true)
+                        } else {
+                            copyLink()
+                        }
+                    }}>
                         <Share2 className="mr-2 h-4 w-4"/>
                         分享
                     </Button>
