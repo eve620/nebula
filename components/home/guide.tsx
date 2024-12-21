@@ -6,18 +6,18 @@ const Guide: React.FC = () => {
     return (
         <div className={'sm:columns-2 max-w-6xl mx-auto'}>
             <div className="overflow-hidden">
-                <Image className={"mx-auto mt-2 rounded-md"} width={150} height={150} src={"/storage/avatar/avatar1.jpg"}
+                <Image className={"mx-auto mt-2 rounded-md"} width={150} height={150}
+                       src={"/storage/avatar/avatar1.jpg"}
                        alt={"picture"}/>
-                <span className={"text-3xl leading-loose inline-block"}>Why aren’t you good at English?</span>
-                <span
-                    className={"text-3xl leading-loose inline-block"}>It’s because you haven’t used Log yet!</span>
+                <p className={"text-center text-lg leading-loose font-semibold"}>如何记录好项目、笔记</p>
+                <p className={"text-center text-lg leading-loose font-semibold"}>请开始使用Suzvc</p>
                 <Link className="
-                    w-full py-2 my-8 mx-auto sm:mx-0 sm:w-48 text-center rounded-md font-bold hover:duration-200 block
+                    w-full py-2 mt-5 mx-auto sm:w-48 text-center rounded-md font-bold hover:duration-200 block
                     text-black dark:text-gray-300
                     bg-gray-200 dark:bg-neutral-800
-                    hover:bg-gray-300 dark:hover:bg-neutral-900" href={""}>Github</Link>
+                    hover:bg-gray-300 dark:hover:bg-neutral-900" href={"#"}>Github</Link>
             </div>
-            <div className="hidden sm:block">
+            <div>
                 <div className="overflow-hidden
                                 bg-gray-50 border border-gray-200 dark:border-gray-500
                                 dark:from-[#525252e6] dark:bg-gradient-to-b dark:to-gray-900

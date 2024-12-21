@@ -15,7 +15,6 @@ export default async function Home() {
             <section className="relative h-[calc(100vh-4rem)] flex items-center justify-center bg-background">
                <Banner/>
             </section>
-
             {/* Features Section */}
             <section className="py-16 px-5 bg-background"  id="demo">
                 <Navigate/>

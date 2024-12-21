@@ -32,7 +32,7 @@ const Notice: React.FC<DevLogProps> = ({notices}) => {
                                 bg-gray-50 border border-gray-200 dark:border-gray-500
                                 dark:from-[#525252e6] dark:bg-gradient-to-b dark:to-gray-900
                                 rounded-2xl pt-4 pl-4 pb-4
-                                hover:shadow-xl dark:shadow-md dark:hover:shadow-blue-700/70
+                                hover:shadow-xl dark:shadow-md dark:hover:shadow-slate-700
                                 ">
                                 <div className={"overflow-y-auto pr-2 h-32"}>
                                     <span>{format(new Date(notice.time), 'yyyy.MM.dd')}</span>

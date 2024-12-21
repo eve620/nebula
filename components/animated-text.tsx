@@ -20,7 +20,7 @@ export function AnimatedText({text}: { text: string }) {
     }, [text])
 
     return (
-        <span className="font-mono">
+        <span className="font-semibold">
             {displayText}
             <span className="animate-pulse">|</span>
     </span>

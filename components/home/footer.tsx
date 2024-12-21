@@ -12,8 +12,7 @@ export function Footer() {
                     <div>
                         <h4 className="text-xl font-bold mb-4">快速链接</h4>
                         <ul className="space-y-2">
-                            <li><Link href="#" className="text-muted-foreground hover:text-foreground">新闻公告</Link></li>
-                            <li><Link href="#" className="text-muted-foreground hover:text-foreground">常见问题</Link></li>
+                            <li><Link href="#" className="text-muted-foreground hover:text-foreground">公告</Link></li>
                         </ul>
                     </div>
                     <div>

@@ -25,8 +25,8 @@ const ArticleItem: React.FC<NoteItemProps> = ({article}) => {
                              text-xl
                              shadow-lg
                              transition-transform
-                             dark:bg-gray-700 dark:hover:shadow-blue-700/30
-                             hover:-translate-y-1
+                             dark:bg-gray-700 dark:hover:shadow-slate-800
+                             hover:-translate-y-[1.3px]
                              hover:shadow-xl hover:shadow-black/10" onClick={() => {
             router.push(`/my/article/${article.id}`)
         }}>

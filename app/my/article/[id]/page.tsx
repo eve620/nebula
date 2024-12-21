@@ -12,6 +12,7 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import {useArticle} from "@/contexts/article-context";
+import {Edit, Share2} from "lucide-react";
 
 export default function Page() {
     const article = useArticle()
@@ -50,10 +51,15 @@ export default function Page() {
                 <div className={"flex-1"}></div>
                 <Button onClick={() => {
                     router.push(`/my/article/${article?.id}/edit`)
-                }}>编辑</Button>
+                }}>
+                    <Edit className="h-4 w-4"/>
+                    编辑</Button>
                 <Button onClick={() => {
                     showMessage("share")
-                }}>分享</Button>
+                }}>
+                    <Share2 className="h-4 w-4"/>
+                    分享
+                </Button>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                         <Button>删除</Button>

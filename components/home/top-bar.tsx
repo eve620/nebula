@@ -17,7 +17,7 @@ const TopBar: React.FC = () => {
             px-4 py-3 text-black
             sm:flex sm:items-center sm:justify-between sm:px-6
             lg:px-8 rounded-lg">
-            <span>About Glog ，My own project</span>
+            <span className={'font-semibold text-sm opacity-90'}>关于Suzvc，以下是一些使用说明和介绍</span>
             <span onClick={scrollToAbout}
                   className="mt-4 block rounded-lg bg-white px-5 py-3
                       text-center text-sm font-bold text-purple-600 transition

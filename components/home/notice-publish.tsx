@@ -76,7 +76,7 @@ export default function NoticePublish() {
         <>
             {currentUser?.role === "Admin" ? <>
                 <form onSubmit={handleSubmit}
-                      className="mb-8 p-4 bg-card rounded-lg shadow-lg dark:shadow-gray-500">
+                      className="mb-8 p-4 border rounded-lg shadow dark:shadow-gray-500">
                     <h2 className="text-xl font-semibold mb-4">更新公告</h2>
                     <Popover>
                         <PopoverTrigger asChild className={'mb-4'}>

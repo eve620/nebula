@@ -10,7 +10,7 @@ interface ArticlesProps {
 }
 
 const Articles: React.FC<ArticlesProps> = ({articles}) => {
-    const tags = useTag()
+    const tags = useTag() || []
     const [articleList, setArticleList] = useState<Article[]>(articles)
     const [currentTags, setCurrentTags] = useState<string[]>([])
     const [isTagListShow, setIsTagListShow] = useState(false)

@@ -102,13 +102,6 @@ export default function ForumPost() {
                         <Share2 className="mr-2 h-4 w-4"/>
                         分享
                     </Button>
-                    {article.createdBy.username === user?.username && (
-                        <Button variant="outline" size="sm"
-                                onClick={() => router.push(`/forum/${article.id}/edit`)}>
-                            <Edit className="mr-2 h-4 w-4"/>
-                            编辑
-                        </Button>
-                    )}
                 </div>
                 <div className="space-y-4">
                     <h2 className="text-2xl font-bold">评论</h2>

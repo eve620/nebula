@@ -6,7 +6,7 @@ export default function About() {
         <div>
             <h2 className="text-4xl font-bold mb-12 text-center">关于我</h2>
             <Card
-                className="w-full mx-auto max-w-xl dark:bg-gray-950 dark:border-gray-800 shadow-lg dark:shadow-blue-950">
+                className="w-full mx-auto max-w-xl bg-card/70 shadow-lg dark:shadow-slate-700">
                 <CardHeader className="flex flex-col items-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                     <Image src="/storage/avatar/avatar1.jpg" width={120} height={120} alt={"avatar"}
                            className={"rounded-full border-4 border-gray-200 z-10 shadow-lg"}/>

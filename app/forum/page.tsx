@@ -24,7 +24,7 @@ export default function Forum() {
     const [searchTerm, setSearchTerm] = useState('')
     const postsPerPage = 3
     const user = useUser()
-    const filteredPosts = useMemo(() => {
+    const filteredArticles = useMemo(() => {
         setCurrentPage(1)
         return articles.filter(post =>
             post.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -32,9 +32,9 @@ export default function Forum() {
     }, [articles, searchTerm])
     const indexOfLastPost = currentPage * postsPerPage
     const indexOfFirstPost = indexOfLastPost - postsPerPage
-    const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost)
+    const currentArticles = filteredArticles.slice(indexOfFirstPost, indexOfLastPost)
 
-    const totalPages = Math.ceil(filteredPosts.length / postsPerPage)
+    const totalPages = Math.ceil(filteredArticles.length / postsPerPage)
 
     const handlePageChange = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -56,17 +56,17 @@ export default function Forum() {
                     className="max-w-sm"
                 />
             </div>
-            {currentPosts.length ?
+            {currentArticles.length ?
                 <div className="space-y-6">
-                    {currentPosts.map((post) => (
-                        <div key={post.id} onClick={() => router.push(`/forum/${post.id}`)}
+                    {currentArticles.map((article) => (
+                        <div key={article.id} onClick={() => router.push(`/forum/${article.id}`)}
                              className="cursor-pointer">
-                            <ForumPost post={post}/>
+                            <ForumPost article={article}/>
                         </div>
                     ))}
                 </div> :
                 <Empty/>}
-            {filteredPosts.length > 0 && (
+            {filteredArticles.length > 0 && (
                 <Pagination className={'mt-5'}>
                     <PaginationContent>
                         <PaginationItem>

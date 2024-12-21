@@ -75,7 +75,7 @@ export default function Page() {
                     <input
                         placeholder="" value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className={"bg-transparent dark:focus:border-white py-1 px-2 mt-1 border-2 rounded-md outline-none disabled:opacity-70 disabled:cursor-n border-neutral-300 focus:border-black"}
+                        className={"flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"}
                     />
                 </div>
                 <div className={"w-1/2 flex flex-col pl-4"}>
@@ -94,7 +94,7 @@ export default function Page() {
                     </label>
                     <div className="relative" ref={tagRef}>
                         <button onClick={() => setIsTagListShow(!isTagListShow)}
-                                className="relative w-full bg-transparent dark:focus:border-white py-1 px-2 mt-1 border-2 rounded-md outline-none disabled:opacity-70 disabled:cursor-n border-neutral-300 focus:border-black">
+                                className={"flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"}>
                             <div className="w-11/12 text-left truncate">
                                 {currentTags.length ? currentTags.map((item, index) => <span key={index}
                                                                                              className="ml-2 bg-pink-300/20 dark:bg-blue-300/30 px-2 rounded-lg">{item}</span>)

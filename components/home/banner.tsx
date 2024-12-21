@@ -33,11 +33,11 @@ export default function Banner() {
         <>
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="/placeholder.svg"
+                    src="/bg3.jpg"
                     alt="Cyberpunk city background"
                     layout="fill"
                     objectFit="cover"
-                    className="opacity-50 dark:opacity-30"
+                    className="opacity-95 dark:opacity-60"
                 />
             </div>
             <div className="relative z-10 text-center">
