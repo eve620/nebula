@@ -1,55 +1,38 @@
-import { NextResponse } from 'next/server'
+import {NextResponse} from 'next/server'
 import {prisma} from "@/lib/prisma";
 
-export async function GET(request: Request) {
-  try {
-    const today = new Date()
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
-
-    const leaderboard = await prisma.user.findMany({
-      select: {
-        id: true,
-        username: true,
-        avatarUrl: true,
-        dailyCheckIns: {
-          where: {
-            checkInDate: {
-              gte: firstDayOfMonth,
+export async function GET() {
+    try {
+        const leaderboard = await prisma.dailyCheckIn.groupBy({
+            by: ['userId'],
+            _count: {
+                id: true,
             },
-          },
-          orderBy: {
-            checkInDate: 'desc',
-          },
-          take: 1,
-        },
-      },
-      orderBy: [
-        {
-          dailyCheckIns: {
-            _count: 'desc',
-          },
-        },
-        {
-          dailyCheckIns: {
-            streak: 'desc',
-          },
-        },
-      ],
-      take: 10,
-    })
+            orderBy: {
+                _count: {
+                    id: 'desc',
+                },
+            },
+            take: 5,
+        })
+        const leaderboardWithUserInfo = await Promise.all(
+            leaderboard.map(async (entry) => {
+                const user = await prisma.user.findUnique({
+                    where: {id: entry.userId},
+                })
+                return {
+                    userId: entry.userId,
+                    username: user?.username,
+                    nickname: user?.nickname,
+                    image: user?.image,
+                    totalCheckIns: entry._count.id,
+                }
+            })
+        )
 
-    const formattedLeaderboard = leaderboard.map((user) => ({
-      id: user.id,
-      username: user.username,
-      avatarUrl: user.avatarUrl,
-      monthlyCheckIns: user.dailyCheckIns[0]?.monthlyCheckIns || 0,
-      currentStreak: user.dailyCheckIns[0]?.streak || 0,
-    }))
-
-    return NextResponse.json(formattedLeaderboard)
-  } catch (error) {
-    console.error('获取排行榜失败:', error)
-    return NextResponse.json({ message: '获取排行榜失败，请稍后重试' }, { status: 500 })
-  }
+        return NextResponse.json(leaderboardWithUserInfo)
+    } catch (error) {
+        return NextResponse.json({error: '获取排行榜失败'}, {status: 500})
+    }
 }
 

@@ -36,7 +36,7 @@ export function LoginModal() {
             if (isRegistering) {
                 registerSchema.parse({username, password, nickname})
                 // 这里应该有注册逻辑
-                const user = await fetch("/api/auth/user", {
+                const user = await fetch("/api/user", {
                     method: "POST",
                     body: JSON.stringify({
                         username,
@@ -54,6 +54,9 @@ export function LoginModal() {
                         showMessage("注册成功！")
                         router.push("/")
                         router.refresh()
+                        loginStore.onClose()
+                    }else {
+                        showMessage("注册失败")
                     }
                     setPassword("")
                     setUsername("")
@@ -75,13 +78,15 @@ export function LoginModal() {
                     showMessage("登录成功！")
                     router.push("/")
                     router.refresh()
+                    loginStore.onClose()
+                }else {
+                    showMessage("登录失败")
                 }
                 setNickname("")
                 setUsername("")
                 setPassword("")
             }
             // 为演示目的，我们仍然关闭模态框
-            loginStore.onClose()
         } catch (error) {
             if (error instanceof z.ZodError) {
                 setErrors(error.flatten().fieldErrors)

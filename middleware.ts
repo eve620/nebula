@@ -25,6 +25,13 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(returnUrl);
         }
     }
+    if (request.nextUrl.pathname.startsWith('/api/my')) {
+        const token = await getToken({req: request});
+        if (!token) {
+            return NextResponse.json("未登录", {status: 403})
+        }
+    }
+    return NextResponse.next()
 }
 
-export const config = {matcher: ['/my/:path*', '/admin/:path*']}
+export const config = {matcher: ['/my/:path*', '/admin/:path*', '/api/my/:path*']}

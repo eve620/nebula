@@ -3,17 +3,18 @@
 import React, {useState, useEffect} from 'react'
 
 export function AnimatedText({text}: { text: string }) {
-    const [displayText, setDisplayText] = useState('')
+    const [index, setIndex] = useState(0)
 
     useEffect(() => {
-        let i = 0
         const timer = setInterval(() => {
-            if (i < text.length) {
-                setDisplayText((prev) => prev + text.charAt(i))
-                i++
-            } else {
-                clearInterval(timer)
-            }
+            setIndex((prev) => {
+                if (prev < text.length) {
+                    return prev + 1
+                } else {
+                    clearInterval(timer)
+                    return prev
+                }
+            })
         }, 100)
 
         return () => clearInterval(timer)
@@ -21,9 +22,8 @@ export function AnimatedText({text}: { text: string }) {
 
     return (
         <span className="font-semibold">
-            {displayText}
+            {text.slice(0, index)}
             <span className="animate-pulse">|</span>
-    </span>
+        </span>
     )
 }
-

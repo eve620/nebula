@@ -86,7 +86,7 @@ export default function NewsDetail() {
                     <Image
                         src={news.imageUrl}
                         alt={news.title}
-                        layout="fill"
+                        fill
                         objectFit="cover"
                         className="rounded-lg"
                     />

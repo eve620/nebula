@@ -207,7 +207,7 @@ export default function EditProject() {
                                         <Image
                                             src={image}
                                             alt={`Uploaded image ${index + 1}`}
-                                            layout="fill"
+                                            fill
                                             objectFit="cover"
                                             className="rounded"
                                         />

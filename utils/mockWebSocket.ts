@@ -5,13 +5,13 @@ class MockWebSocket {
 
   constructor() {
     // 模拟接收服务器消息
-    setInterval(() => {
-      this.emit('friendRequest', {
-        id: Math.random().toString(36).substr(2, 9),
-        username: `User${Math.floor(Math.random() * 1000)}`,
-        avatarUrl: '/placeholder.svg'
-      });
-    }, 10000); // 每10秒模拟一个新的好友请求
+    // setInterval(() => {
+    //   this.emit('friendRequest', {
+    //     id: Math.random().toString(36).substr(2, 9),
+    //     username: `User${Math.floor(Math.random() * 1000)}`,
+    //     avatarUrl: '/placeholder.svg'
+    //   });
+    // }, 10000); // 每10秒模拟一个新的好友请求
   }
 
   on(event: string, callback: Listener) {

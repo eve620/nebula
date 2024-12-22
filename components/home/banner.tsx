@@ -30,25 +30,25 @@ export default function Banner() {
         }
     }
     return (
-        <>
-            <div className="absolute inset-0 z-0">
+        <div className={"group"}>
+            <div className="absolute inset-0 z-0 overflow-hidden">
                 <Image
                     src="/bg3.jpg"
                     alt="Cyberpunk city background"
-                    layout="fill"
+                    fill
                     objectFit="cover"
-                    className="opacity-95 dark:opacity-60"
+                    className="opacity-95 dark:opacity-60 group-hover:scale-105 transition-transform duration-700"
                 />
             </div>
             <div className="relative z-10 text-center">
                 <h1 className="text-6xl font-bold mb-4 animate-pulse">SUZVC</h1>
                 <p className="text-xl mb-8">
-                    <AnimatedText text="探索未来世界的秘密"/>
+                    <AnimatedText text="探索知识的海洋"/>
                 </p>
                 <Button onClick={scrollToDemo}>
                     开始体验
                 </Button>
             </div>
-        </>
+        </div>
     );
 }

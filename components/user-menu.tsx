@@ -17,7 +17,6 @@ import {ViewSharedPostsModal} from "@/components/modal/view-shared-posts-modal";
 import {DailyCheckInModal} from "@/components/modal/daily-check-in-modal";
 import {EditProfileModal} from "@/components/modal/edit-profile-modal";
 import {signOut} from "next-auth/react";
-import {toast} from "@/hooks/use-toast";
 import {useUser} from "@/contexts/user-context";
 import showMessage from "@/components/message";
 
@@ -74,12 +73,14 @@ export function UserMenu() {
                         <Settings className="mr-2 h-4 w-4"/>
                         <span>设置</span>
                     </DropdownMenuItem>
-                    {currentUser?.role === "Admin" && (
-                        <DropdownMenuItem onClick={() => router.push('/admin')}>
-                            <ShieldCheck className="mr-2 h-4 w-4"/>
-                            <span>后台管理</span>
-                        </DropdownMenuItem>
-                    )}
+                    <>
+                        {currentUser?.role === "Admin" && (
+                            <DropdownMenuItem onClick={() => router.push('/admin')}>
+                                <ShieldCheck className="mr-2 h-4 w-4"/>
+                                <span>后台管理</span>
+                            </DropdownMenuItem>
+                        )}
+                    </>
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem onClick={() => {
                         signOut({redirect: false}).then(() => {
@@ -105,7 +106,6 @@ export function UserMenu() {
             <DailyCheckInModal
                 isOpen={isDailyCheckInModalOpen}
                 onClose={() => setIsDailyCheckInModalOpen(false)}
-                userId={currentUser?.id}
             />
             <EditProfileModal
                 isOpen={isEditProfileModalOpen}

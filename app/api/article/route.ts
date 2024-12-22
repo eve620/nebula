@@ -3,7 +3,6 @@ import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export async function GET() {
-    console.log("2131312321")
     const articles = await prisma.article.findMany({
         include: {
             createdBy: {select: {nickname: true, username: true}},

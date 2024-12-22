@@ -19,11 +19,11 @@ model User {
   role         UserRole       @default(User)
   project      Project[]
   progress     Progress?
-  Event        Event[]
-  Article      Article[]
-  Comment      Comment[]
-  Like         Like[]
-  DailyCheckIn DailyCheckIn[]
+  event        Event[]
+  article      Article[]
+  comment      Comment[]
+  like         Like[]
+  dailyCheckIn DailyCheckIn[]
 }
 
 enum UserRole {
@@ -146,12 +146,10 @@ model Like {
 }
 
 model DailyCheckIn {
-  id              Int      @id @default(autoincrement())
-  userId          Int
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  checkInDate     DateTime @default(now())
-  streak          Int      @default(1)
-  monthlyCheckIns Int      @default(1)
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checkInDate DateTime @default(now())
 
   @@unique([userId, checkInDate])
   @@index([userId, checkInDate])
