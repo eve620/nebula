@@ -82,9 +82,6 @@ export function LoginModal() {
                 }else {
                     showMessage("登录失败")
                 }
-                setNickname("")
-                setUsername("")
-                setPassword("")
             }
             // 为演示目的，我们仍然关闭模态框
         } catch (error) {

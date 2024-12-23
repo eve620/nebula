@@ -21,13 +21,16 @@ export function Modal({isOpen, onClose, title, description, children, className 
                     e.preventDefault()
                 }
             }}
-                           className={`sm:max-w-[425px] ${className} bg-card`}>
-                {(title || description) && (
-                    <DialogHeader>
-                        {title && <DialogTitle>{title}</DialogTitle>}
-                        {description && <DialogDescription>{description}</DialogDescription>}
-                    </DialogHeader>
-                )}
+                           className={`sm:max-w-[425px] ${className} bg-background`}>
+                <>
+                    {(title || description) && (
+                        <DialogHeader>
+                            <>
+                                {title && <DialogTitle>{title}</DialogTitle>}
+                                {description && <DialogDescription>{description}</DialogDescription>}
+                            </>
+                        </DialogHeader>
+                    )}</>
                 {children}
             </DialogContent>
         </Dialog>

@@ -38,8 +38,8 @@ export function extractFormData(formData: FormData) {
     const title = formData.get("title") as string;
     const job = formData.get("job") as string;
     const stacks = formData.get("stacks") as string;
-    const startTime = formData.get("startTime") as string;
-    const endTime = formData.get("endTime") as string;
+    const startTime = new Date(formData.get("startTime") as string);
+    const endTime = new Date(formData.get("endTime") as string);
     const describe = formData.get("describe") as string;
     const highlight = formData.get("highlight") as string;
     const createdById = Number(formData.get("createdBy"));

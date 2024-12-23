@@ -1,10 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
-import {compare, hash} from "bcrypt"
-import fs from "fs";
-import path from "path";
-import {saveBase64Image} from "@/app/api/user/utils";
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import {compare, hash} from "bcrypt";
 
 export async function GET() {
     const currentUser = await getCurrentUser()
@@ -36,7 +33,7 @@ export async function POST(request: NextRequest) {
                 password: hashedPassword
             }
         })
-        return NextResponse.json(newUser)
+        return NextResponse.json("")
     } catch (e) {
         return NextResponse.json({error: '服务器内部错误'}, {status: 500});
     }
@@ -44,47 +41,39 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
     try {
-        const {username, account, oldPassword, newPassword, bio, base64Image} = await request.json()
-        // 判断是否存在
-        const user = await prisma.user.findUnique({
-            where: {account}
-        })
-        if (!user) return NextResponse.json({error: "账号不存在"}, {status: 400})
-        let fileName = user.image
-        if (base64Image) {
-            if (user.image) {
-                const deleteFilePath = path.join(process.cwd(), 'public', 'storage', 'avatar', user.image);
-                fs.unlink(deleteFilePath, (err) => {
-                    if (err) {
-                        return NextResponse.json({error: '删除文件时出错', details: err.message}, {status: 500});
-                    }
-                    return NextResponse.json({message: '文件删除成功'}, {status: 200});
-                });
-            }
-            const matches = base64Image.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]*);base64,/);
-            if (!matches) {
-                return NextResponse.json({error: '无效的 Base64 图片'}, {status: 400});
-            }
-            fileName = await saveBase64Image(base64Image)
+        const formData = await request.formData();
+        const username = formData.get("username") as string;
+        const nickname = formData.get("nickname") as string;
+        const bio = formData.get("bio") as string;
+        const image = formData.get("image") as Blob;
+        const oldPassword = formData.get("oldPassword") as string | null;
+        const newPassword = formData.get("newPassword") as string | null;
+        console.log(oldPassword)
+        console.log(newPassword)
+        const user = await prisma.user.findUnique({where: {username}});
+        if (!user) {
+            return NextResponse.json({error: "账号不存在"}, {status: 400});
         }
-        if (oldPassword) {
+        let updatedPassword = user.password; // 默认不修改密码
+        if (oldPassword || newPassword) {
+            if (!oldPassword || !newPassword) return NextResponse.json({error: "请同时提供旧密码和新密码"}, {status: 400});
             const passwordCorrect = await compare(oldPassword, user.password);
-            if (!passwordCorrect) return NextResponse.json({error: "原密码不正确"}, {status: 400})
-        }
-        const hashedNewPassword = await hash(newPassword, 10);
-        await prisma.user.update({
-            where: {
-                account
-            },
-            data: {
-                image: fileName,
-                username,
-                bio,
-                password: newPassword ? hashedNewPassword : user.password
+            if (!passwordCorrect) {
+                return NextResponse.json({error: "原密码不正确"}, {status: 400});
             }
-        })
-        return NextResponse.json({message: "修改成功"})
+            updatedPassword = await hash(newPassword, 10); // 更新密码
+        }
+        await prisma.user.update({
+            where: {username},
+            data: {
+                nickname,
+                bio,
+                password: updatedPassword,
+            },
+        });
+        return NextResponse.json({message: "修改成功"});
     } catch (e) {
-        throw new Error("服务器出错")
+        console.error(e);
+        return NextResponse.json({error: "服务器出错"}, {status: 500});
     }
 }

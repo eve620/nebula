@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {deleteFiles, extractFormData, saveFiles} from "@/app/api/project/utils";
 import {prisma} from "@/lib/prisma";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export async function GET(request: NextRequest) {
     const {searchParams} = new URL(request.url);
@@ -20,6 +21,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
     try {
         const formData = await request.formData()
         const {
@@ -30,11 +33,9 @@ export async function POST(request: NextRequest) {
             endTime,
             describe,
             highlight,
-            createdById,
             files
         } = extractFormData(formData);
         const imageUrl = await saveFiles(files);
-
         await prisma.project.create({
             data: {
                 title,
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
                 endTime,
                 describe,
                 highlight,
-                createdById,
+                createdById: currentUser.id,
                 imageUrl: JSON.stringify(imageUrl)
             }
         });
