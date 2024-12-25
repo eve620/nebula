@@ -1,21 +1,22 @@
 import React from 'react';
 import {prisma} from "@/lib/prisma";
 import {ArticleProvider} from "@/contexts/article-context";
+import {ProjectProvider} from "@/contexts/project-context";
 
 export default async function AdminLayout({params, children}: Readonly<{ children: React.ReactNode; }>) {
     const {id} = await params
-    const article = await prisma.article.findUnique({
+    const project = await prisma.project.findUnique({
         where: {
             id: Number(id)
         }
     })
-    if (!article) {
+    if (!project) {
         return
         // return <EmptyState/>
     }
     return (
-        <ArticleProvider value={article}>
+        <ProjectProvider value={project}>
             {children}
-        </ArticleProvider>
+        </ProjectProvider>
     );
 }

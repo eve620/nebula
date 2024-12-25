@@ -16,7 +16,6 @@ import {format} from "date-fns"
 import {zhCN} from "date-fns/locale";
 import {DateRange} from "react-day-picker"
 import {Calendar} from "@/components/ui/calendar"
-import {useUser} from "@/contexts/user-context";
 
 interface NewsData {
     title: string
@@ -37,24 +36,30 @@ export default function PublishProject() {
     const [stacks, setStacks] = useState([])
     const [describe, setDescribe] = useState("")
     const [highlight, setHighlight] = useState("")
-    // const [fileList, setFileList] = useState([]);
     const [previewImage, setPreviewImage] = useState<string | null>(null)
     const [newStack, setNewStack] = useState('')
     const fileInputRef = useRef<HTMLInputElement>(null)
-
+    const [images, setImages] = useState([])
+    const maxImages = 5
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // const files = e.target.files
-        // if (files) {
-        //     const newImages = Array.from(files).map(file => URL.createObjectURL(file))
-        //     setNewsData(prev => ({...prev, images: [...prev.images, ...newImages]}))
-        // }
+        const files = e.target.files
+        if (images.length + files.length > maxImages) {
+            showMessage(`最多上传${maxImages}张图片`)
+            return
+        }
+        if (files) {
+            const newImages = Array.from(files).map(file => {
+                return {
+                    url: URL.createObjectURL(file),
+                    sourceFile: file
+                }
+            })
+            setImages([...images, ...newImages])
+        }
     }
 
     const handleRemoveImage = (index: number) => {
-        // setNewsData(prev => ({
-        //     ...prev,
-        //     images: prev.images.filter((_, i) => i !== index)
-        // }))
+        setImages(images.filter((_, i) => i !== index))
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -66,23 +71,14 @@ export default function PublishProject() {
         formData.append('describe', describe || "")
         formData.append('highlight', highlight || "")
         if (date?.from) {
-            formData.append("startTime", date.from); // 开始日期
+            formData.append("startTime", date.from.toISOString()); // 开始日期
         }
         if (date?.to) {
-            formData.append("endTime", date.to); // 结束日期
+            formData.append("endTime", date.to.toISOString()); // 结束日期
         }
-        for (const [key, value] of formData.entries()) {
-            console.log(key + ': ' + value);
-        }
-        // let uploaderImage = []
-        // fileList.forEach((item, index) => {
-        //     if (item.originFileObj) {
-        //         formData.append('images[]', item.originFileObj as Blob);
-        //     }
-        //     if (item.status === 'uploaded') {
-        //         uploaderImage.push(item.fileName)
-        //     }
-        // });
+        images.forEach((item) => {
+            formData.append('newImages[]', item.sourceFile);
+        });
         const request = await fetch('/api/project', {
             method: 'POST',
             body: formData as BodyInit
@@ -220,44 +216,44 @@ export default function PublishProject() {
                         />
                     </div>
                 </div>
-                {/*{newsData.images.length > 0 && (*/}
-                {/*    <div className="grid grid-cols-4 gap-4">*/}
-                {/*        <div className="col-start-2 col-span-3">*/}
-                {/*            <div className="flex gap-4">*/}
-                {/*                {newsData.images.map((image, index) => (*/}
-                {/*                    <div key={index} className="relative w-24 h-24 group">*/}
-                {/*                        <Image*/}
-                {/*                            src={image}*/}
-                {/*                            alt={`Uploaded image ${index + 1}`}*/}
-                {/*                            fill*/}
-                {/*                            objectFit="cover"*/}
-                {/*                            className="rounded"*/}
-                {/*                        />*/}
-                {/*                        <div*/}
-                {/*                            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">*/}
-                {/*                            <button*/}
-                {/*                                type="button"*/}
-                {/*                                className="text-white p-1 hover:text-blue-400"*/}
-                {/*                                onClick={() => setPreviewImage(image)}*/}
-                {/*                            >*/}
-                {/*                                <Eye size={20}/>*/}
-                {/*                                <span className="sr-only">Preview image</span>*/}
-                {/*                            </button>*/}
-                {/*                            <button*/}
-                {/*                                type="button"*/}
-                {/*                                className="text-white p-1 hover:text-red-400"*/}
-                {/*                                onClick={() => handleRemoveImage(index)}*/}
-                {/*                            >*/}
-                {/*                                <Trash2 size={20}/>*/}
-                {/*                                <span className="sr-only">Delete image</span>*/}
-                {/*                            </button>*/}
-                {/*                        </div>*/}
-                {/*                    </div>*/}
-                {/*                ))}*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*)}*/}
+                {images.length > 0 && (
+                    <div className="grid grid-cols-4 gap-4">
+                        <div className="col-start-2 col-span-3">
+                            <div className="flex gap-4">
+                                {images.map((item, index) => (
+                                    <div key={index} className="relative w-24 h-24 group">
+                                        <Image
+                                            src={item.url}
+                                            alt={`Uploaded image ${index + 1}`}
+                                            fill
+                                            objectFit="cover"
+                                            className="rounded"
+                                        />
+                                        <div
+                                            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                            <button
+                                                type="button"
+                                                className="text-white p-1 hover:text-blue-400"
+                                                onClick={() => setPreviewImage(item.url)}
+                                            >
+                                                <Eye size={20}/>
+                                                <span className="sr-only">Preview image</span>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="text-white p-1 hover:text-red-400"
+                                                onClick={() => handleRemoveImage(index)}
+                                            >
+                                                <Trash2 size={20}/>
+                                                <span className="sr-only">Delete image</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <div className="flex gap-4 justify-end mt-4">
                     <div className={"flex-1"}></div>
                     <Button type={"submit"}>发布</Button>

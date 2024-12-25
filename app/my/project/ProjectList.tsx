@@ -5,6 +5,8 @@ import Empty from "@/components/empty";
 import {format} from "date-fns/format";
 import {useRouter} from "next/navigation";
 import {Modal} from "@/components/modal/modal";
+import showMessage from "@/components/message";
+import Image from "next/image";
 
 const ProjectList: React.FC = ({projectList}) => {
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -26,7 +28,7 @@ const ProjectList: React.FC = ({projectList}) => {
                         return (
                             <div key={item.id}
                                  onClick={() => {
-                                     router.push('/project/1')
+                                     router.push(`/my/project/${item.id}`)
                                  }}
                                  className="mb-8 sm:break-inside-avoid rounded-xl shadow-lg
                              bg-content transition-shadow dark:hover:shadow-blue-400/40
@@ -57,11 +59,11 @@ const ProjectList: React.FC = ({projectList}) => {
                                             ${format(new Date(item.endTime), "yyyy.MM")}`}</p>
                                         <p className={"text-blue-500 cursor-pointer"} onClick={(e) => {
                                             e.stopPropagation()
-                                            setPreviewImage(true)
                                             if (!JSON.parse(item.imageUrl).length) {
-                                                //toast
+                                                showMessage("无图片")
                                                 return
                                             }
+                                            setPreviewImage(true)
                                             showImages(JSON.parse(item.imageUrl))
                                         }}>展示图片</p>
                                     </div>
@@ -72,15 +74,15 @@ const ProjectList: React.FC = ({projectList}) => {
                 </div> :
                 <Empty/>
             }
-            <Modal isOpen={previewImage} autofocus={false} onClose={() => setPreviewImage(false)} title="图片预览">
+            <Modal isOpen={previewImage} autofocus={false} onClose={() => setPreviewImage(false)} title="项目图片">
                 <div className="flex justify-center">
-                    {/*<Image*/}
-                    {/*    src={previewImage}*/}
-                    {/*    alt="Preview"*/}
-                    {/*    width={600}*/}
-                    {/*    height={400}*/}
-                    {/*    className="object-contain"*/}
-                    {/*/>*/}
+                    <Image
+                        src={images[0]}
+                        alt="Preview"
+                        width={600}
+                        height={400}
+                        className="object-contain"
+                    />
                 </div>
             </Modal>
         </>

@@ -55,7 +55,7 @@ export async function PUT(request: NextRequest) {
         let imageUrl = user.image
         // 如果存在旧头像，删除它
         if (image) {
-            const response = await put(filename, image, {
+            const response = await put(`avatar/${filename}`, image, {
                 access: 'public',
             })
             if (imageUrl) {

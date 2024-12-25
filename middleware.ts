@@ -2,6 +2,14 @@ import {NextRequest, NextResponse} from "next/server";
 import {getToken} from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
+
+    // const { pathname, method } = request.nextUrl
+    //
+    // // 允许所有GET请求通过
+    // if (method === 'GET') {
+    //     return NextResponse.next()
+    // }
+
     if (request.nextUrl.pathname.startsWith('/my')) {
         const token = await getToken({req: request});
         if (!token) {

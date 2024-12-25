@@ -43,7 +43,8 @@ export function extractFormData(formData: FormData) {
     const describe = formData.get("describe") as string;
     const highlight = formData.get("highlight") as string;
     const createdById = Number(formData.get("createdBy"));
-    const files = formData.getAll("images[]").filter(item => item instanceof File) as File[];
+    const newImages = formData.getAll("newImages[]");
+    const existingImages = formData.getAll("existingImages[]");
     return {
         title,
         job,
@@ -53,6 +54,7 @@ export function extractFormData(formData: FormData) {
         describe,
         highlight,
         createdById,
-        files,
+        newImages,
+        existingImages
     };
 }

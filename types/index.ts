@@ -45,6 +45,21 @@ export interface Article {
     }
 }
 
+export interface Project {
+    id: number;
+    title: string;
+    job: string;
+    stacks: string,
+    describe: number;
+    startTime: Date;
+    endTime: Date;
+    highlight: number;
+    imageUrl: string[]
+    createdById: number;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
 export interface Tag {
     id: number,
     content: string;

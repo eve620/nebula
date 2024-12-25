@@ -7,7 +7,7 @@ import {Input} from "@/components/ui/input"
 import {Textarea} from "@/components/ui/textarea"
 import {Label} from "@/components/ui/label"
 import Image from 'next/image'
-import {Eye, Trash2, ArrowLeft, CalendarIcon} from 'lucide-react'
+import {Eye, Trash2, CalendarIcon} from 'lucide-react'
 import {Modal} from "@/components/modal/modal";
 import showMessage from "@/components/message";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
@@ -16,6 +16,7 @@ import {format} from "date-fns"
 import {zhCN} from "date-fns/locale";
 import {DateRange} from "react-day-picker"
 import {Calendar} from "@/components/ui/calendar"
+import {useProject} from "@/contexts/project-context";
 
 interface NewsData {
     title: string
@@ -27,65 +28,86 @@ interface NewsData {
     images: string[]
 }
 
-export default function EditProject() {
+export default function PublishProject() {
     const router = useRouter()
-    const [newsData, setNewsData] = useState<NewsData>({
-        title: '',
-        date: '',
-        responsibility: '',
-        techStack: '',
-        description: '',
-        highlights: '',
-        images: [],
-    })
+    const project = useProject()
+    console.log(project)
+
+    const [title, setTitle] = useState(project?.title || "")
+    const [job, setJob] = useState(project?.job || "")
+    const [date, setDate] = useState<DateRange | undefined>({from: project?.startTime} || undefined)
+    const [stacks, setStacks] = useState(JSON.parse(project?.stacks))
+    const [describe, setDescribe] = useState(project?.describe || "")
+    const [highlight, setHighlight] = useState(project?.highlight || "")
     const [previewImage, setPreviewImage] = useState<string | null>(null)
-    const [stacks, setStacks] = useState([])
     const [newStack, setNewStack] = useState('')
     const fileInputRef = useRef<HTMLInputElement>(null)
-    const [date, setDate] = useState<DateRange | undefined>()
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target
-        setNewsData(prev => ({...prev, [name]: value}))
-    }
-
+    const [images, setImages] = useState([])
+    const maxImages = 5
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files
+        if (images.length + files.length > maxImages) {
+            showMessage(`最多上传${maxImages}张图片`)
+            return
+        }
         if (files) {
-            const newImages = Array.from(files).map(file => URL.createObjectURL(file))
-            setNewsData(prev => ({...prev, images: [...prev.images, ...newImages]}))
+            const newImages = Array.from(files).map(file => {
+                return {
+                    url: URL.createObjectURL(file),
+                    sourceFile: file
+                }
+            })
+            setImages([...images, ...newImages])
         }
     }
 
     const handleRemoveImage = (index: number) => {
-        setNewsData(prev => ({
-            ...prev,
-            images: prev.images.filter((_, i) => i !== index)
-        }))
+        setImages(images.filter((_, i) => i !== index))
     }
-    const handleSubmit = (e: React.FormEvent) => {
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        // Here you would typically send the data to your backend
-        console.log('Publishing demo:', newsData)
-        // After publishing, redirect to the demo list page
-        router.push('/demo')
+        const formData = new FormData()
+        formData.append('title', title || "")
+        formData.append('job', job || "")
+        formData.append('stacks', JSON.stringify(stacks || []))
+        formData.append('describe', describe || "")
+        formData.append('highlight', highlight || "")
+        if (date?.from) {
+            formData.append("startTime", date.from.toISOString()); // 开始日期
+        }
+        if (date?.to) {
+            formData.append("endTime", date.to.toISOString()); // 结束日期
+        }
+        images.forEach((item) => {
+            if (item.sourceFile) {
+                formData.append('newImages[]', item.sourceFile);
+            } else if (typeof item === 'string') {
+                formData.append(`existingImages[]`, item)
+            }
+        });
+        const request = await fetch('/api/project', {
+            method: 'POST',
+            body: formData as BodyInit
+        })
+
+        if (request.ok) {
+            showMessage("添加成功！")
+            router.push("/my/project")
+            router.refresh()
+        }
     }
+
     return (
         <>
-            <Button
-                variant="outline"
-                size="sm"
-                className="mb-4"
-                onClick={() => router.back()}
-            >
-                <ArrowLeft className="mr-2 h-4 w-4"/>
-                返回
-            </Button>
-            <h1 className="text-3xl font-bold mb-8">新建项目</h1>
+            <span
+                className="flex flex-wrap text-gray-500 dark:text-gray-300 items-center gap-1.5 break-words text-2xl text-muted-foreground sm:gap-2.5">
+                编辑项目
+            </span>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="title" className="text-right">标题</Label>
-                    <Input id="title" name="title" value={newsData.title} onChange={handleInputChange} required
+                    <Input id="title" name="title" value={title} onChange={(e) => setTitle(e.target.value)} required
                            className="col-span-3"/>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -132,8 +154,9 @@ export default function EditProject() {
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="responsibility" className="text-right">职责</Label>
-                    <Input id="responsibility" name="responsibility" value={newsData.responsibility}
-                           onChange={handleInputChange} required className="col-span-3"/>
+                    <Input id="responsibility" name="responsibility" value={job}
+                           onChange={(e) => setJob(e.target.value)}
+                           required className="col-span-3"/>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="techStack" className="text-right">技术栈</Label>
@@ -174,12 +197,14 @@ export default function EditProject() {
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="description" className="text-right">描述</Label>
-                    <Textarea id="description" name="description" value={newsData.description}
-                              onChange={handleInputChange} required className="col-span-3"/>
+                    <Textarea id="description" name="description" value={describe}
+                              onChange={(e) => setDescribe(e.target.value)}
+                              required className="col-span-3"/>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="highlights" className="text-right">亮点</Label>
-                    <Textarea id="highlights" name="highlights" value={newsData.highlights} onChange={handleInputChange}
+                    <Textarea id="highlights" name="highlights" value={highlight}
+                              onChange={(e) => setHighlight(e.target.value)}
                               required className="col-span-3"/>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -198,14 +223,14 @@ export default function EditProject() {
                         />
                     </div>
                 </div>
-                {newsData.images.length > 0 && (
+                {images.length > 0 && (
                     <div className="grid grid-cols-4 gap-4">
                         <div className="col-start-2 col-span-3">
                             <div className="flex gap-4">
-                                {newsData.images.map((image, index) => (
+                                {images.map((item, index) => (
                                     <div key={index} className="relative w-24 h-24 group">
                                         <Image
-                                            src={image}
+                                            src={item.url || item}
                                             alt={`Uploaded image ${index + 1}`}
                                             fill
                                             objectFit="cover"
@@ -216,7 +241,7 @@ export default function EditProject() {
                                             <button
                                                 type="button"
                                                 className="text-white p-1 hover:text-blue-400"
-                                                onClick={() => setPreviewImage(image)}
+                                                onClick={() => setPreviewImage(item.url || item)}
                                             >
                                                 <Eye size={20}/>
                                                 <span className="sr-only">Preview image</span>
@@ -236,8 +261,12 @@ export default function EditProject() {
                         </div>
                     </div>
                 )}
-                <div className="flex justify-end space-x-2">
-                    <Button type="submit">发布</Button>
+                <div className="flex gap-4 justify-end mt-4">
+                    <div className={"flex-1"}></div>
+                    <Button type={"submit"}>发布</Button>
+                    <Button type={"button"} onClick={() => {
+                        router.back()
+                    }}>取消</Button>
                 </div>
             </form>
             {previewImage && (

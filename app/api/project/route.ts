@@ -2,6 +2,8 @@ import {NextRequest, NextResponse} from "next/server";
 import {deleteFiles, extractFormData, saveFiles} from "@/app/api/project/utils";
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import {put} from "@vercel/blob";
+import {v4 as uuid} from 'uuid'
 
 export async function GET(request: NextRequest) {
     const {searchParams} = new URL(request.url);
@@ -33,9 +35,18 @@ export async function POST(request: NextRequest) {
             endTime,
             describe,
             highlight,
-            files
+            newImages,
+            existingImages
         } = extractFormData(formData);
-        const imageUrl = await saveFiles(files);
+        console.log(newImages)
+        const imageUrl = []
+        for (let file of newImages) {
+            const filename = uuid()
+            const response = await put(`project/${filename}`, file, {
+                access: 'public',
+            })
+            imageUrl.push(response.url)
+        }
         await prisma.project.create({
             data: {
                 title,
@@ -57,6 +68,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
     try {
         const formData = await request.formData()
         const {
@@ -67,16 +80,22 @@ export async function PUT(request: NextRequest) {
             endTime,
             describe,
             highlight,
-            createdById,
-            files,
+            newImages,
+            existingImages
         } = extractFormData(formData);
         const id = Number(formData.get("id"))
         const uploadedImage = JSON.parse(formData.get("uploadedImage") as string);
         if (id == undefined) {
             return NextResponse.json({message: "缺少项目ID"}, {status: 400});
         }
-        const imageUrl = await saveFiles(files);
-        const newImageUrl = [...uploadedImage, ...imageUrl];
+        const imageUrl = []
+        for (let file of newImages) {
+            const filename = uuid()
+            const response = await put(`project/${filename}`, file, {
+                access: 'public',
+            })
+            imageUrl.push(response.url)
+        }
 
         const project = await prisma.project.findUnique({
             where: {
@@ -88,8 +107,9 @@ export async function PUT(request: NextRequest) {
         }
 
         const existingImageUrl = JSON.parse(project.imageUrl)
-        const filesToDelete = existingImageUrl.filter(item => !newImageUrl.includes(item));
-        await deleteFiles(filesToDelete);
+        //todo:删除
+        // const filesToDelete = existingImageUrl.filter(item => !newImageUrl.includes(item));
+        // await deleteFiles(filesToDelete);
         await prisma.project.update({
             where: {
                 id
