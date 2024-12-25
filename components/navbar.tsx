@@ -62,7 +62,7 @@ export function Navbar({curTheme}: NavbarProps) {
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
                         <Link href="/" className="flex-shrink-0">
-                            <span className="text-xl font-semibold italic">SUZVC</span>
+                            <span className="text-xl font-semibold italic">NABULA</span>
                         </Link>
                     </div>
                     <div className="hidden md:block">

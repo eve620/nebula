@@ -9,8 +9,8 @@ import {UserProvider} from "@/contexts/user-context";
 import {Toaster} from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-    title: 'Nebula',
-    description: '星云',
+    title: '星云',
+    description: '星云学习',
 }
 
 export default async function RootLayout({children,}: { children: React.ReactNode }) {

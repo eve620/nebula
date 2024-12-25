@@ -2,6 +2,8 @@ import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import {compare, hash} from "bcrypt";
+import {v4 as uuid} from 'uuid'
+import {del, put} from "@vercel/blob";
 
 export async function GET() {
     const currentUser = await getCurrentUser()
@@ -48,9 +50,19 @@ export async function PUT(request: NextRequest) {
         const image = formData.get("image") as Blob;
         const oldPassword = formData.get("oldPassword") as string | null;
         const newPassword = formData.get("newPassword") as string | null;
-        console.log(oldPassword)
-        console.log(newPassword)
+        const filename = uuid()
         const user = await prisma.user.findUnique({where: {username}});
+        let imageUrl = user.image
+        // 如果存在旧头像，删除它
+        if (image) {
+            const response = await put(filename, image, {
+                access: 'public',
+            })
+            if (imageUrl) {
+                await del(imageUrl);
+            }
+            imageUrl = response.url
+        }
         if (!user) {
             return NextResponse.json({error: "账号不存在"}, {status: 400});
         }
@@ -69,6 +81,7 @@ export async function PUT(request: NextRequest) {
                 nickname,
                 bio,
                 password: updatedPassword,
+                image: imageUrl
             },
         });
         return NextResponse.json({message: "修改成功"});

@@ -108,9 +108,9 @@ export function EditProfileModal({isOpen, onClose}: EditProfileModalProps) {
                                 accept="image/*"
                                 style={{display: 'none'}}
                             />
-                            <div className="relative w-32 h-32" onClick={handleSelectImage}>
+                            <div className="relative w-32 h-32 cursor-pointer" onClick={handleSelectImage}>
                                 <Image
-                                    src={croppedImage || "/storage/avatar/avatar.png"}
+                                    src={croppedImage || currentUser?.image || "/storage/avatar/avatar.png"}
                                     alt="Cropped avatar"
                                     fill
                                     objectFit="cover"
