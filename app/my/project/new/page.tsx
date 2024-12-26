@@ -110,11 +110,11 @@ export default function PublishProject() {
                                     {date?.from ? (
                                         date.to ? (
                                             <>
-                                                {format(date.from, "yyyy年MM月dd日", {locale: zhCN})} -{" "}
-                                                {format(date.to, "yyyy年MM月dd日", {locale: zhCN})}
+                                                {format(date.from, "yyyy年MM月dd日")} -{" "}
+                                                {format(date.to, "yyyy年MM月dd日")}
                                             </>
                                         ) : (
-                                            format(date.from, "yyyy年MM月dd日", {locale: zhCN})
+                                            format(date.from, "yyyy年MM月dd日")
                                         )
                                     ) : (
                                         <span>请选择日期...</span>

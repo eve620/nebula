@@ -40,8 +40,6 @@ export async function POST(request: NextRequest) {
         const imageUrl = []
         for (const file of newImages) {
             const filename = uuid()
-            console.log(file)
-            console.log(filename)
             const response = await put(`project/${filename}`, file, {
                 access: 'public',
             })

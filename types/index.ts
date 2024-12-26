@@ -49,15 +49,19 @@ export interface Project {
     id: number;
     title: string;
     job: string;
-    stacks: string,
-    describe: number;
+    stacks: string[],
+    describe: string;
     startTime: Date;
     endTime: Date;
-    highlight: number;
-    imageUrl: string;
+    highlight: string;
+    imageUrl: string[];
     createdById: number;
     createdAt: Date;
     updatedAt: Date;
+    createdBy: {
+        username: string
+        nickname: string
+    }
 }
 
 export interface Tag {

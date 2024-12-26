@@ -4,7 +4,10 @@ import {ProjectProvider} from "@/contexts/project-context";
 
 export default async function AdminLayout({params, children}: Readonly<{ children: React.ReactNode; }>) {
     const {id} = await params
-    const project = await prisma.project.findUnique({
+    let project = await prisma.project.findUnique({
+        include: {
+            createdBy: {select: {nickname: true, username: true}},
+        },
         where: {
             id: Number(id)
         }
@@ -12,6 +15,11 @@ export default async function AdminLayout({params, children}: Readonly<{ childre
     if (!project) {
         return
         // return <EmptyState/>
+    }
+    project = {
+        ...project,
+        stacks: JSON.parse(project.stacks) || [],
+        imageUrl: JSON.parse(project.imageUrl) || []
     }
     return (
         <ProjectProvider value={project}>

@@ -41,11 +41,11 @@ model Project {
   title       String
   startTime   DateTime?
   endTime     DateTime?
-  job         String
-  stacks      String
-  describe    String
+  job         String    @default("")
+  stacks      String    @default("[]")
+  describe    String    @default("")
   highlight   String    @default("")
-  imageUrl    String    @default("")
+  imageUrl    String    @default("[]")
   createdById Int
   createdBy   User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())

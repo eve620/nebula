@@ -2,25 +2,13 @@
 
 import {useParams, useRouter} from 'next/navigation'
 import {Button} from "@/components/ui/button"
-import {Label} from "@/components/ui/label"
 import Image from 'next/image'
-import {ArrowLeft} from 'lucide-react'
+import {ArrowLeft, Briefcase, Calendar, Code, FileText, Lightbulb, User} from 'lucide-react'
 import {useProject} from "@/contexts/project-context";
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel";
 import {Card, CardContent} from "@/components/ui/card";
 import React from "react";
-
-interface NewsItem {
-    id: string;
-    title: string;
-    content: string;
-    author: string;
-    date: string;
-    imageUrl: string;
-    responsibility: string;
-    techStack: string;
-    highlights: string;
-}
+import {format} from "date-fns";
 
 export default function NewsDetail() {
     const project = useProject()
@@ -30,59 +18,57 @@ export default function NewsDetail() {
         return <div>Loading...</div>
     }
     return (
-        <>
+        <div>
             <Button
                 variant="outline"
                 size="sm"
                 className="mb-4"
-                onClick={() => router.push("/my/project")}>
+                onClick={() => router.back()}>
                 <ArrowLeft className="mr-2 h-4 w-4"/>
                 返回
             </Button>
-            <div className={'flex justify-between mx-5'}>
-                <h1 className="text-3xl font-bold mb-8">{project.title}</h1>
-                <Button onClick={() => router.push(`/my/project/${id}/edit`)}>
-                    编辑
-                </Button>
-            </div>
-            <div className="space-y-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">发布日期</Label>
-                    <div className="col-span-3">{''}</div>
+
+            <div className="space-y-6 max-w-6xl mx-auto">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <h1 className="text-4xl font-bold mb-4 md:mb-0">{project.title}</h1>
+                    <Button onClick={() => router.push(`/my/project/${id}/edit`)}>
+                        编辑项目
+                    </Button>
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">作者</Label>
-                    <div className="col-span-3">{project.createdById}</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                        <InfoItem icon={Calendar} label="项目周期"
+                                  value={`${format(project.startTime, "yyyy年MM月")} - ${project.endTime ? format(project.endTime, "yyyy年MM月") : '至今'}`}/>
+                        <InfoItem icon={User} label="开发者"
+                                  value={project.createdBy.nickname || project.createdBy.username}/>
+                        <InfoItem icon={Briefcase} label="职责" value={project.job}/>
+                        <InfoItem icon={Code} label="技术栈" value={
+                            <div className="flex flex-wrap gap-2">
+                                {project.stacks.map((tech, index) => (
+                                    <span key={index}>{tech}</span>
+                                ))}
+                            </div>
+                        }/>
+                    </div>
+                    <div className="space-y-6">
+                        <InfoItem icon={FileText} label="项目描述" value={project.describe}/>
+                        <InfoItem icon={Lightbulb} label="项目亮点" value={project.highlight}/>
+                    </div>
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">职责</Label>
-                    <div className="col-span-3">{project.job}</div>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">技术栈</Label>
-                    <div className="col-span-3">{JSON.parse(project.stacks)}</div>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">描述</Label>
-                    <div className="col-span-3">{project.describe}</div>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">亮点</Label>
-                    <div className="col-span-3">{project.highlight}</div>
-                </div>
-                {JSON.parse(project.imageUrl).length !== 0 && (
-                    <div className="relative w-full h-[400px]">
-                        <h3 className="text-2xl font-bold mb-4">图片展示</h3>
-                        <Carousel className="w-full max-w-xs mx-auto">
+
+                {project.imageUrl.length !== 0 && (
+                    <div>
+                        <h2 className="text-2xl font-semibold mb-4">项目展示</h2>
+                        <Carousel className="w-full max-w-xl mx-auto">
                             <CarouselContent>
-                                {JSON.parse(project.imageUrl).map((_, index) => (
+                                {project.imageUrl.map((_, index) => (
                                         <CarouselItem key={index}>
                                             <div className="p-1">
                                                 <Card>
                                                     <CardContent
                                                         className="flex aspect-square items-center justify-center p-6">
-                                                        <Image src={JSON.parse(project.imageUrl)[index]} width={400}
-                                                               height={400} alt={"adas"}/>
+                                                        <Image src={project.imageUrl[index]} width={300}
+                                                               height={300} alt={"adas"}/>
                                                     </CardContent>
                                                 </Card>
                                             </div>
@@ -94,10 +80,22 @@ export default function NewsDetail() {
                             <CarouselNext/>
                         </Carousel>
                     </div>
-                )
-                }
+                )}
+
             </div>
-        </>
+        </div>
+    )
+}
+
+function InfoItem({icon: Icon, label, value}) {
+    return (
+        <div className="flex">
+            <Icon className="w-5 h-5 mr-3 mt-1"/>
+            <div>
+                <h3 className="font-semibold text-lg">{label}</h3>
+                <div className="text-gray-600 dark:text-gray-400">{value}</div>
+            </div>
+        </div>
     )
 }
 
