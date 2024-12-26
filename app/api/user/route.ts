@@ -28,14 +28,14 @@ export async function POST(request: NextRequest) {
         if (user) return NextResponse.json({error: "该账号已存在"}, {status: 409})
         // 创建新用户
         const hashedPassword = await hash(password, 10);
-        const newUser = await prisma.user.create({
+        await prisma.user.create({
             data: {
                 username,
                 nickname,
                 password: hashedPassword
             }
-        })
-        return NextResponse.json("")
+        });
+        return NextResponse.json("添加成功")
     } catch (e) {
         return NextResponse.json({error: '服务器内部错误'}, {status: 500});
     }

@@ -17,16 +17,6 @@ import {zhCN} from "date-fns/locale";
 import {DateRange} from "react-day-picker"
 import {Calendar} from "@/components/ui/calendar"
 
-interface NewsData {
-    title: string
-    date: string
-    responsibility: string
-    techStack: string
-    description: string
-    highlights: string
-    images: string[]
-}
-
 export default function PublishProject() {
     const router = useRouter()
 

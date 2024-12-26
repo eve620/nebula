@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import {deleteFiles, extractFormData, saveFiles} from "@/app/api/project/utils";
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import {put} from "@vercel/blob";
+import {del, put} from "@vercel/blob";
 import {v4 as uuid} from 'uuid'
 
 export async function GET(request: NextRequest) {
@@ -36,12 +36,12 @@ export async function POST(request: NextRequest) {
             describe,
             highlight,
             newImages,
-            existingImages
         } = extractFormData(formData);
-        console.log(newImages)
         const imageUrl = []
-        for (let file of newImages) {
+        for (const file of newImages) {
             const filename = uuid()
+            console.log(file)
+            console.log(filename)
             const response = await put(`project/${filename}`, file, {
                 access: 'public',
             })
@@ -84,19 +84,9 @@ export async function PUT(request: NextRequest) {
             existingImages
         } = extractFormData(formData);
         const id = Number(formData.get("id"))
-        const uploadedImage = JSON.parse(formData.get("uploadedImage") as string);
         if (id == undefined) {
             return NextResponse.json({message: "缺少项目ID"}, {status: 400});
         }
-        const imageUrl = []
-        for (let file of newImages) {
-            const filename = uuid()
-            const response = await put(`project/${filename}`, file, {
-                access: 'public',
-            })
-            imageUrl.push(response.url)
-        }
-
         const project = await prisma.project.findUnique({
             where: {
                 id
@@ -105,11 +95,21 @@ export async function PUT(request: NextRequest) {
         if (!project) {
             return NextResponse.json({message: "项目未找到"}, {status: 404});
         }
-
         const existingImageUrl = JSON.parse(project.imageUrl)
-        //todo:删除
-        // const filesToDelete = existingImageUrl.filter(item => !newImageUrl.includes(item));
-        // await deleteFiles(filesToDelete);
+        for (const url of existingImageUrl) {
+            if (!existingImages.includes(url)) {
+                await del(url);
+            }
+        }
+
+        for (const file of newImages) {
+            const filename = uuid()
+            const response = await put(`project/${filename}`, file, {
+                access: 'public',
+            })
+            existingImages.push(response.url)
+        }
+
         await prisma.project.update({
             where: {
                 id
@@ -122,13 +122,12 @@ export async function PUT(request: NextRequest) {
                 endTime,
                 describe,
                 highlight,
-                createdById,
-                imageUrl: JSON.stringify(newImageUrl)
+                createdById: currentUser.id,
+                imageUrl: JSON.stringify(existingImages)
             }
         });
         return NextResponse.json({message: "更新成功"});
     } catch (error) {
-        // 如果发生错误，返回404
         throw new Error("服务器出错")
     }
 }

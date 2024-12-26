@@ -6,6 +6,9 @@ import {Label} from "@/components/ui/label"
 import Image from 'next/image'
 import {ArrowLeft} from 'lucide-react'
 import {useProject} from "@/contexts/project-context";
+import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel";
+import {Card, CardContent} from "@/components/ui/card";
+import React from "react";
 
 interface NewsItem {
     id: string;
@@ -67,15 +70,32 @@ export default function NewsDetail() {
                     <Label className="text-right">亮点</Label>
                     <div className="col-span-3">{project.highlight}</div>
                 </div>
-                <div className="relative w-full h-[400px]">
-                    <Image
-                        src={'/bg.png'}
-                        alt={"占位"}
-                        fill
-                        objectFit="cover"
-                        className="rounded-lg"
-                    />
-                </div>
+                {JSON.parse(project.imageUrl).length !== 0 && (
+                    <div className="relative w-full h-[400px]">
+                        <h3 className="text-2xl font-bold mb-4">图片展示</h3>
+                        <Carousel className="w-full max-w-xs mx-auto">
+                            <CarouselContent>
+                                {JSON.parse(project.imageUrl).map((_, index) => (
+                                        <CarouselItem key={index}>
+                                            <div className="p-1">
+                                                <Card>
+                                                    <CardContent
+                                                        className="flex aspect-square items-center justify-center p-6">
+                                                        <Image src={JSON.parse(project.imageUrl)[index]} width={400}
+                                                               height={400} alt={"adas"}/>
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
+                                        </CarouselItem>
+                                    )
+                                )}
+                            </CarouselContent>
+                            <CarouselPrevious/>
+                            <CarouselNext/>
+                        </Carousel>
+                    </div>
+                )
+                }
             </div>
         </>
     )

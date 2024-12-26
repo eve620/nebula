@@ -54,7 +54,7 @@ export interface Project {
     startTime: Date;
     endTime: Date;
     highlight: number;
-    imageUrl: string[]
+    imageUrl: string;
     createdById: number;
     createdAt: Date;
     updatedAt: Date;

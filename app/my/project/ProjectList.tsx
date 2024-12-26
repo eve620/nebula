@@ -9,17 +9,14 @@ import showMessage from "@/components/message";
 import Image from "next/image";
 
 const ProjectList: React.FC = ({projectList}) => {
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewTitle, setPreviewTitle] = useState('');
-    const [images, setImages] = useState<string[]>([""])
+    const [images, setImages] = useState<string[]>([])
     const [imageIndex, setImageIndex] = useState(0)
     const [previewImage, setPreviewImage] = useState(false)
+    const [previewTitle, setPreviewTitle] = useState("")
     const router = useRouter()
     const showImages = (images: string[]) => {
         setImages(images)
-        setPreviewOpen(true)
     }
-    //todo:添加编辑项目的功能
     return (
         <>
             {projectList.length ?
@@ -65,6 +62,7 @@ const ProjectList: React.FC = ({projectList}) => {
                                             }
                                             setPreviewImage(true)
                                             showImages(JSON.parse(item.imageUrl))
+                                            setPreviewTitle(item.title)
                                         }}>展示图片</p>
                                     </div>
                                 </div>
@@ -74,15 +72,71 @@ const ProjectList: React.FC = ({projectList}) => {
                 </div> :
                 <Empty/>
             }
-            <Modal isOpen={previewImage} autofocus={false} onClose={() => setPreviewImage(false)} title="项目图片">
+            <Modal isOpen={previewImage} autofocus={false} description={previewTitle}
+                   onClose={() => {
+                setPreviewImage(false)
+                setImageIndex(0)
+            }} title="图片展示">
                 <div className="flex justify-center">
                     <Image
-                        src={images[0]}
+                        src={images[imageIndex]}
                         alt="Preview"
                         width={600}
                         height={400}
                         className="object-contain"
                     />
+                </div>
+                <div className={"flex justify-between pt-3"}>
+                    <button className={"hover:text-fuchsia-400 dark:hover:text-fuchsia-300 dark:text-white"}
+                            onClick={() => {
+                                if (imageIndex > 0) setImageIndex(imageIndex - 1)
+                                else setImageIndex(images.length - 1)
+                            }}>
+                        <svg
+                            width="2em"
+                            height="2em"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                fill="none"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="1"
+                                d="m15 5l-6 7l6 7"
+                            />
+                        </svg>
+                    </button>
+                    <div className={'space-x-1 flex items-center'}>
+                        {images.map((item: string, index: number) => {
+                            return (
+                                <div onClick={() => {
+                                    setImageIndex(index)
+                                }}
+                                     className={`rounded-full duration-100 hover:bg-fuchsia-300 ${index === imageIndex ? "size-[0.6rem] bg-fuchsia-300" : "size-2 bg-pink-200"} hover:size-[0.6rem] `}
+                                     key={index}/>)
+                        })}
+                    </div>
+                    <button className={"hover:text-fuchsia-400 dark:hover:text-fuchsia-300 dark:text-white"}
+                            onClick={() => {
+                                if (imageIndex < images.length - 1) setImageIndex(imageIndex + 1)
+                                else setImageIndex(0)
+                            }}>
+                        <svg
+                            width="2em"
+                            height="2em"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                fill="none"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="1"
+                                d="m9 5l6 7l-6 7"
+                            />
+                        </svg>
+                    </button>
                 </div>
             </Modal>
         </>

@@ -1,7 +1,7 @@
 'use client'
 
 import {useState, useRef} from 'react'
-import {useRouter} from 'next/navigation'
+import {useParams, useRouter} from 'next/navigation'
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Textarea} from "@/components/ui/textarea"
@@ -18,31 +18,20 @@ import {DateRange} from "react-day-picker"
 import {Calendar} from "@/components/ui/calendar"
 import {useProject} from "@/contexts/project-context";
 
-interface NewsData {
-    title: string
-    date: string
-    responsibility: string
-    techStack: string
-    description: string
-    highlights: string
-    images: string[]
-}
-
 export default function PublishProject() {
     const router = useRouter()
     const project = useProject()
-    console.log(project)
-
+    const {id} = useParams()
     const [title, setTitle] = useState(project?.title || "")
     const [job, setJob] = useState(project?.job || "")
     const [date, setDate] = useState<DateRange | undefined>({from: project?.startTime} || undefined)
-    const [stacks, setStacks] = useState(JSON.parse(project?.stacks))
+    const [stacks, setStacks] = useState(JSON.parse(project?.stacks || "[]"))
     const [describe, setDescribe] = useState(project?.describe || "")
     const [highlight, setHighlight] = useState(project?.highlight || "")
     const [previewImage, setPreviewImage] = useState<string | null>(null)
     const [newStack, setNewStack] = useState('')
     const fileInputRef = useRef<HTMLInputElement>(null)
-    const [images, setImages] = useState([])
+    const [images, setImages] = useState(JSON.parse(project?.imageUrl || "[]"))
     const maxImages = 5
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files
@@ -73,6 +62,8 @@ export default function PublishProject() {
         formData.append('stacks', JSON.stringify(stacks || []))
         formData.append('describe', describe || "")
         formData.append('highlight', highlight || "")
+        formData.append('id', String(id))
+
         if (date?.from) {
             formData.append("startTime", date.from.toISOString()); // 开始日期
         }
@@ -82,12 +73,12 @@ export default function PublishProject() {
         images.forEach((item) => {
             if (item.sourceFile) {
                 formData.append('newImages[]', item.sourceFile);
-            } else if (typeof item === 'string') {
+            } else {
                 formData.append(`existingImages[]`, item)
             }
         });
         const request = await fetch('/api/project', {
-            method: 'POST',
+            method: 'PUT',
             body: formData as BodyInit
         })
 
