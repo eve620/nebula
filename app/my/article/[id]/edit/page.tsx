@@ -6,6 +6,7 @@ import Tiptap from "@/components/tiptap/tiptap";
 import {Button} from "@/components/ui/button";
 import {useTag} from "@/contexts/tag-context";
 import {useArticle} from "@/contexts/article-context";
+import showMessage from "@/components/message";
 
 export default function Page() {
     const article = useArticle()
@@ -32,6 +33,11 @@ export default function Page() {
             })
         })
         if (editArticle.ok) {
+            showMessage("编辑成功！")
+            router.push(`/my/article/${article?.id}`)
+            router.refresh()
+        }else {
+            showMessage("编辑失败")
         }
     }
 
@@ -62,7 +68,7 @@ export default function Page() {
             <div>
                 <span
                     className="flex flex-wrap text-gray-500 dark:text-gray-300 items-center gap-1.5 break-words text-2xl text-muted-foreground sm:gap-2.5">
-                Edit
+                编辑文章
                 </span>
             </div>
             <div className={"flex mt-4"}>
@@ -140,11 +146,7 @@ export default function Page() {
             </div>
             <div className="flex gap-4 mt-4">
                 <div className={"flex-1"}></div>
-                <Button onClick={() => {
-                    editArticle()
-                    router.push(`/my/article/${article?.id}`)
-                    router.refresh()
-                }}>保存</Button>
+                <Button onClick={editArticle}>保存</Button>
                 <Button label={""} onClick={() => {
                     router.back()
                 }}>取消</Button>

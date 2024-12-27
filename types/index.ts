@@ -32,6 +32,7 @@ export interface Article {
     createdAt: Date;
     updatedAt: Date;
     viewCount: number;
+    isLiked: boolean;
     isPinned: boolean;
     isLocked: boolean;
     visibility: "PRIVATE" | "FRIENDS_ONLY" | "PUBLIC",

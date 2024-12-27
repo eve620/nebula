@@ -15,10 +15,25 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-    const body = await request.json()
-    const {title, content, tags, createdById} = body
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
+    const {title, content, tags} = await request.json()
     const article = await prisma.article.create({
-        data: {title, content, tags, createdById},
+        data: {title, content, tags, createdById: currentUser.id},
+    })
+
+    return NextResponse.json(article, {status: 201})
+}
+
+export async function PUT(request: Request) {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
+    const {id, title, content, tags} = await request.json()
+    const article = await prisma.article.update({
+        where: {
+            id
+        },
+        data: {title, content, tags, createdById: currentUser.id},
     })
 
     return NextResponse.json(article, {status: 201})

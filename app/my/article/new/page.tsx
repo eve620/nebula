@@ -29,7 +29,6 @@ export default function Page() {
                 title,
                 tags: JSON.stringify(currentTags),
                 content,
-                createdById: user?.id
             })
         })
         if (addNote.ok) {
