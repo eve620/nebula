@@ -16,22 +16,8 @@ module.exports = {
             },
         },
         extend: {
-            typography: {
-                DEFAULT: {
-                    css: {
-                        maxWidth: 'none',
-                        // 统一设置所有文本的行间距
-                        '*': {
-                            lineHeight: '1.5',
-                            marginTop: '0',
-                            marginBottom: '0.4em'
-                        }
-                    }
-                }
-            },
             colors: {
                 content: 'var(--content-background)',
-
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
                 ring: "hsl(var(--ring))",
@@ -89,6 +75,5 @@ module.exports = {
     },
     plugins: [
         require("tailwindcss-animate"),
-        require('@tailwindcss/typography'),
     ],
 }

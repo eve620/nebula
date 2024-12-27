@@ -66,13 +66,32 @@ body {
     body {
         @apply bg-background text-foreground;
     }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+
+    h1 {
+        @apply text-2xl font-bold;
+    }
+
+    h2 {
+        @apply text-xl font-bold;
+    }
+
+    h3 {
+        @apply text-lg font-bold;
+    }
+
+    pre {
+        @apply p-2 bg-foreground text-background rounded-md;
+    }
 }
 
 @layer components {
     .tag {
-        @apply bg-pink-200 dark:bg-blue-300
-        hover:bg-pink-300 dark:hover:bg-blue-400 duration-200
-        text-gray-700 rounded-xl px-2 inline-block cursor-default;
+        @apply bg-pink-300/20 dark:bg-blue-300/30 px-2 rounded-xl
+        hover:bg-pink-300/40 dark:hover:bg-blue-300/50 duration-200 inline-block cursor-default;
     }
 }
 

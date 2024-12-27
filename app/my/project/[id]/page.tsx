@@ -45,7 +45,7 @@ export default function NewsDetail() {
                         <InfoItem icon={Code} label="技术栈" value={
                             <div className="flex flex-wrap gap-2">
                                 {project.stacks.map((tech, index) => (
-                                    <span key={index}>{tech}</span>
+                                    <span className={'tag'} key={index}>{tech}</span>
                                 ))}
                             </div>
                         }/>
