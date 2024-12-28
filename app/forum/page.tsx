@@ -2,7 +2,7 @@
 
 import {useRouter} from 'next/navigation'
 import {Button} from "@/components/ui/button"
-import {ForumPost} from '@/components/forum-post'
+import {ForumArticle} from '@/components/forum-article'
 import Empty from "@/components/empty";
 import React, {useMemo, useState} from "react";
 import {Input} from "@/components/ui/input"
@@ -61,7 +61,7 @@ export default function Forum() {
                     {currentArticles.map((article) => (
                         <div key={article.id} onClick={() => router.push(`/forum/${article.id}`)}
                              className="cursor-pointer">
-                            <ForumPost article={article}/>
+                            <ForumArticle article={article}/>
                         </div>
                     ))}
                 </div> :

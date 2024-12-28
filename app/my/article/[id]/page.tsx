@@ -81,9 +81,7 @@ export default function Page() {
                     router.push("/my/article")
                 }}>返回</Button>
             </div>
-            <div>
-                <Viewer content={article?.content || ""}/>
-            </div>
+            <Viewer content={article?.content || ""}/>
         </div>
     )
 }

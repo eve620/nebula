@@ -156,7 +156,7 @@ export function DailyCheckInModal({isOpen, onClose}: DailyCheckInModalProps) {
                             {leaderboard.map((entry, index) => (
                                 <li key={entry.userId} className="flex items-center space-x-2">
                                     <span className="font-bold">{index + 1}.</span>
-                                    <img src={entry?.avatarUrl || "/avatar.jpg"} alt={entry.username}
+                                    <img src={entry?.avatarUrl || "/avatar.png"} alt={entry.username}
                                          className="w-6 h-6 rounded-full"/>
                                     <span>{entry?.nickname || entry.username}</span>
                                     <span className="ml-auto">总打卡 {entry.totalCheckIns} 次</span>

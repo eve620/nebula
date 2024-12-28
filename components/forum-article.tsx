@@ -7,7 +7,7 @@ interface ForumArticleProps {
     article: Article
 }
 
-export function ForumPost({article}: ForumArticleProps) {
+export function ForumArticle({article}: ForumArticleProps) {
     const plainText = article.content.replace(/<\/?[^>]+(>|$)/g, "");
     return (
         <div
@@ -24,7 +24,7 @@ export function ForumPost({article}: ForumArticleProps) {
         </span>
                 <span className="flex items-center">
           <MessageSquare className="mr-2 h-4 w-4"/>
-                    {article.comments.length}
+                    {article._count.comments}
         </span>
             </div>
         </div>

@@ -40,7 +40,7 @@ export function UserMenu() {
                 <DropdownMenuTrigger asChild>
                     <div
                         className={"w-8 h-8 bg-blue-300 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80"}>
-                        <Image src={currentUser?.image || '/avatar.jpg'} alt="avatar" width={100} height={100}/>
+                        <Image src={currentUser?.image || '/avatar.png'} alt="avatar" width={100} height={100}/>
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>

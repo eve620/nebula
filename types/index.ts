@@ -32,17 +32,16 @@ export interface Article {
     createdAt: Date;
     updatedAt: Date;
     viewCount: number;
-    isLiked: boolean;
     isPinned: boolean;
     isLocked: boolean;
-    visibility: "PRIVATE" | "FRIENDS_ONLY" | "PUBLIC",
+    visibility: "PRIVATE" | "PUBLIC",
     createdBy: {
         username: string;
         nickname: string; // 增加了nickname
     };
-    comments: any;
     _count: {
         likes: number
+        comments: number
     }
 }
 

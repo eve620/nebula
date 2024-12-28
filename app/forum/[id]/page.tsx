@@ -1,9 +1,8 @@
 'use client'
 
 import React, {useState} from 'react'
-import {useParams, useRouter} from 'next/navigation'
+import {useRouter} from 'next/navigation'
 import {Button} from "@/components/ui/button"
-import {Textarea} from "@/components/ui/textarea"
 import {ThumbsUp, MessageSquare, Share2, ArrowLeft} from 'lucide-react'
 import {ShareModal} from '@/components/modal/share-modal'
 import {useUser} from "@/contexts/user-context";
@@ -11,11 +10,11 @@ import {format} from "date-fns";
 import Viewer from "@/components/tiptap/viewer";
 import showMessage from "@/components/message";
 import {useArticle} from "@/contexts/article-context";
+import {CommentList} from "@/app/forum/CommentList";
 
 export default function ForumPost() {
     const router = useRouter()
     const article = useArticle()
-    const [newComment, setNewComment] = useState('')
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
     const user = useUser()
     const tags = JSON.parse(article?.tags || "[]")
@@ -45,21 +44,14 @@ export default function ForumPost() {
             // 如果需要，这里可以添加错误处理逻辑，比如显示一个错误提示
         }
     }
-    const handleComment = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (article && newComment.trim()) {
-            // const newCommentObj = {
-            //     id: article.comments.length + 1,
-            //     author: '当前用户',
-            //     content: newComment,
-            //     date: new Date().toISOString().split('T')[0],
-            // }
-            // setPost({...article, comments: [...article.comments, newCommentObj]})
-            // setNewComment('')
+    const scrollToComment = () => {
+        const comment = document.getElementById("commentModule")
+        if (comment) {
+            comment.scrollIntoView({behavior: "smooth"})
         }
     }
     return (
-        <>
+        <div className={'min-w-fit'}>
             <Button
                 variant="outline"
                 size="sm"
@@ -78,15 +70,15 @@ export default function ForumPost() {
                     }
                 </div>
                 <p className="text-muted-foreground mb-4">
-                    由 {article?.createdBy.nickname || article?.createdBy.username} 发布于 {format(new Date(article!.createdAt), 'yyyy年MM月dd日 HH:mm:ss')}
+                    由 {article?.createdBy.nickname || article?.createdBy.username} 发布于 {format(article!.createdAt, 'yyyy年MM月dd日 HH:mm:ss')}
                 </p>
                 <Viewer content={article?.content || ""}/>
                 <div className="flex items-center space-x-4 mb-6">
                     <Button variant="outline" size="sm" onClick={handleLike}>
-                        <ThumbsUp className={`mr-2 h-4 w-4 ${article.isLiked && "text-red-600"}`}/>
+                        <ThumbsUp className={`mr-2 h-4 w-4 ${article?.isLiked && "text-red-600"}`}/>
                         {article?._count.likes}
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={scrollToComment}>
                         <MessageSquare className="mr-2 h-4 w-4"/>
                         {article?.comments.length}
                     </Button>
@@ -101,27 +93,10 @@ export default function ForumPost() {
                         分享
                     </Button>
                 </div>
-                <div className="space-y-4">
-                    <h2 className="text-2xl font-bold">评论</h2>
-                    {article?.comments.map((comment) => (
-                        <div key={comment.id} className="bg-muted p-4 rounded">
-                            <p className="font-semibold">{comment.author}</p>
-                            <p className="text-sm text-muted-foreground mb-2">{comment.date}</p>
-                            <p>{comment.content}</p>
-                        </div>
-                    ))}
-                    <form onSubmit={handleComment} className="space-y-2">
-                        <Textarea
-                            placeholder="添加评论..."
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                        />
-                        <Button type="submit">发表评论</Button>
-                    </form>
-                </div>
+                <CommentList comments={article!.comments}/>
             </div>
-            <ShareModal isOpen={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} articleId={article.id}/>
-        </>
+            <ShareModal isOpen={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} articleId={article?.id}/>
+        </div>
     )
 }
 

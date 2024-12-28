@@ -52,8 +52,8 @@ const ProjectList: React.FC = ({projectList}) => {
                                     <div className={"my-4"}/>
                                     <div className={"flex justify-between text-xs"}>
                                         <p className={"text-gray-400"}>{(item.startTime && item.startTime) &&
-                                            `${format(new Date(item.startTime), "yyyy.MM")} - 
-                                            ${format(new Date(item.endTime), "yyyy.MM")}`}</p>
+                                            `${format(item.startTime, "yyyy.MM")} - 
+                                            ${format(item.endTime, "yyyy.MM")}`}</p>
                                         <p className={"text-blue-500 cursor-pointer"} onClick={(e) => {
                                             e.stopPropagation()
                                             if (!JSON.parse(item.imageUrl).length) {

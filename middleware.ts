@@ -1,14 +1,34 @@
 import {NextRequest, NextResponse} from "next/server";
 import {getToken} from "next-auth/jwt";
 
-export async function middleware(request: NextRequest) {
 
+// const protectedRoutes = [
+//     { path: '/api/articles', methods: ['POST', 'PUT', 'DELETE'] },
+//     { path: '/api/comment', methods: ['POST', 'PUT', 'DELETE'] },
+// ]
+export async function middleware(request: NextRequest) {
+    //保护
     // const { pathname, method } = request.nextUrl
     //
-    // // 允许所有GET请求通过
+    // 思路1允许所有
     // if (method === 'GET') {
     //     return NextResponse.next()
     // }
+    // 2限定
+    // const needsAuth = protectedRoutes.some(route =>
+    //     pathname.startsWith(route.path) && route.methods.includes(method)
+    // )
+    //
+    // if (needsAuth) {}
+    if (request.nextUrl.pathname.startsWith('/api/article/comment')) {
+        const token = await getToken({req: request});
+        if (!token) {
+            return NextResponse.json({error: '未登录'}, {status: 401})
+        }
+        const response = NextResponse.next()
+        response.headers.set('X-User-Id', token.sub.toString())
+        return response
+    }
 
     if (request.nextUrl.pathname.startsWith('/my')) {
         const token = await getToken({req: request});
@@ -42,4 +62,4 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
 }
 
-export const config = {matcher: ['/my/:path*', '/admin/:path*', '/api/my/:path*']}
+export const config = {matcher: ['/my/:path*', '/admin/:path*', '/api/my/:path*', '/api/article/:path*']}

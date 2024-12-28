@@ -24,16 +24,12 @@ model User {
   comment      Comment[]
   like         Like[]
   dailyCheckIn DailyCheckIn[]
+  ChildComment ChildComment[]
 }
 
 enum UserRole {
   User
   Admin
-}
-
-enum NoteType {
-  Dir
-  Note
 }
 
 model Project {
@@ -43,7 +39,7 @@ model Project {
   endTime     DateTime?
   job         String    @default("")
   stacks      String    @default("[]")
-  describe    String    @default("")
+  describe    String    @default("") @db.VarChar(2048)
   highlight   String    @default("")
   imageUrl    String    @default("[]")
   createdById Int
@@ -67,7 +63,7 @@ model Notice {
   time      DateTime
   title     String
   version   String
-  content   String
+  content   String   @db.VarChar(2048)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -96,8 +92,8 @@ model Tag {
 model Article {
   id          Int        @id @default(autoincrement())
   title       String
-  content     String
-  tags        String     @default("[]")
+  content     String     @db.Text
+  tags        String     @default("[]") @db.VarChar(1024)
   createdById Int
   createdBy   User       @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdAt   DateTime   @default(now())
@@ -112,23 +108,29 @@ model Article {
 
 enum Visibility {
   PRIVATE
-  FRIENDS_ONLY
   PUBLIC
 }
 
 model Comment {
-  id              Int       @id @default(autoincrement())
-  articleId       Int
-  article         Article   @relation(fields: [articleId], references: [id])
-  createdById     Int
-  createdBy       User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  content         String
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  parentCommentId Int?
-  parentComment   Comment?  @relation("CommentToComment", fields: [parentCommentId], references: [id])
-  childComments   Comment[] @relation("CommentToComment")
-  likes           Like[]
+  id            Int            @id @default(autoincrement())
+  content       String         @db.VarChar(1024)
+  articleId     Int
+  article       Article        @relation(fields: [articleId], references: [id])
+  createdById   Int
+  createdBy     User           @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt     DateTime       @default(now())
+  childComments ChildComment[]
+}
+
+model ChildComment {
+  id          Int      @id @default(autoincrement())
+  content     String   @db.VarChar(1024)
+  replyTo     String?
+  commentToId Int
+  commentTo   Comment  @relation(fields: [commentToId], references: [id], onDelete: Cascade)
+  createdById Int
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
 }
 
 model Like {
@@ -137,12 +139,9 @@ model Like {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   articleId Int?
   article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  commentId Int?
-  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
   @@unique([userId, articleId])
-  @@unique([userId, commentId])
 }
 
 model DailyCheckIn {

@@ -5,8 +5,7 @@ export default async function getArticleList() {
         const articles = await prisma.article.findMany({
             include: {
                 createdBy: {select: {nickname: true, username: true}},
-                _count: {select: {likes: true}},
-                comments: true
+                _count: {select: {likes: true,comments: true}},
             },
             orderBy: {createdAt: 'desc'},
         })

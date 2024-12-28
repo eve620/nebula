@@ -6,7 +6,7 @@ interface ViewerProps {
 
 const Viewer: React.FC<ViewerProps> = ({content}) => {
     return (
-        <div className={'p-10'} dangerouslySetInnerHTML={{__html: content}}/>
+        <div className={'p-10 text-wrap leading-8'} dangerouslySetInnerHTML={{__html: content}}/>
     );
 };
 

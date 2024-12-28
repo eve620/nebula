@@ -13,7 +13,18 @@ export default async function Layout({params, children}: Readonly<{ children: Re
         include: {
             createdBy: {select: {nickname: true, username: true}},
             _count: {select: {likes: true}},
-            comments: true,
+            comments: {
+                include: {
+                    createdBy: {select: {image: true, nickname: true, username: true}},
+                    childComments: {
+                        include: {
+                            createdBy: {select: {image: true, nickname: true, username: true}},
+                        },
+                        orderBy: {createdAt: 'asc'},
+                    }
+                },
+                orderBy: {createdAt: 'asc'},
+            },
             likes: currentUser?.id ? {
                 where: {
                     userId: currentUser.id
@@ -24,7 +35,6 @@ export default async function Layout({params, children}: Readonly<{ children: Re
     })
     article.isLiked = currentUser?.id ? article?.likes.length > 0 : false
     delete article.likes
-    console.log(article)
     if (!article) {
         return
         // return <EmptyState/>
