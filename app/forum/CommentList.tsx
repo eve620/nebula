@@ -56,7 +56,7 @@ export function CommentList({comments}: { comments: any[] }) {
                         </Button>
                     ))}
                 </div>
-                <form onSubmit={handleComment} className="space-y-2" id={'commentModule'}>
+                <form onSubmit={handleComment} className="space-y-2" id={"commentModule"}>
                     <Textarea
                         className={"dark:border-slate-700 h-28 resize-none"}
                         maxLength={300}

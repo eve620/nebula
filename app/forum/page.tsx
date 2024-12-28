@@ -5,7 +5,6 @@ import {Button} from "@/components/ui/button"
 import {ForumArticle} from '@/components/forum-article'
 import Empty from "@/components/empty";
 import React, {useMemo, useState} from "react";
-import {Input} from "@/components/ui/input"
 import {
     Pagination,
     PaginationContent,
@@ -16,25 +15,32 @@ import {
 } from "@/components/ui/pagination"
 import {useArticles} from "@/contexts/articles-context";
 import {useUser} from "@/contexts/user-context";
+import {ArticleSearchBar} from "@/components/article-search-bar";
 
 export default function Forum() {
     const router = useRouter()
     const articles = useArticles() || []
+
     const [currentPage, setCurrentPage] = useState(1)
-    const [searchTerm, setSearchTerm] = useState('')
     const postsPerPage = 3
     const user = useUser()
-    const filteredArticles = useMemo(() => {
-        setCurrentPage(1)
-        return articles.filter(post =>
-            post.title.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    }, [articles, searchTerm])
+
+    const [currentTags, setCurrentTags] = useState<string[]>([])
+    const [searchKeyword, setSearchKeyword] = useState<string>(''); // 搜索关键字
+
     const indexOfLastPost = currentPage * postsPerPage
     const indexOfFirstPost = indexOfLastPost - postsPerPage
-    const currentArticles = filteredArticles.slice(indexOfFirstPost, indexOfLastPost)
 
-    const totalPages = Math.ceil(filteredArticles.length / postsPerPage)
+    const filterArticles = useMemo(() => {
+        setCurrentPage(1)
+
+        return articles.filter(article =>
+            (searchKeyword === '' || article.title.toLowerCase().includes(searchKeyword.toLowerCase())) &&
+            (currentTags.length === 0 || currentTags.every(tag => article.tags.includes(tag)))
+        );
+    }, [articles, searchKeyword, currentTags])
+    const currentArticles = filterArticles.slice(indexOfFirstPost, indexOfLastPost)
+    const totalPages = Math.ceil(filterArticles.length / postsPerPage)
 
     const handlePageChange = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -47,15 +53,8 @@ export default function Forum() {
                 <h1 className="text-3xl font-bold">论坛</h1>
                 {user && <Button onClick={() => router.push('/my/article')}>发布文章</Button>}
             </div>
-            <div className="mb-6">
-                <Input
-                    type="text"
-                    placeholder="搜索..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="max-w-sm"
-                />
-            </div>
+            <ArticleSearchBar searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword}
+                              currentTags={currentTags} setCurrentTags={setCurrentTags}/>
             {currentArticles.length ?
                 <div className="space-y-6">
                     {currentArticles.map((article) => (
@@ -66,7 +65,7 @@ export default function Forum() {
                     ))}
                 </div> :
                 <Empty/>}
-            {filteredArticles.length > 0 && (
+            {filterArticles.length > 0 && (
                 <Pagination className={'mt-5'}>
                     <PaginationContent>
                         <PaginationItem>
