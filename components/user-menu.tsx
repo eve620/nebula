@@ -11,9 +11,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {User as UserIcon, Settings, LogOut, ShieldCheck, UserPlus, Share2, Calendar} from 'lucide-react'
+import {User as UserIcon, Settings, LogOut, ShieldCheck, UserPlus, MessageSquareText, Calendar} from 'lucide-react'
 import {FriendManagementModal} from "@/components/modal/friend-management-modal";
-import {ViewSharedPostsModal} from "@/components/modal/view-shared-posts-modal";
 import {DailyCheckInModal} from "@/components/modal/daily-check-in-modal";
 import {EditProfileModal} from "@/components/modal/edit-profile-modal";
 import {signOut} from "next-auth/react";
@@ -24,15 +23,8 @@ export function UserMenu() {
     const currentUser = useUser()
     const router = useRouter()
     const [isFriendManagementModalOpen, setIsFriendManagementModalOpen] = useState(false)
-    const [isViewSharedPostsModalOpen, setIsViewSharedPostsModalOpen] = useState(false)
     const [isDailyCheckInModalOpen, setIsDailyCheckInModalOpen] = useState(false)
     const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false); // Add state for EditProfileModal
-
-    const handleEditProfile = (username: string, nickname: string, description: string, avatarUrl: string) => {
-        // 这里应该有实际的编辑个人资料逻辑
-        console.log('Profile edited:', username, nickname, description, avatarUrl)
-        setIsEditProfileModalOpen(false)
-    }
 
     return (
         <>
@@ -61,9 +53,9 @@ export function UserMenu() {
                         <UserPlus className="mr-2 h-4 w-4"/>
                         <span>好友管理</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setIsViewSharedPostsModalOpen(true)}>
-                        <Share2 className="mr-2 h-4 w-4"/>
-                        <span>查看分享的帖子</span>
+                    <DropdownMenuItem onClick={() => router.push('/message/whisper')}>
+                        <MessageSquareText className="mr-2 h-4 w-4"/>
+                        <span>消息</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setIsDailyCheckInModalOpen(true)}>
                         <Calendar className="mr-2 h-4 w-4"/>
@@ -98,10 +90,6 @@ export function UserMenu() {
             <FriendManagementModal
                 isOpen={isFriendManagementModalOpen}
                 onClose={() => setIsFriendManagementModalOpen(false)}
-            />
-            <ViewSharedPostsModal
-                isOpen={isViewSharedPostsModalOpen}
-                onClose={() => setIsViewSharedPostsModalOpen(false)}
             />
             <DailyCheckInModal
                 isOpen={isDailyCheckInModalOpen}
