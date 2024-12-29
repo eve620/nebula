@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
         return response
     }
 
-    if (request.nextUrl.pathname.startsWith('/my')) {
+    if (request.nextUrl.pathname.startsWith('/my') || request.nextUrl.pathname.startsWith('/message')) {
         const token = await getToken({req: request});
         if (!token) {
             const returnUrl = new URL('/', request.url);
@@ -39,6 +39,9 @@ export async function middleware(request: NextRequest) {
         }
         if (request.nextUrl.pathname === '/my') {
             return NextResponse.redirect(new URL('/my/article', request.url))
+        }
+        if (request.nextUrl.pathname === '/message') {
+            return NextResponse.redirect(new URL('/message/whisper', request.url))
         }
     }
     if (request.nextUrl.pathname.startsWith('/admin')) {
@@ -62,4 +65,4 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
 }
 
-export const config = {matcher: ['/my/:path*', '/admin/:path*', '/api/my/:path*', '/api/article/:path*']}
+export const config = {matcher: ['/my/:path*', '/admin/:path*', '/message/:path*', '/api/my/:path*', '/api/article/:path*']}
