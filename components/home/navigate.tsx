@@ -29,8 +29,8 @@ export default function Navigate() {
             href: "/english"
         },
         {
-            title: "代办记录",
-            description: "记录代办任务，规划时间，轻松完成每个目标！",
+            title: "代办事项",
+            description: "记录代办事项，规划时间，轻松完成每个目标！",
             icon: "📝",
             href: "/kanban"
         }

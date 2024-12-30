@@ -8,28 +8,70 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  username     String         @unique
-  nickname     String
-  password     String
-  image        String?
-  bio          String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  role         UserRole       @default(User)
-  project      Project[]
-  progress     Progress?
-  event        Event[]
-  article      Article[]
-  comment      Comment[]
-  like         Like[]
-  dailyCheckIn DailyCheckIn[]
-  ChildComment ChildComment[]
+  id               Int             @id @default(autoincrement())
+  username         String          @unique
+  nickname         String
+  password         String
+  image            String?
+  bio              String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  role             UserRole        @default(User)
+  project          Project[]
+  progress         Progress?
+  event            Event[]
+  article          Article[]
+  comment          Comment[]
+  like             Like[]
+  dailyCheckIn     DailyCheckIn[]
+  ChildComment     ChildComment[]
+  friends          User[]          @relation("UserFriends")
+  friendsOf        User[]          @relation("UserFriends")
+  sentRequests     FriendRequest[] @relation("SentFriendRequests")
+  receivedRequests FriendRequest[] @relation("ReceivedFriendRequests")
+  sentMessages     Message[]       @relation("SentMessages")
+  receivedMessages Message[]       @relation("ReceivedMessages")
 }
 
 enum UserRole {
   User
   Admin
+}
+
+// 好友相关
+model FriendRequest {
+  id         Int      @id @default(autoincrement())
+  sender     User     @relation("SentFriendRequests", fields: [senderId], references: [id])
+  senderId   Int
+  receiver   User     @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
+  receiverId Int
+  status     FRStatus
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([senderId, receiverId])
+}
+
+enum FRStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Message {
+  id         Int         @id @default(autoincrement())
+  sender     User        @relation("SentMessages", fields: [senderId], references: [id])
+  senderId   Int
+  receiver   User        @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  receiverId Int
+  type       MessageType
+  content    String
+  createdAt  DateTime    @default(now())
+}
+
+enum MessageType {
+  MESSAGE
+  SHARE
 }
 
 model Project {

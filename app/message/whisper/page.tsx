@@ -1,12 +1,14 @@
 'use client'
 
-import React, { useState } from "react"
-import { Send } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
+import React, {useEffect, useState} from "react"
+import {Send} from 'lucide-react'
+import {Button} from "@/components/ui/button"
+import {Input} from "@/components/ui/input"
+import {ScrollArea} from "@/components/ui/scroll-area"
+import {cn} from "@/lib/utils"
 import Image from "next/image";
+import {getSocket} from "@/lib/globalSocket";
+import {useUser} from "@/contexts/user-context";
 
 interface SharedPost {
     id: string
@@ -22,30 +24,43 @@ interface Message {
     timestamp: string
 }
 
+
 export default function Page() {
     const [sharedPosts] = useState<SharedPost[]>([
-        { id: '1', title: '绝区零最新更新讨论', sharedBy: '好友A', date: '2023-06-20' },
-        { id: '2', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
-        { id: '3', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
-        { id: '4', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
-        { id: '5', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
-        { id: '6', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
-        { id: '7', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
-        { id: '8', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
-        { id: '9', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
-        { id: '10', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
-        { id: '11', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19' },
+        {id: '1', title: '绝区零最新更新讨论', sharedBy: '好友A', date: '2023-06-20'},
+        {id: '2', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
+        {id: '3', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
+        {id: '4', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
+        {id: '5', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
+        {id: '6', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
+        {id: '7', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
+        {id: '8', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
+        {id: '9', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
+        {id: '10', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
+        {id: '11', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},
     ])
 
-    const [messages] = useState<Message[]>([
-        { id: '1', content: '你好！', sender: 'user', timestamp: '10:00' },
-        { id: '2', content: '有什么可以帮助你的吗？', sender: 'other', timestamp: '10:01' },
+    const [messages, setMessages] = useState<Message[]>([
+        {id: '1', content: '你好！', sender: 'user', timestamp: '10:00'},
+        {id: '2', content: '有什么可以帮助你的吗？', sender: 'other', timestamp: '10:01'},
     ])
-
+    const user = useUser()
     const [inputValue, setInputValue] = useState('')
+    const socket = getSocket()
+    useEffect(() => {
+        if (!user) return
+        socket.emit('login', user.id);
 
+        socket.on('messageReceived', (message: Message) => {
+            setMessages((prevMessages) => [...prevMessages, message]);
+        });
+        return () => {
+            socket.emit('logout');
+        };
+    }, [user]);
     return (
-        <div className="flex h-[calc(100vh-11rem)] flex-col md:flex-row border rounded-lg overflow-hidden bg-background">
+        <div
+            className="flex h-[calc(100vh-11rem)] flex-col md:flex-row border rounded-lg overflow-hidden bg-background">
             {/* Contacts List */}
             <div className="w-full md:w-80 border-r">
                 <div className="flex items-center justify-between p-4 border-b">
@@ -123,7 +138,7 @@ export default function Page() {
                             className="flex-1"
                         />
                         <Button type="submit" size="icon">
-                            <Send className="h-4 w-4" />
+                            <Send className="h-4 w-4"/>
                             <span className="sr-only">发送消息</span>
                         </Button>
                     </form>
