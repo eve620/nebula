@@ -25,12 +25,24 @@ model User {
   like             Like[]
   dailyCheckIn     DailyCheckIn[]
   ChildComment     ChildComment[]
-  friends          User[]          @relation("UserFriends")
-  friendsOf        User[]          @relation("UserFriends")
   sentRequests     FriendRequest[] @relation("SentFriendRequests")
   receivedRequests FriendRequest[] @relation("ReceivedFriendRequests")
   sentMessages     Message[]       @relation("SentMessages")
   receivedMessages Message[]       @relation("ReceivedMessages")
+  friendships      Friendship[]    @relation("UserFriendships")
+  friendOf         Friendship[]    @relation("FriendOf")
+}
+
+model Friendship {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation("UserFriendships", fields: [userId], references: [id])
+  userId    Int
+  friend    User     @relation("FriendOf", fields: [friendId], references: [id])
+  friendId  Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, friendId])
+  @@index([friendId])
 }
 
 enum UserRole {
@@ -45,17 +57,10 @@ model FriendRequest {
   senderId   Int
   receiver   User     @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
   receiverId Int
-  status     FRStatus
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   @@unique([senderId, receiverId])
-}
-
-enum FRStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
 }
 
 model Message {
@@ -64,7 +69,8 @@ model Message {
   senderId   Int
   receiver   User        @relation("ReceivedMessages", fields: [receiverId], references: [id])
   receiverId Int
-  type       MessageType
+  isRead     Boolean     @default(false)
+  type       MessageType @default(MESSAGE)
   content    String
   createdAt  DateTime    @default(now())
 }
@@ -156,6 +162,7 @@ enum Visibility {
 model Comment {
   id            Int            @id @default(autoincrement())
   content       String         @db.VarChar(1024)
+  isRead        Boolean        @default(false)
   articleId     Int
   article       Article        @relation(fields: [articleId], references: [id])
   createdById   Int
@@ -167,6 +174,7 @@ model Comment {
 model ChildComment {
   id          Int      @id @default(autoincrement())
   content     String   @db.VarChar(1024)
+  isRead      Boolean  @default(false)
   replyTo     String?
   commentToId Int
   commentTo   Comment  @relation(fields: [commentToId], references: [id], onDelete: Cascade)
@@ -177,6 +185,7 @@ model ChildComment {
 
 model Like {
   id        Int      @id @default(autoincrement())
+  isRead    Boolean  @default(false)
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   articleId Int?

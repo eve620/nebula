@@ -49,7 +49,7 @@ export default function Page() {
     const socket = getSocket()
     useEffect(() => {
         if (!user) return
-        socket.emit('login', user.id);
+        socket.emit('login', user.username);
 
         socket.on('messageReceived', (message: Message) => {
             setMessages((prevMessages) => [...prevMessages, message]);

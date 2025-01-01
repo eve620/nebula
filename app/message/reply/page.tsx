@@ -3,6 +3,11 @@ import React, {useState} from "react";
 import Image from "next/image";
 
 export default function Page() {
+
+    // const { data, error } = useSWR('/api/news', fetcher, {
+    //     refreshInterval: 10000,  // 设置每 10 秒刷新一次
+    // });
+    
     const [sharedPosts, setSharedPosts] = useState([
         {id: '1', title: '绝区零最新更新讨论', sharedBy: '好友A', date: '2023-06-20'},
         {id: '2', title: '新手求助：如何快速上手？', sharedBy: '好友B', date: '2023-06-19'},

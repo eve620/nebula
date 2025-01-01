@@ -1,73 +1,63 @@
 import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 
-export async function GET(request) {
-    // Get friends list
-    const {userId} = request.query;
-    const friends = await prisma.user.findUnique({
-        where: {id: Number(userId)},
-        select: {
-            friends: {
-                select: {
-                    id: true,
-                    username: true,
-                    nickname: true,
-                    image: true,
-                },
-            },
-        },
-    });
-    return NextResponse.json(friends);
-}
+export async function GET() {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
 
-export async function POST(request: NextRequest) {
-    const {senderId, receiverId} = await request.json();
-    const friendRequest = await prisma.friendRequest.create({
-        data: {
-            senderId: Number(senderId),
-            receiverId: Number(receiverId),
-            status: 'PENDING',
-        },
-    });
-    return NextResponse.json(friendRequest);
-
-}
-
-export async function PUT(request: NextRequest) {
-    const {senderId, receiverId, accept} = await request.json();
     try {
-        await prisma.friendRequest.updateMany({
+        const friendships = await prisma.friendship.findMany({
             where: {
-                senderId: Number(senderId),
-                receiverId: Number(receiverId),
-                status: 'PENDING'
+                userId: currentUser.id
             },
-            data: {
-                status: accept === true ? 'ACCEPTED' : "REJECTED"
-            }
-        });
-
-        await prisma.user.update({
-            where: {id: Number(senderId)},
-            data: {
-                friends: {
-                    connect: {id: Number(receiverId)}
+            include: {
+                friend: {
+                    select: {
+                        id: true,
+                        username: true,
+                        nickname: true,
+                        image: true,
+                        bio: true
+                    }
                 }
             }
         });
 
-        await prisma.user.update({
-            where: {id: Number(receiverId)},
-            data: {
-                friends: {
-                    connect: {id: Number(senderId)}
-                }
-            }
-        });
+        const friends = friendships.map(friendship => friendship.friend);
 
-        return NextResponse.json({message: 'Friend request accepted'});
+        return NextResponse.json(friends);
     } catch (error) {
-        return NextResponse.json({error: 'Error accepting friend request'});
+        console.error('获取好友列表时发生错误:', error);
+        return NextResponse.json({error: '获取好友列表时发生错误'}, {status: 500});
+    }
+}
+
+export async function DELETE(request: NextRequest) {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
+
+    const {friendId} = await request.json();
+
+    if (!friendId) {
+        return NextResponse.json({error: '需要好友信息'}, {status: 400});
     }
 
+    try {
+        await prisma.$transaction([
+            prisma.friendship.deleteMany({
+                where: {
+                    OR: [
+                        {userId: currentUser.id, friendId: Number(friendId)},
+                        {userId: Number(friendId), friendId: currentUser.id}
+                    ]
+                },
+            }),
+        ]);
+
+        return NextResponse.json({message: '好友关系删除成功'});
+    } catch (error) {
+        console.error('Error deleting friendship:', error);
+        return NextResponse.json({error: '删除好友关系时发生错误'}, {status: 500});
+    }
 }
