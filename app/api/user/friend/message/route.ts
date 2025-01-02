@@ -29,47 +29,57 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-    const currentUser = await getCurrentUser()
-    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
-    const {searchParams} = new URL(request.url)
-    const friendId = searchParams.get('friendId')
-
-    if (!friendId) {
-        return NextResponse.json({error: '好友ID都是必需的'}, {status: 400});
-    }
 
     try {
-        const messages = await prisma.message.findMany({
-            where: {
-                OR: [
-                    {senderId: currentUser.id, receiverId: Number(friendId)},
-                    {senderId: Number(friendId), receiverId: currentUser.id}
-                ]
-            },
-            orderBy: {
-                createdAt: 'asc'
-            },
-            include: {
-                sender: {
-                    select: {
-                        id: true,
-                        username: true,
-                        nickname: true,
-                        image: true
-                    }
+        const currentUser = await getCurrentUser()
+        if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
+        const {searchParams} = new URL(request.url)
+        const checkOnly = searchParams.get('checkOnly') === 'true';
+        if (checkOnly) {
+            const unreadMessageCount = await prisma.message.count({
+                where: {
+                    receiverId: currentUser.id,
+                    isRead: false
                 },
-                receiver: {
-                    select: {
-                        id: true,
-                        username: true,
-                        nickname: true,
-                        image: true
+            });
+            return NextResponse.json({unreadMessage: unreadMessageCount > 0});
+        } else {
+            const friendId = searchParams.get('friendId')
+            if (!friendId) {
+                return NextResponse.json({error: '好友ID都是必需的'}, {status: 400});
+            }
+            const messages = await prisma.message.findMany({
+                where: {
+                    OR: [
+                        {senderId: currentUser.id, receiverId: Number(friendId)},
+                        {senderId: Number(friendId), receiverId: currentUser.id}
+                    ]
+                },
+                orderBy: {
+                    createdAt: 'asc'
+                },
+                include: {
+                    sender: {
+                        select: {
+                            id: true,
+                            username: true,
+                            nickname: true,
+                            image: true
+                        }
+                    },
+                    receiver: {
+                        select: {
+                            id: true,
+                            username: true,
+                            nickname: true,
+                            image: true
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        return NextResponse.json(messages);
+            return NextResponse.json(messages);
+        }
     } catch (error) {
         console.error('获取消息时发生错误:', error);
         return NextResponse.json({error: '获取消息时发生错误'}, {status: 500});

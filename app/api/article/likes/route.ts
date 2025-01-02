@@ -1,7 +1,10 @@
 import {NextResponse} from 'next/server'
 import {prisma} from "@/lib/prisma";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export async function GET(request: Request) {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
     const {searchParams} = new URL(request.url)
     const userId = searchParams.get('userId')
 
@@ -23,17 +26,15 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-    const body = await request.json()
-    const {userId, articleId, commentId} = body
+    const {createdById, articleId, commentId} = await request.json()
 
     if (!articleId && !commentId) {
         return NextResponse.json({error: 'Either articleId or commentId is required'}, {status: 400})
     }
-
     // 查找是否已经存在点赞记录
     const existingLike = await prisma.like.findFirst({
         where: {
-            userId,
+            createdById,
             OR: [
                 {articleId: articleId ?? undefined},
                 {commentId: commentId ?? undefined}
@@ -50,36 +51,21 @@ export async function POST(request: Request) {
         })
         return NextResponse.json({message: 'Like removed successfully'}, {status: 200})
     } else {
+        const article = await prisma.article.findFirst({
+            where: {
+                id: articleId
+            }
+        })
         // 点赞
         const like = await prisma.like.create({
             data: {
-                userId,
+                createdById,
                 articleId,
-                commentId
+                commentId,
+                articleById: article.createdById
             }
         })
         return NextResponse.json(like, {status: 201})
     }
 
 }
-
-export async function DELETE(request: Request) {
-    const {searchParams} = new URL(request.url)
-    const userId = searchParams.get('userId')
-    const articleId = searchParams.get('articleId')
-    const commentId = searchParams.get('commentId')
-
-    if (!userId || (!articleId && !commentId)) {
-        return NextResponse.json({error: 'UserId and either articleId or commentId are required'}, {status: 400})
-    }
-
-    await prisma.like.deleteMany({
-        where: {
-            userId,
-            ...(articleId ? {articleId} : {commentId}),
-        },
-    })
-
-    return NextResponse.json({message: 'Like removed successfully'})
-}
-

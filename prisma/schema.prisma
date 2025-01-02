@@ -58,7 +58,6 @@ model FriendRequest {
   receiver   User     @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
   receiverId Int
   createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
 
   @@unique([senderId, receiverId])
 }
@@ -163,6 +162,7 @@ model Comment {
   id            Int            @id @default(autoincrement())
   content       String         @db.VarChar(1024)
   isRead        Boolean        @default(false)
+  articleById   Int
   articleId     Int
   article       Article        @relation(fields: [articleId], references: [id])
   createdById   Int
@@ -172,27 +172,29 @@ model Comment {
 }
 
 model ChildComment {
-  id          Int      @id @default(autoincrement())
-  content     String   @db.VarChar(1024)
-  isRead      Boolean  @default(false)
-  replyTo     String?
-  commentToId Int
-  commentTo   Comment  @relation(fields: [commentToId], references: [id], onDelete: Cascade)
-  createdById Int
-  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  content       String   @db.VarChar(1024)
+  isRead        Boolean  @default(false)
+  replyTo       String?
+  commentToById Int
+  commentToId   Int
+  commentTo     Comment  @relation(fields: [commentToId], references: [id], onDelete: Cascade)
+  createdById   Int
+  createdBy     User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
 }
 
 model Like {
-  id        Int      @id @default(autoincrement())
-  isRead    Boolean  @default(false)
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  articleId Int?
-  article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  isRead      Boolean  @default(false)
+  createdById Int
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  articleById Int
+  articleId   Int?
+  article     Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
 
-  @@unique([userId, articleId])
+  @@unique([createdById, articleId])
 }
 
 model DailyCheckIn {

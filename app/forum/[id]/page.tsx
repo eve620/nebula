@@ -23,7 +23,7 @@ export default function ForumPost() {
             const response = await fetch("/api/article/likes", {
                 method: "POST",
                 body: JSON.stringify({
-                    userId: user?.id,
+                    createdById: user?.id,
                     articleId: article.id
                 })
             })

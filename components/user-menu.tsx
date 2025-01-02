@@ -1,6 +1,6 @@
 'use client'
 
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import Image from 'next/image'
 import {useRouter} from 'next/navigation'
 import {
@@ -25,14 +25,36 @@ export function UserMenu() {
     const [isFriendManagementModalOpen, setIsFriendManagementModalOpen] = useState(false)
     const [isDailyCheckInModalOpen, setIsDailyCheckInModalOpen] = useState(false)
     const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false); // Add state for EditProfileModal
+    const [hasMessages, setHasMessages] = useState(false)
+    const [hasFriendRequest, setHasFriendRequest] = useState(false)
+    useEffect(() => {
+        checkFriendRequest()
+    }, []);
+
+    async function checkFriendRequest() {
+        const response = await fetch("/api/user/friend-request?checkOnly=true")
+        if (response.ok) {
+            const res = await response.json()
+            setHasFriendRequest(res.hasFriendRequest)
+        }
+    }
+
+    async function checkMessage() {
+
+    }
 
     return (
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <div
-                        className={"w-8 h-8 bg-blue-300 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80"}>
-                        <Image src={currentUser?.image || '/avatar.png'} alt="avatar" width={100} height={100}/>
+                    <div className="relative w-8 h-8">
+                        <div
+                            className="w-full h-full bg-blue-300 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80">
+                            <Image src={currentUser?.image || '/avatar.png'} alt="avatar" width={100} height={100}/>
+                        </div>
+                        {(hasMessages || hasFriendRequest) && (
+                            <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
+                        )}
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -52,10 +74,22 @@ export function UserMenu() {
                     <DropdownMenuItem onClick={() => setIsFriendManagementModalOpen(true)}>
                         <UserPlus className="mr-2 h-4 w-4"/>
                         <span>好友管理</span>
+                        <>
+                            {hasFriendRequest && (
+                                <div
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full"></div>
+                            )}
+                        </>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push('/message/whisper')}>
                         <MessageSquareText className="mr-2 h-4 w-4"/>
                         <span>消息</span>
+                        <>
+                            {hasMessages && (
+                                <div
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full"></div>
+                            )}
+                        </>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setIsDailyCheckInModalOpen(true)}>
                         <Calendar className="mr-2 h-4 w-4"/>

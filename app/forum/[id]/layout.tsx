@@ -27,7 +27,7 @@ export default async function Layout({params, children}: Readonly<{ children: Re
             },
             likes: currentUser?.id ? {
                 where: {
-                    userId: currentUser.id
+                    createdById: currentUser.id
                 },
                 take: 1
             } : false

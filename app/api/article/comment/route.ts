@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     }
 
     const comments = await prisma.comment.findMany({
-        where: {articleId},
+        where: {articleId:Number(articleId)},
         include: {
             author: {select: {username: true}},
             _count: {select: {likes: true}}
@@ -27,11 +27,14 @@ export async function POST(request: Request) {
         return NextResponse.json({error: '未登录'}, {status: 403})
     }
     const {articleId, content} = await request.json()
-    //
-    // const {articleId, authorId, content, parentCommentId} = await request.json()
-    //
+    console.log(typeof articleId)
+    const article = await prisma.article.findFirst({
+        where: {
+            id: articleId
+        }
+    })
     const comment = await prisma.comment.create({
-        data: {content, articleId: Number(articleId), createdById: Number(userId)},
+        data: {content, articleId, createdById: Number(userId), articleById: article.createdById},
     })
 
     return NextResponse.json(comment, {status: 201})

@@ -18,12 +18,11 @@ export function CommentList({comments}: { comments: any[] }) {
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     const handleComment = async (e: React.FormEvent) => {
         e.preventDefault()
-        console.log(111)
         if (newComment.trim()) {
             const response = await fetch("/api/article/comment", {
                 method: "POST",
                 body: JSON.stringify({
-                    articleId: id,
+                    articleId: Number(id),
                     content: newComment,
                 })
             })
