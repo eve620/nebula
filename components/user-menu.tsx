@@ -18,6 +18,7 @@ import {EditProfileModal} from "@/components/modal/edit-profile-modal";
 import {signOut} from "next-auth/react";
 import {useUser} from "@/contexts/user-context";
 import showMessage from "@/components/message";
+import Avatar from "@/components/avatar";
 
 export function UserMenu() {
     const currentUser = useUser()

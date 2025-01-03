@@ -2,32 +2,6 @@ import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
-export async function POST(request: NextRequest) {
-    const currentUser = await getCurrentUser()
-    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
-    const {receiverId, content, type} = await request.json();
-
-    if (!receiverId || !content || !type) {
-        return NextResponse.json({error: '所有字段都是必需的'}, {status: 400});
-    }
-
-    try {
-        const message = await prisma.message.create({
-            data: {
-                senderId: currentUser.id,
-                receiverId: Number(receiverId),
-                content,
-                type,
-            },
-        });
-
-        return NextResponse.json(message);
-    } catch (error) {
-        console.error('发送消息时发生错误:', error);
-        return NextResponse.json({error: '发送消息时发生错误'}, {status: 500});
-    }
-}
-
 export async function GET(request: NextRequest) {
 
     try {
@@ -44,7 +18,7 @@ export async function GET(request: NextRequest) {
             });
             return NextResponse.json({unreadMessage: unreadMessageCount > 0});
         } else {
-            const friendId = searchParams.get('friendId')
+            const friendId = searchParams.get('id')
             if (!friendId) {
                 return NextResponse.json({error: '好友ID都是必需的'}, {status: 400});
             }
@@ -83,5 +57,31 @@ export async function GET(request: NextRequest) {
     } catch (error) {
         console.error('获取消息时发生错误:', error);
         return NextResponse.json({error: '获取消息时发生错误'}, {status: 500});
+    }
+}
+
+export async function POST(request: NextRequest) {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
+    const {receiverId, content, type} = await request.json();
+
+    if (!receiverId || !content) {
+        return NextResponse.json({error: '字段都是必需的'}, {status: 400});
+    }
+
+    try {
+        const message = await prisma.message.create({
+            data: {
+                senderId: currentUser.id,
+                receiverId: Number(receiverId),
+                content,
+                type,
+            },
+        });
+
+        return NextResponse.json(message);
+    } catch (error) {
+        console.error('发送消息时发生错误:', error);
+        return NextResponse.json({error: '发送消息时发生错误'}, {status: 500});
     }
 }
