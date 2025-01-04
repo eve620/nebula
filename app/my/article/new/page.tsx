@@ -6,17 +6,15 @@ import Tiptap from "@/components/tiptap/tiptap";
 import {Button} from "@/components/ui/button";
 import {useTag} from "@/contexts/tag-context";
 import showMessage from "@/components/message";
-import {useUser} from "@/contexts/user-context";
 
 export default function Page() {
-    const tags = useTag()
+    const tags = useTag()||[]
     const router = useRouter()
     const [isTagListShow, setIsTagListShow] = useState(false)
-    const tagRef = useRef(null)
+    const tagRef = useRef<HTMLDivElement>(null)
     const [title, setTitle] = useState('')
     const [currentTags, setCurrentTags] = useState<string[]>(JSON.parse('[]'))
     const [content, setContent] = useState('')
-    const user = useUser()
 
     function contentChange(value: string) {
         setContent(value)
@@ -57,7 +55,7 @@ export default function Page() {
         setCurrentTags(newCurrentTags);
     };
 
-    useOnClickOutside(tagRef.current, (event) => {
+    useOnClickOutside(tagRef.current, () => {
         setIsTagListShow(false)
     })
     const handleSubmit = (e) => {

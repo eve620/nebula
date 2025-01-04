@@ -9,20 +9,13 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {Label} from "@/components/ui/label";
 
-interface ColumnProps {
-    events: any[];
-    setEvents: React.Dispatch<React.SetStateAction<any[]>>;
-    currentEvent: any;
-    tag: string;
-}
-
 const tagTextMap = {
     toDo: '代办',
     inProgress: '进行中...',
     completed: '已完成',
 };
 
-const Column: React.FC<ColumnProps> = ({tag, currentEvent, events, setEvents}) => {
+const Column = ({tag, currentEvent, events, setEvents}) => {
     const [isModalShow, setIsModalShow] = useState(false)
     const [newTaskName, setNewTaskName] = useState('')
     const [newTaskDetail, setNewTaskDetail] = useState('')
@@ -40,7 +33,7 @@ const Column: React.FC<ColumnProps> = ({tag, currentEvent, events, setEvents}) =
             prev.map((event) => {
                 if (event.title === currentEvent.title) {
                     const taskList = event[tag];
-                    const index = taskList.findIndex((item: any) => item.id === id);
+                    const index = taskList.findIndex((item) => item.id === id);
                     taskList.splice(index, 1);
                     return {...event, [tag]: [...taskList]};
                 } else {
@@ -51,7 +44,7 @@ const Column: React.FC<ColumnProps> = ({tag, currentEvent, events, setEvents}) =
     };
     useEffect(() => {
         if (operation === 'EDIT' && currentTaskId !== undefined) {
-            const taskToEdit = events.find((event) => event.title === currentEvent.title)?.[tag]?.find((task: any) => task.id === currentTaskId);
+            const taskToEdit = events.find((event) => event.title === currentEvent.title)?.[tag]?.find((task) => task.id === currentTaskId);
             if (taskToEdit) {
                 setNewTaskName(taskToEdit.name);
                 setNewTaskDetail(taskToEdit.details);
@@ -97,7 +90,7 @@ const Column: React.FC<ColumnProps> = ({tag, currentEvent, events, setEvents}) =
                 prev.map((event) => {
                     if (event.title === currentEvent.title) {
                         const taskList = event[tag];
-                        const index = taskList.findIndex((item: any) => item.id === currentTaskId);
+                        const index = taskList.findIndex((item) => item.id === currentTaskId);
                         const updatedTask = {
                             ...taskList[index],
                             name: newTaskName.trim(),
@@ -121,7 +114,7 @@ const Column: React.FC<ColumnProps> = ({tag, currentEvent, events, setEvents}) =
                     className={'text-sm font-semibold'}>{tagTextMap[tag as ("toDo" | "inProgress" | "completed")]}</span>
                 <AddButton handleClick={handleAdd}/>
                 <Droppable droppableId={tag}>
-                    {(provided, snapshot) => {
+                    {(provided) => {
                         return (
                             <div
                                 className='min-h-16 max-h-[40vh] overflow-y-auto px-2 overflow-x-hidden'
@@ -130,13 +123,13 @@ const Column: React.FC<ColumnProps> = ({tag, currentEvent, events, setEvents}) =
                             >
                                 {events
                                     .find((event) => event.title === currentEvent.title)
-                                    ?.[tag].map((item: any, index: number) => (
+                                    ?.[tag].map((item, index: number) => (
                                     <Draggable
                                         key={item.id}
                                         draggableId={item.id}
                                         index={index}
                                     >
-                                        {(provided, snapshot) => (
+                                        {(provided) => (
                                             <Task
                                                 name={item.name}
                                                 details={item.details}

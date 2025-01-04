@@ -26,12 +26,11 @@ export function LoginModal() {
     const [password, setPassword] = useState('')
     const [nickname, setNickname] = useState('')
     const [isRegistering, setIsRegistering] = useState(false)
-    const [errors, setErrors] = useState<{ [key: string]: string }>({})
+    const [errors, setErrors] = useState(undefined)
     const router = useRouter()
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setErrors({})
-
+        setErrors(undefined)
         try {
             if (isRegistering) {
                 registerSchema.parse({username, password, nickname})
@@ -55,7 +54,7 @@ export function LoginModal() {
                         router.push("/")
                         router.refresh()
                         loginStore.onClose()
-                    }else {
+                    } else {
                         showMessage("注册失败")
                     }
                     setPassword("")
@@ -69,7 +68,7 @@ export function LoginModal() {
             } else {
                 loginSchema.parse({username, password})
                 // 现有的登录逻辑
-                const response: any = await signIn('credentials', {
+                const response = await signIn('credentials', {
                     username,
                     password,
                     redirect: false
@@ -79,15 +78,17 @@ export function LoginModal() {
                     router.push("/")
                     router.refresh()
                     loginStore.onClose()
-                }else {
+                } else {
                     showMessage("登录失败")
                 }
             }
             // 为演示目的，我们仍然关闭模态框
         } catch (error) {
-            if (error instanceof z.ZodError) {
-                setErrors(error.flatten().fieldErrors)
-            }
+            console.log(error)
+            // if (error instanceof z.ZodError) {
+            //     const errors = error.flatten().fieldErrors
+            //     setErrors(errors)
+            // }
         }
     }
 
@@ -105,7 +106,7 @@ export function LoginModal() {
                         placeholder="输入用户名"
                         required
                     />
-                    {errors.username && <p className="text-sm text-red-500">{errors.username}</p>}
+                    {errors?.username && <p className="text-sm text-red-500">{errors.username}</p>}
                 </div>
                 {isRegistering && (
                     <div className="space-y-2">
@@ -117,7 +118,7 @@ export function LoginModal() {
                             placeholder="输入昵称"
                             required
                         />
-                        {errors.nickname && <p className="text-sm text-red-500">{errors.nickname}</p>}
+                        {errors?.nickname && <p className="text-sm text-red-500">{errors.nickname}</p>}
                     </div>
                 )}
                 <div className="space-y-2">
@@ -131,7 +132,7 @@ export function LoginModal() {
                         placeholder="输入密码"
                         required
                     />
-                    {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
+                    {errors?.password && <p className="text-sm text-red-500">{errors.password}</p>}
                 </div>
                 <Button type="submit" className="w-full">{isRegistering ? "注册" : "登录"}</Button>
             </form>

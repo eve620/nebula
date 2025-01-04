@@ -12,15 +12,16 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {getSocket} from "@/lib/globalSocket";
 import {useUser} from "@/contexts/user-context";
 import showMessage from "@/components/message";
+import {socketClient} from "@/lib/globalSocket";
+import Image from "next/image";
 
 interface Friend {
     id: string;
     nickname: string;
     username: string;
-    avatarUrl: string;
+    image: string;
 }
 
 interface FriendRequest {
@@ -40,27 +41,29 @@ export function FriendManagementModal({isOpen, onClose}: FriendManagementModalPr
     const [friends, setFriends] = useState<Friend[]>([])
     const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([])
     const user = useUser()
-    const socket = getSocket()
+    const socket = socketClient.getSocket()
     useEffect(() => {
-        if (!user) return
+        if (!user || !socket) return
         socket.emit('login', user.username);
 
         socket.on('friendRequestReceived', () => {
-            initData()
+            getFriendRequestList()
+            getFriendList()
         });
 
         socket.on('friendRequestAccepted', () => {
-            console.log(2222)
-            initData()
+            getFriendRequestList()
+            getFriendList()
         });
 
         return () => {
             socket.emit('logout');
         };
-    }, [user]);
+    }, [user, socket]);
     useEffect(() => {
         if (isOpen) {
-            initData()
+            getFriendRequestList()
+            getFriendList()
         }
     }, [isOpen]);
     const initData = () => {
@@ -196,10 +199,11 @@ export function FriendManagementModal({isOpen, onClose}: FriendManagementModalPr
                                         <DropdownMenuItem key={request.id}
                                                           className="flex items-center justify-between p-2">
                                             <div className="flex items-center space-x-2">
-                                                <img
+                                                <Image
                                                     src={request.image || "/avatar.png"}
                                                     alt={request.nickname || request.username}
-                                                    className="w-8 h-8 rounded-full"
+                                                    width={8} height={8}
+                                                    className="rounded-full"
                                                 />
                                                 <span>{request.nickname || request.username}</span>
                                             </div>

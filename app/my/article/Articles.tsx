@@ -12,16 +12,12 @@ const Articles: React.FC<ArticlesProps> = ({articles}) => {
     const [articleList, setArticleList] = useState<Article[]>(articles)
     const [currentTags, setCurrentTags] = useState<string[]>([])
     const [searchKeyword, setSearchKeyword] = useState<string>(''); // 搜索关键字
-
-    const filterArticles = () => {
-        return articles.filter(article =>
+    
+    useEffect(() => {
+        const filteredArticles = articles.filter(article =>
             (searchKeyword === '' || article.title.toLowerCase().includes(searchKeyword.toLowerCase())) &&
             (currentTags.length === 0 || currentTags.every(tag => article.tags.includes(tag)))
         );
-    };
-
-    useEffect(() => {
-        const filteredArticles = filterArticles();
         setArticleList(filteredArticles);
     }, [searchKeyword, currentTags, articles]);
     return (

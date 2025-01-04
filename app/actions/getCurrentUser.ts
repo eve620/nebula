@@ -1,9 +1,16 @@
-import {getServerSession, Session} from "next-auth";
+import {getServerSession} from "next-auth";
 import {authOptions} from "@/lib/authOptions";
+import {prisma} from "@/lib/prisma";
+
+interface Session {
+    user: {
+        username: string
+    }
+}
 
 const getCurrentUser = async () => {
     try {
-        const session: Session | null = await getServerSession(authOptions as any)
+        const session: Session | null = await getServerSession(authOptions)
         if (!session?.user?.username) {
             return null;
         }
@@ -25,8 +32,8 @@ const getCurrentUser = async () => {
             image: currentUser.image,
             role: currentUser.role
         };
-    } catch (error) {
-        return null;
+    } catch  {
+        throw new Error();
     }
 }
 

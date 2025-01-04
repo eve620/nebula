@@ -23,7 +23,7 @@ export default async function getArticleList() {
                 createdById: item.createdById
             }
         })
-    } catch (error: any) {
+    } catch (error) {
         throw new Error(error);
     }
 }

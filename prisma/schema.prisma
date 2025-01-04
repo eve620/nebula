@@ -33,6 +33,11 @@ model User {
   friendOf         Friendship[]    @relation("FriendOf")
 }
 
+enum UserRole {
+  User
+  Admin
+}
+
 model Friendship {
   id        Int      @id @default(autoincrement())
   user      User     @relation("UserFriendships", fields: [userId], references: [id])
@@ -43,11 +48,6 @@ model Friendship {
 
   @@unique([userId, friendId])
   @@index([friendId])
-}
-
-enum UserRole {
-  User
-  Admin
 }
 
 // 好友相关

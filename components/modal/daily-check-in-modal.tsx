@@ -6,6 +6,7 @@ import {Button} from "@/components/ui/button"
 import {ChevronLeft, ChevronRight} from 'lucide-react'
 import {useUser} from "@/contexts/user-context";
 import showMessage from "@/components/message";
+import Image from "next/image";
 
 interface DailyCheckInModalProps {
     isOpen: boolean
@@ -59,7 +60,7 @@ export function DailyCheckInModal({isOpen, onClose}: DailyCheckInModalProps) {
             }
             const data = await response.json()
             setLeaderboard(data)
-        } catch (error) {
+        } catch {
             showMessage("获取排行榜失败！")
         }
     }
@@ -156,8 +157,8 @@ export function DailyCheckInModal({isOpen, onClose}: DailyCheckInModalProps) {
                             {leaderboard.map((entry, index) => (
                                 <li key={entry.userId} className="flex items-center space-x-2">
                                     <span className="font-bold">{index + 1}.</span>
-                                    <img src={entry?.avatarUrl || "/avatar.png"} alt={entry.username}
-                                         className="w-6 h-6 rounded-full"/>
+                                    <Image src={entry?.avatarUrl || "/avatar.png"} alt={entry.username}
+                                           width={6} height={6} className={'rounded-full'}/>
                                     <span>{entry?.nickname || entry.username}</span>
                                     <span className="ml-auto">总打卡 {entry.totalCheckIns} 次</span>
                                 </li>

@@ -9,21 +9,14 @@ import {useUser} from "@/contexts/user-context";
 import useLoginModal from "@/hooks/use-login-modal";
 import showMessage from "@/components/message";
 
-interface EventBarProps {
-    events: any
-    setEvents: any
-    currentEvent: any
-    setCurrentEvent: any
-}
-
-const EventBar: React.FC<EventBarProps> = ({events, setEvents, currentEvent, setCurrentEvent}) => {
+const EventBar = ({events, setEvents, currentEvent, setCurrentEvent}) => {
     const [isAddEvent, setIsAddEvent] = useState(false)
     const [newEventName, setNewEventName] = useState('')
     const user = useUser()
     const loginStore = useLoginModal()
     const handleAdd = useCallback(() => {
         // Prevent Duplicated
-        if (events.find((event: any) => event.title.toLowerCase() === newEventName.trim().toLowerCase())) {
+        if (events.find((event) => event.title.toLowerCase() === newEventName.trim().toLowerCase())) {
             //toast
             return;
         }
@@ -32,7 +25,7 @@ const EventBar: React.FC<EventBarProps> = ({events, setEvents, currentEvent, set
         }
         // Add new event
         if (newEventName) {
-            setEvents((prev: any) => [
+            setEvents((prev) => [
                 ...prev,
                 {
                     title: newEventName.trim(),
@@ -58,7 +51,7 @@ const EventBar: React.FC<EventBarProps> = ({events, setEvents, currentEvent, set
                 setIsAddEvent(true)
             }}/>
             <div className='px-8 cursor-pointer'>
-                {events.map((item: any) => (
+                {events.map((item) => (
                     <div style={{transitionProperty: 'background-color'}}
                          key={item.title}
                          className={`px-8 mb-2 text-xl py-2 rounded-3xl truncate hover:duration-200

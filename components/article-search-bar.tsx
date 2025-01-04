@@ -6,7 +6,7 @@ interface SearchAndTagSelectorProps {
     searchKeyword: string;
     setSearchKeyword: (keyword: string) => void;
     currentTags: string[];
-    setCurrentTags: (prevTags: any) => any;
+    setCurrentTags
 }
 
 export function ArticleSearchBar({

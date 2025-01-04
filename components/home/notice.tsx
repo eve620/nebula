@@ -3,11 +3,11 @@ import React, {useRef, useState} from "react";
 import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/internal/hooks/use-on-click-outside";
 import {useUser} from "@/contexts/user-context";
 import NoticePublish from "@/components/home/notice-publish";
-import {Notice} from "@/types";
+import {Notice as NoticeType} from "@/types";
 import {format} from "date-fns";
 
 interface DevLogProps {
-    notices: Notice[]
+    notices: NoticeType[]
 }
 
 const Notice: React.FC<DevLogProps> = ({notices}) => {

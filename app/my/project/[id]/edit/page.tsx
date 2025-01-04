@@ -24,7 +24,7 @@ export default function PublishProject() {
     const {id} = useParams()
     const [title, setTitle] = useState(project?.title || "")
     const [job, setJob] = useState(project?.job || "")
-    const [date, setDate] = useState<DateRange | undefined>({from: project?.startTime} || undefined)
+    const [date, setDate] = useState<DateRange | undefined>(project?.startTime && {from: project.startTime})
     const [stacks, setStacks] = useState(project?.stacks || [])
     const [describe, setDescribe] = useState(project?.describe || "")
     const [highlight, setHighlight] = useState(project?.highlight || "")

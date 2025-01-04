@@ -7,7 +7,7 @@ export async function GET() {
         const tag = await prisma.tag.findMany()
         const tagArray = tag.map((item) => item.content)
         return NextResponse.json(tagArray || []);
-    } catch (error) {
+    } catch  {
         throw new Error("服务器出错")
     }
 }
@@ -28,7 +28,7 @@ export async function PUT(request: NextRequest) {
             });
         }
         return NextResponse.json({message: "更新成功"});
-    } catch (error) {
+    } catch  {
         throw new Error("服务器出错")
     }
 }
@@ -45,7 +45,7 @@ export async function DELETE(request: NextRequest) {
             }
         })
         return NextResponse.json("删除成功");
-    } catch (error) {
+    } catch  {
         throw new Error("服务器出错")
     }
 }

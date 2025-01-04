@@ -2,39 +2,29 @@ import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     const currentUser = await getCurrentUser()
     if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
-    const {searchParams} = new URL(request.url);
-    const checkOnly = searchParams.get('checkOnly') === 'true';
-    if (checkOnly) {
-        const friendRequestCount = await prisma.friendRequest.count({
-            where: {
-                receiverId: currentUser.id,
-            },
-        });
-        return NextResponse.json({hasFriendRequest: friendRequestCount > 0});
-    } else {
-        const friendRequests = await prisma.friendRequest.findMany({
-            where: {
-                receiverId: currentUser.id,
-            },
-            include: {
-                sender: {
-                    select: {
-                        id: true,
-                        username: true,
-                        nickname: true,
-                        image: true
-                    },
-                }
-            },
-            orderBy: {
-                createdAt: 'desc'
-            },
-        });
-        return NextResponse.json(friendRequests.map(request => request.sender));
-    }
+
+    const friendRequests = await prisma.friendRequest.findMany({
+        where: {
+            receiverId: currentUser.id,
+        },
+        include: {
+            sender: {
+                select: {
+                    id: true,
+                    username: true,
+                    nickname: true,
+                    image: true
+                },
+            }
+        },
+        orderBy: {
+            createdAt: 'desc'
+        },
+    });
+    return NextResponse.json(friendRequests.map(request => request.sender));
 }
 
 export async function POST(request: NextRequest) {

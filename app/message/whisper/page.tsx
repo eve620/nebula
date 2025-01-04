@@ -3,14 +3,9 @@ import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import MessageBox from "@/app/message/whisper/MessageBox";
 import FriendMenu from "@/app/message/whisper/FriendMenu";
-import {SearchParams} from "next/dist/server/request/search-params";
 
-type Props = {
-    searchParams: SearchParams;
-};
-
-export default async function Page({searchParams}: Props) {
-    const {id} =await searchParams
+export default async function Page({searchParams}) {
+    const {id} = await searchParams
     const currentUser = await getCurrentUser()
     let messages = []
     if (id) {
@@ -42,9 +37,18 @@ export default async function Page({searchParams}: Props) {
                     id: true,
                     image: true,
                     username: true,
-                    nickname: true
+                    nickname: true,
+                    sentMessages: {
+                        where: {
+                            receiverId: currentUser?.id,
+                            isRead: false
+                        },
+                        select: {
+                            id: true
+                        }
+                    }
                 }
-            }
+            },
         }
     }) || []
     const friendList = friends.map(item => item.friend)
@@ -52,8 +56,8 @@ export default async function Page({searchParams}: Props) {
     return (
         <div
             className="flex h-[calc(100vh-11rem)] flex-col md:flex-row border rounded-lg overflow-hidden bg-background">
-            <FriendMenu friendList={friendList}/>
-            <MessageBox friend={friend} messageList={messages}/>
+            <FriendMenu currentId={id} friendList={friendList}/>
+            <MessageBox currentId={id} friend={friend} messageList={messages}/>
         </div>
     );
 }

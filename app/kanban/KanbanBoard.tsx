@@ -5,8 +5,6 @@ import EventBar from "@/app/kanban/component/EventBar";
 import {useRouter} from "next/navigation";
 import {EventType} from "@/types";
 import {useUser} from "@/contexts/user-context";
-import useLoginModal from "@/hooks/use-login-modal";
-import showMessage from "@/components/message";
 
 export interface KanbanBoardProps {
     eventData: EventType[]
@@ -29,7 +27,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({eventData}) => {
             });
             if (response.ok) router.refresh()
         }
-    }, [events]);
+    }, [events,user,router]);
 
     useEffect(() => {
         const currentLength = events.length;

@@ -47,7 +47,7 @@ export default function NoticePublish() {
             content,
         }
         try {
-            const validatedData = NoticeSchema.parse(notice)
+            NoticeSchema.parse(notice)
             const request = await fetch("/api/notice", {
                 method: "POST",
                 body: JSON.stringify(notice)
@@ -65,10 +65,10 @@ export default function NoticePublish() {
         } catch (error) {
             if (error instanceof z.ZodError) {
                 const errors = error.flatten().fieldErrors
-                if (errors.time) showMessage(errors.time)
-                else if (errors.title) showMessage(errors.title)
-                else if (errors.version) showMessage(errors.version)
-                else if (errors.content) showMessage(errors.content)
+                if (errors.time) showMessage(errors.time[0]||errors.time[1])
+                else if (errors.title) showMessage(errors.title[0]||errors.title[1])
+                else if (errors.version) showMessage(errors.version[0]||errors.version[1])
+                else if (errors.content) showMessage(errors.content[0]||errors.content[1])
             }
         }
     }

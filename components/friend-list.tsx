@@ -3,7 +3,7 @@
 import {useState} from 'react'
 import Image from 'next/image'
 import {Button} from "@/components/ui/button"
-import {FriendDetail} from './friend-detail'
+import {FriendDetail} from "@/components/friend-detail";
 
 interface Friend {
     id: string;
@@ -53,13 +53,13 @@ export function FriendList({friends, onDeleteFriend}: FriendListProps) {
                     </div>
                 </div>
             ))}
-            {/*{selectedFriend && (*/}
-            {/*    <FriendDetail*/}
-            {/*        friend={selectedFriend}*/}
-            {/*        isOpen={!!selectedFriend}*/}
-            {/*        onClose={() => setSelectedFriend(null)}*/}
-            {/*    />*/}
-            {/*)}*/}
+            {selectedFriend && (
+                <FriendDetail
+                    friend={selectedFriend}
+                    isOpen={!!selectedFriend}
+                    onClose={() => setSelectedFriend(null)}
+                />
+            )}
         </div>
     )
 }

@@ -8,7 +8,7 @@ import {Modal} from "@/components/modal/modal";
 import showMessage from "@/components/message";
 import Image from "next/image";
 
-const ProjectList: React.FC = ({projectList}) => {
+const ProjectList = ({projectList}) => {
     const [images, setImages] = useState<string[]>([])
     const [imageIndex, setImageIndex] = useState(0)
     const [previewImage, setPreviewImage] = useState(false)

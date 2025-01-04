@@ -11,7 +11,7 @@ export async function GET() {
     try {
         const users = await prisma.user.findMany()
         return NextResponse.json(users)
-    } catch (e) {
+    } catch {
         return NextResponse.json({error: '服务器内部错误'}, {status: 500});
     }
 }
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
             }
         });
         return NextResponse.json("添加成功")
-    } catch (e) {
+    } catch {
         return NextResponse.json({error: '服务器内部错误'}, {status: 500});
     }
 }
@@ -85,8 +85,7 @@ export async function PUT(request: NextRequest) {
             },
         });
         return NextResponse.json({message: "修改成功"});
-    } catch (e) {
-        console.error(e);
+    } catch {
         return NextResponse.json({error: "服务器出错"}, {status: 500});
     }
 }

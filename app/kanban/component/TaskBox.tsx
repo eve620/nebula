@@ -1,9 +1,8 @@
 "use client"
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import Column from './Column';
 import {DragDropContext, DropResult} from "@hello-pangea/dnd";
 import {Button} from "@/components/ui/button";
-import {Modal} from "@/components/modal/modal";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -15,14 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import {useRouter} from "next/navigation";
 
-interface TaskBoxProps {
-    events: any[];
-    setEvents: any;
-    currentEvent: any;
-    setCurrentEvent: any;
-}
-
-const TaskBox: React.FC<TaskBoxProps> = ({events, setEvents, currentEvent, setCurrentEvent}) => {
+const TaskBox = ({events, setEvents, currentEvent, setCurrentEvent}) => {
     const router = useRouter()
     const handleRemove = useCallback(async () => {
         const removeEvent = await fetch("/api/kanban", {
@@ -30,8 +22,8 @@ const TaskBox: React.FC<TaskBoxProps> = ({events, setEvents, currentEvent, setCu
             body: JSON.stringify({title: currentEvent.title}),
         })
         if (removeEvent.ok) {
-            setEvents((prev: any) => {
-                const result = prev.filter((item: any) => item.title != currentEvent.title);
+            setEvents((prev) => {
+                const result = prev.filter((item) => item.title != currentEvent.title);
                 if (result.length) {
                     setCurrentEvent(result[0]);
                 }
@@ -39,18 +31,18 @@ const TaskBox: React.FC<TaskBoxProps> = ({events, setEvents, currentEvent, setCu
             });
             router.refresh()
         }
-    }, [setEvents, currentEvent, setCurrentEvent]);
+    }, [setEvents, currentEvent, setCurrentEvent,router]);
 
     const handleDragEnd = useCallback((result: DropResult) => {
         if (!result.destination) return;
-        const { source, destination } = result;
+        const {source, destination} = result;
 
         setEvents(prevEvents =>
             prevEvents.map(event => {
                 if (event.title !== currentEvent.title) return event; // 不修改与当前事件无关的事件
 
                 // 深拷贝当前的 event，确保不会直接修改原数据
-                const eventCopy = { ...event };
+                const eventCopy = {...event};
 
                 // 深拷贝 source 和 destination 的 task 列表，确保不修改原数组
                 const sourceList = [...eventCopy[source.droppableId]];
@@ -69,7 +61,7 @@ const TaskBox: React.FC<TaskBoxProps> = ({events, setEvents, currentEvent, setCu
                 return eventCopy;
             })
         );
-    }, [currentEvent]);
+    }, [currentEvent,setEvents]);
 
     return (
         <>

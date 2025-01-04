@@ -147,7 +147,7 @@ export default function Page() {
             <div className="flex gap-4 mt-4">
                 <div className={"flex-1"}></div>
                 <Button onClick={editArticle}>保存</Button>
-                <Button label={""} onClick={() => {
+                <Button onClick={() => {
                     router.back()
                 }}>取消</Button>
             </div>

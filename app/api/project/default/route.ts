@@ -1,7 +1,7 @@
-import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
+import {NextResponse} from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
         const data = await prisma.project.findMany({
             where: {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
         }
         )
         return NextResponse.json({data});
-    } catch (error) {
+    } catch {
         // 如果发生错误，返回404
         throw new Error('服务器出错');
     }

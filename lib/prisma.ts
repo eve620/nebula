@@ -9,7 +9,7 @@ prisma.$use(async (params, next) => {
         const result = await next(params)
 
         await prisma.comment.updateMany({
-            where: {id: {in: result.map((item: any) => item.id)}},
+            where: {id: {in: result.map((item) => item.id)}},
             data: {isRead: true},
         })
 
@@ -19,7 +19,7 @@ prisma.$use(async (params, next) => {
         const result = await next(params)
 
         await prisma.childComment.updateMany({
-            where: {id: {in: result.map((item: any) => item.id)}},
+            where: {id: {in: result.map((item) => item.id)}},
             data: {isRead: true},
         })
 
@@ -29,7 +29,7 @@ prisma.$use(async (params, next) => {
         const result = await next(params)
 
         await prisma.message.updateMany({
-            where: {id: {in: result.map((item: any) => item.id)}},
+            where: {id: {in: result.map((item) => item.id)}},
             data: {isRead: true},
         })
 
@@ -39,7 +39,7 @@ prisma.$use(async (params, next) => {
         const result = await next(params)
 
         await prisma.like.updateMany({
-            where: {id: {in: result.map((item: any) => item.id)}},
+            where: {id: {in: result.map((item) => item.id)}},
             data: {isRead: true},
         })
 

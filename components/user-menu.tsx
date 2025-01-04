@@ -18,7 +18,9 @@ import {EditProfileModal} from "@/components/modal/edit-profile-modal";
 import {signOut} from "next-auth/react";
 import {useUser} from "@/contexts/user-context";
 import showMessage from "@/components/message";
-import Avatar from "@/components/avatar";
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 export function UserMenu() {
     const currentUser = useUser()
@@ -26,22 +28,13 @@ export function UserMenu() {
     const [isFriendManagementModalOpen, setIsFriendManagementModalOpen] = useState(false)
     const [isDailyCheckInModalOpen, setIsDailyCheckInModalOpen] = useState(false)
     const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false); // Add state for EditProfileModal
-    const [hasMessages, setHasMessages] = useState(false)
-    const [hasFriendRequest, setHasFriendRequest] = useState(false)
+    const {data: newMessage, error} = useSWR('/api/check', fetcher, {
+        refreshInterval: 5000, // 每5秒轮询一次
+    })
     useEffect(() => {
-        checkFriendRequest()
-    }, []);
-
-    async function checkFriendRequest() {
-        const response = await fetch("/api/user/friend-request?checkOnly=true")
-        if (response.ok) {
-            const res = await response.json()
-            setHasFriendRequest(res.hasFriendRequest)
-        }
-    }
-
-    async function checkMessage() {
-
+    }, [newMessage]);
+    if (!newMessage || error) {
+        return <div className="w-8 h-8"/>
     }
 
     return (
@@ -53,7 +46,7 @@ export function UserMenu() {
                             className="w-full h-full bg-blue-300 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80">
                             <Image src={currentUser?.image || '/avatar.png'} alt="avatar" width={100} height={100}/>
                         </div>
-                        {(hasMessages || hasFriendRequest) && (
+                        {(newMessage.hasNewLike || newMessage.hasNewMessage || newMessage.hasNewComment || newMessage.hasFriendRequest) && (
                             <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
                         )}
                     </div>
@@ -76,7 +69,7 @@ export function UserMenu() {
                         <UserPlus className="mr-2 h-4 w-4"/>
                         <span>好友管理</span>
                         <>
-                            {hasFriendRequest && (
+                            {newMessage.hasFriendRequest && (
                                 <div
                                     className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full"></div>
                             )}
@@ -86,7 +79,7 @@ export function UserMenu() {
                         <MessageSquareText className="mr-2 h-4 w-4"/>
                         <span>消息</span>
                         <>
-                            {hasMessages && (
+                            {(newMessage.hasNewLike || newMessage.hasNewMessage || newMessage.hasNewComment) && (
                                 <div
                                     className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full"></div>
                             )}

@@ -30,7 +30,7 @@ export function ArticleManagement() {
             }
             const data = await response.json()
             setArticles(data)
-        } catch (error) {
+        } catch {
             toast({
                 title: "错误",
                 description: "获取文章列表失败",
@@ -40,6 +40,7 @@ export function ArticleManagement() {
     }
 
     const handleDeletePost = (id: number) => {
+        console.log(id)
     }
 
     const handleEditPost = (article: Article) => {

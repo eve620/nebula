@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import {prisma} from "@/lib/prisma";
+
 export async function GET(request: NextRequest) {
     const currentUser = await getCurrentUser()
     if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest) {
             })
             return NextResponse.json({data})
         }
-    } catch (error) {
+    } catch {
         return NextResponse.json({message: '查询失败'});
     }
 }
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
     if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
     try {
         const {title, tags, content} = await request.json()
-        const note = await prisma.note.create({
+        await prisma.note.create({
             data: {
                 title,
                 tags,
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
             }
         })
         return NextResponse.json({message: "添加成功"});
-    } catch (error) {
+    } catch {
         return NextResponse.json({message: '添加失败'});
     }
 }
@@ -52,7 +53,7 @@ export async function PUT(request: NextRequest) {
     if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
     try {
         const {id, title, tags, content} = await request.json()
-        const note = await prisma.note.update({
+        await prisma.note.update({
             where: {
                 id: Number(id)
             },
@@ -64,7 +65,7 @@ export async function PUT(request: NextRequest) {
             }
         })
         return NextResponse.json({message: "编辑成功"});
-    } catch (error) {
+    } catch {
         return NextResponse.json({message: '编辑失败'});
     }
 }
@@ -80,8 +81,7 @@ export async function DELETE(request: NextRequest) {
             }
         })
         return NextResponse.json({message: "删除成功"});
-    } catch (error) {
-        console.log(error)
+    } catch {
         throw new Error("删除错误")
     }
 }

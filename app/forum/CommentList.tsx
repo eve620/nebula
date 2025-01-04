@@ -6,7 +6,7 @@ import {Textarea} from "@/components/ui/textarea";
 import showMessage from "@/components/message";
 import {useParams, useRouter} from "next/navigation";
 
-export function CommentList({comments}: { comments: any[] }) {
+export function CommentList({comments}: { comments }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 5;
     const {id} = useParams()

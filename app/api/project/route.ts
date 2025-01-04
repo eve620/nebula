@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {deleteFiles, extractFormData, saveFiles} from "@/app/api/project/utils";
+import {deleteFiles, extractFormData} from "@/app/api/project/utils";
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import {del, put} from "@vercel/blob";
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
             }
         })
         return NextResponse.json({data});
-    } catch (error) {
+    } catch  {
         // 如果发生错误，返回404
         throw new Error('服务器出错')
     }
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
         });
 
         return NextResponse.json({message: "添加成功"});
-    } catch (error) {
+    } catch  {
         throw new Error("服务器出错")
     }
 }
@@ -125,7 +125,7 @@ export async function PUT(request: NextRequest) {
             }
         });
         return NextResponse.json({message: "更新成功"});
-    } catch (error) {
+    } catch  {
         throw new Error("服务器出错")
     }
 }
@@ -148,7 +148,7 @@ export async function DELETE(request: NextRequest) {
             }
         })
         return NextResponse.json({message: "删除成功"});
-    } catch (error) {
+    } catch  {
         throw new Error("服务器出错")
     }
 }

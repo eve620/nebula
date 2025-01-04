@@ -11,8 +11,8 @@ type Props = {
     editor: Editor | null
 }
 const Toolbar = ({editor}: Props) => {
-    if (!editor) return null
     const fileInputRef = useRef<HTMLInputElement>(null)
+    if (!editor) return null
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (file) {

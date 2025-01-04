@@ -51,8 +51,7 @@ export async function DELETE(request: NextRequest) {
             }
         })
         return NextResponse.json({message: "删除成功"});
-    } catch (error) {
-        console.log(error)
+    } catch {
         throw new Error("删除错误")
     }
 }

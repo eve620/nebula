@@ -27,7 +27,7 @@ export function UserManagement() {
             }
             const data = await response.json()
             setUsers(data)
-        } catch (error) {
+        } catch {
             toast({
                 title: "错误",
                 description: "获取用户列表失败",
@@ -54,7 +54,7 @@ export function UserManagement() {
                 title: "成功",
                 description: "用户添加成功",
             })
-        } catch (error) {
+        } catch {
             toast({
                 title: "错误",
                 description: "添加用户失败",
@@ -76,7 +76,7 @@ export function UserManagement() {
                 title: "成功",
                 description: "用户删除成功",
             })
-        } catch (error) {
+        } catch {
             toast({
                 title: "错误",
                 description: "删除用户失败",
@@ -110,7 +110,7 @@ export function UserManagement() {
                     title: "成功",
                     description: "用户更新成功",
                 })
-            } catch (error) {
+            } catch {
                 toast({
                     title: "错误",
                     description: "更新用户失败",
@@ -213,7 +213,10 @@ export function UserManagement() {
                                     <Input
                                         id="role"
                                         value={editingUser.role}
-                                        onChange={(e) => setEditingUser({...editingUser, role: e.target.value})}
+                                        onChange={(e) => setEditingUser({
+                                            ...editingUser,
+                                            role: e.target.value === "Admin" ? "Admin" : "User"
+                                        })}
                                         className="col-span-3"
                                     />
                                 </div>

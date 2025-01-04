@@ -1,5 +1,4 @@
 import React, {useRef, useState} from 'react';
-import {Comment as CommentType} from '/mockData';
 import {Button} from "@/components/ui/button"
 import {format} from "date-fns";
 import Image from "next/image";
@@ -7,11 +6,8 @@ import {Textarea} from "@/components/ui/textarea";
 import {useRouter} from "next/navigation";
 import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/internal/hooks/use-on-click-outside";
 
-interface CommentProps {
-    comment: CommentType;
-}
 
-export function Comment({comment}: CommentProps) {
+export function Comment({comment}) {
     const [showReplies, setShowReplies] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const repliesPerPage = 5;

@@ -19,7 +19,7 @@ export default async function getEventList() {
                 completed: JSON.parse(item.completed),
             }
         })
-    } catch (error: any) {
-        throw new Error(error);
+    } catch  {
+        throw new Error;
     }
 }

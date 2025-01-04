@@ -3,7 +3,7 @@ import {prisma} from "@/lib/prisma";
 import {ArticleProvider} from "@/contexts/article-context";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
-export default async function Layout({params, children}: Readonly<{ children: React.ReactNode; }>) {
+export default async function Layout({params, children}) {
     const {id} = await params
     const currentUser = await getCurrentUser()
     const article = await prisma.article.findUnique({

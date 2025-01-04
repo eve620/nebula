@@ -3,14 +3,13 @@
 import {useState, useCallback} from 'react'
 import {Button} from "@/components/ui/button"
 import {Modal} from '@/components/modal/modal'
-import Cropper from 'react-easy-crop'
-import {Point, Area} from 'react-easy-crop/types'
+import Cropper, {Area, Point} from 'react-easy-crop'
 
 interface CropImageModalProps {
     isOpen: boolean
     onClose: () => void
     imageUrl: string
-    onCropComplete: (croppedImage: string) => void
+    onCropComplete: (croppedImage: Blob) => void
 }
 
 export function CropImageModal({isOpen, onClose, imageUrl, onCropComplete}: CropImageModalProps) {
@@ -51,7 +50,7 @@ export function CropImageModal({isOpen, onClose, imageUrl, onCropComplete}: Crop
     )
 }
 
-async function getCroppedImg(imageSrc: string, pixelCrop: Area): Promise<string> {
+async function getCroppedImg(imageSrc: string, pixelCrop: Area): Promise<Blob> {
     const image = await createImage(imageSrc)
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')

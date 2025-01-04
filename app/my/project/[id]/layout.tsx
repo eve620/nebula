@@ -2,7 +2,7 @@ import React from 'react';
 import {prisma} from "@/lib/prisma";
 import {ProjectProvider} from "@/contexts/project-context";
 
-export default async function AdminLayout({params, children}: Readonly<{ children: React.ReactNode; }>) {
+export default async function AdminLayout({params, children}) {
     const {id} = await params
     let project = await prisma.project.findUnique({
         include: {

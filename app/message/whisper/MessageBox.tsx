@@ -1,8 +1,6 @@
 "use client"
 import React, {useEffect, useRef, useState} from "react";
-import {useRouter, useSearchParams} from "next/navigation";
 import {useUser} from "@/contexts/user-context";
-import {getSocket} from "@/lib/globalSocket";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {cn} from "@/lib/utils";
 import {Input} from "@/components/ui/input";
@@ -10,6 +8,8 @@ import {Button} from "@/components/ui/button";
 import {Send} from "lucide-react";
 import {format} from "date-fns";
 import Avatar from "@/components/avatar";
+import {socketClient} from "@/lib/globalSocket";
+import {mutate} from "swr";
 
 interface Message {
     id: number
@@ -18,21 +18,18 @@ interface Message {
     createdAt: Date
 }
 
-export default function MessageBox({friend, messageList}) {
+export default function MessageBox({currentId, friend, messageList}) {
     const [messages, setMessages] = useState<Message[]>(messageList)
-    const id = useSearchParams().get("id")
     const user = useUser()
-    const router = useRouter()
     const messagesEndRef = useRef<HTMLDivElement>(null)
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({behavior: "smooth"})
     }
     useEffect(() => {
-        if (id) {
-            router.refresh()
-        }
-    }, [id]);
+        mutate("/api/check")
+    }, [currentId]);
+
     useEffect(() => {
         setMessages(messageList)
     }, [messageList]);
@@ -42,11 +39,12 @@ export default function MessageBox({friend, messageList}) {
     }, [messages]);
 
     async function sendMessage() {
+        if (!currentId) return
         const response = await fetch("/api/user/friend/message", {
             method: "POST",
             body: JSON.stringify({
                 content: inputValue.trim(),
-                receiverId: Number(id)
+                receiverId: Number(currentId)
             })
         })
         if (response.ok) {
@@ -60,9 +58,9 @@ export default function MessageBox({friend, messageList}) {
     }
 
     const [inputValue, setInputValue] = useState('')
-    const socket = getSocket()
+    const socket = socketClient.getSocket()
     useEffect(() => {
-        if (!user) return
+        if (!user || !socket) return
         socket.emit('login', user.username);
 
         socket.on('messageReceived', (message: Message) => {
@@ -71,7 +69,7 @@ export default function MessageBox({friend, messageList}) {
         return () => {
             socket.emit('logout');
         };
-    }, [user]);
+    }, [user,socket]);
     return (
         <div className="flex-1 flex flex-col">
             {/* Chat Area */}
@@ -114,7 +112,7 @@ export default function MessageBox({friend, messageList}) {
 
             {/* Input Area */}
             <div className="border-t p-4">
-                {id &&
+                {currentId &&
                     <form
                         onSubmit={(e) => {
                             e.preventDefault()

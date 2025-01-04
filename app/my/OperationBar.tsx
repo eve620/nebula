@@ -5,7 +5,7 @@ import {usePathname, useRouter} from "next/navigation"
 import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs"
 import {Button} from "@/components/ui/button"
 
-const OperationBar: React.FC = () => {
+const OperationBar = () => {
     const router = useRouter()
     const pathname = usePathname()
     const currentTab = pathname.split('/').pop() || "article"

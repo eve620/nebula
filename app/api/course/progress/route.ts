@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
             progress: progress,
         });
-    } catch (e) {
+    } catch {
         throw new Error("服务器出错")
     }
 }
@@ -52,7 +52,7 @@ export async function PUT(request: NextRequest) {
         });
 
         return NextResponse.json(updatedProgress)
-    } catch (e) {
+    } catch {
         throw new Error("服务器出错")
     }
 }

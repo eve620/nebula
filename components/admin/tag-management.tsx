@@ -30,7 +30,7 @@ export function TagManagement() {
             }
             const data = await response.json()
             setCurrentTags(data)
-        } catch (error) {
+        } catch {
             toast({
                 title: "错误",
                 description: "获取标签列表失败",

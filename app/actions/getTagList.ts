@@ -5,7 +5,7 @@ export default async function getTagList() {
         const tag = await prisma.tag.findMany()
         const tagArray = tag.map((item) => item.content)
         return tagArray || []
-    } catch (error: any) {
+    } catch (error) {
         throw new Error(error);
     }
 }

@@ -27,7 +27,7 @@ export async function POST(request: Request) {
             },
         });
         return NextResponse.json({message: "打卡成功!"}, {status: 201})
-    } catch (error) {
+    } catch  {
         return NextResponse.json({message: '打卡失败'}, {status: 500})
     }
 }
@@ -77,7 +77,7 @@ export async function GET() {
             currentStreak,
             checkedInDates,
         })
-    } catch (error) {
+    } catch {
         return NextResponse.json({message: '打卡失败'}, {status: 500})
     }
 }

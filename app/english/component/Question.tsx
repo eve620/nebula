@@ -15,8 +15,8 @@ interface QuestionProps {
 function Question({word: {chinese, english, soundmark}, failedCount, handleFailedCount, handleAnswer}: QuestionProps) {
     const [inputValue, setInputValue] = useState("");
     const failedCountLimit = 3;
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const inputRef = useRef<HTMLInputElement | null>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const words = english.split(" ");
     const [inputWords, setInputWords] = useState<string[]>([""])
     const tipAudioRef = useRef<HTMLAudioElement | null>(null)
@@ -34,7 +34,7 @@ function Question({word: {chinese, english, soundmark}, failedCount, handleFaile
         // 字符宽度0.9的字符数组
         const zeroPointNineLetters = ["z", "y", "x", "v", "c"];
 
-        for (let letter of wordArr) {
+        for (const letter of wordArr) {
             if (letter === "w" || letter === "m") {
                 width += 1.5;
                 continue;
@@ -59,7 +59,7 @@ function Question({word: {chinese, english, soundmark}, failedCount, handleFaile
             // 记录是否已经增加宽度
             let increasedWidth = false;
 
-            for (let key of onePointOneLetters) {
+            for (const key of onePointOneLetters) {
                 if (key === letter) {
                     width += 1.1;
                     increasedWidth = true;
@@ -67,7 +67,7 @@ function Question({word: {chinese, english, soundmark}, failedCount, handleFaile
                 }
             }
 
-            for (let key of zeroPointNineLetters) {
+            for (const key of zeroPointNineLetters) {
                 if (key === letter) {
                     width += 0.9;
                     increasedWidth = true;
@@ -171,7 +171,9 @@ function Question({word: {chinese, english, soundmark}, failedCount, handleFaile
                        onKeyDown={handleKeyDown}
                        onMouseDown={(event) => {
                            event.preventDefault()
-                           inputRef.current && inputRef.current!.focus()
+                           if (inputRef.current) {
+                               inputRef.current!.focus()
+                           }
                        }}
                        ref={inputRef}
                        className={"absolute h-full w-full opacity-0"}

@@ -31,7 +31,7 @@ export async function GET() {
         )
 
         return NextResponse.json(leaderboardWithUserInfo)
-    } catch (error) {
+    } catch  {
         return NextResponse.json({error: '获取排行榜失败'}, {status: 500})
     }
 }

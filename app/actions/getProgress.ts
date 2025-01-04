@@ -37,7 +37,7 @@ export default async function getProgress() {
             courseData = {id: '01', title: 'Lesson 01', statements: JSON.parse(jsonData)}
         }
         return {wordIndex, courseData}
-    } catch (error: any) {
+    } catch (error) {
         throw new Error(error);
     }
 }

@@ -5,9 +5,9 @@ interface TaskProps {
     name: string;
     details: string;
     id: number;
-    provided: any;
+    provided;
     handleUpdate: (id: number) => void;
-    handleRemove: (id: number, e: any) => void;
+    handleRemove: (id: number, e) => void;
 }
 
 const Task: React.FC<TaskProps> = ({name, details, id, provided, handleUpdate, handleRemove}) => {

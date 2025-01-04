@@ -38,7 +38,7 @@ export default function Forum() {
             (searchKeyword === '' || article.title.toLowerCase().includes(searchKeyword.toLowerCase())) &&
             (currentTags.length === 0 || currentTags.every(tag => article.tags.includes(tag)))
         );
-    }, [articles, searchKeyword, currentTags])
+    }, [searchKeyword, currentTags])
     const currentArticles = filterArticles.slice(indexOfFirstPost, indexOfLastPost)
     const totalPages = Math.ceil(filterArticles.length / postsPerPage)
 
@@ -71,7 +71,7 @@ export default function Forum() {
                         <PaginationItem>
                             <PaginationPrevious
                                 onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
+                                isActive={currentPage === 1}
                             />
                         </PaginationItem>
                         <>
@@ -89,7 +89,7 @@ export default function Forum() {
                         <PaginationItem>
                             <PaginationNext
                                 onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}
+                                isActive={currentPage === totalPages}
                             />
                         </PaginationItem>
                     </PaginationContent>
