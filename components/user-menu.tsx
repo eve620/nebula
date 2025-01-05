@@ -46,7 +46,7 @@ export function UserMenu() {
                             className="w-full h-full bg-blue-300 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80">
                             <Image src={currentUser?.image || '/avatar.png'} alt="avatar" width={100} height={100}/>
                         </div>
-                        {(newMessage.hasNewLike || newMessage.hasNewMessage || newMessage.hasNewComment || newMessage.hasFriendRequest) && (
+                        {(newMessage.hasNewLike || newMessage.unreadSenders.length>0 || newMessage.hasNewComment || newMessage.hasFriendRequest) && (
                             <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
                         )}
                     </div>
@@ -79,7 +79,7 @@ export function UserMenu() {
                         <MessageSquareText className="mr-2 h-4 w-4"/>
                         <span>消息</span>
                         <>
-                            {(newMessage.hasNewLike || newMessage.hasNewMessage || newMessage.hasNewComment) && (
+                            {(newMessage.hasNewLike || newMessage.unreadSenders.length>0 || newMessage.hasNewComment) && (
                                 <div
                                     className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full"></div>
                             )}

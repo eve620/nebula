@@ -4,6 +4,9 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export async function GET() {
     const articles = await prisma.article.findMany({
+        where: {
+            visibility: "PUBLIC"
+        },
         include: {
             createdBy: {select: {nickname: true, username: true}},
             _count: {select: {likes: true}},

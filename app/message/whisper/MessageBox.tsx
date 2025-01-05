@@ -10,33 +10,74 @@ import {format} from "date-fns";
 import Avatar from "@/components/avatar";
 import {socketClient} from "@/lib/globalSocket";
 import {mutate} from "swr";
+import {useRouter} from "next/navigation";
 
 interface Message {
     id: number
     content: string
     senderId: number
+    type: "MESSAGE" | "SHARE",
     createdAt: Date
 }
 
-export default function MessageBox({currentId, friend, messageList}) {
-    const [messages, setMessages] = useState<Message[]>(messageList)
+export default function MessageBox({currentId, friend}) {
+    const [messages, setMessages] = useState<Message[]>([])
     const user = useUser()
     const messagesEndRef = useRef<HTMLDivElement>(null)
-
+    const socket = socketClient.getSocket()
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({behavior: "smooth"})
     }
+    const router = useRouter()
     useEffect(() => {
         mutate("/api/check")
     }, [currentId]);
 
     useEffect(() => {
-        setMessages(messageList)
-    }, [messageList]);
+        if (friend) {
+            getMessages()
+        }
+    }, [friend]);
 
     useEffect(() => {
         scrollToBottom()
     }, [messages]);
+
+    const getMessages = async () => {
+        const response = await fetch(`/api/user/friend/message?id=${friend.id}`)
+        if (response.ok) {
+            const res = await response.json()
+            setMessages(res)
+        }
+    }
+
+    useEffect(() => {
+        if (!user || !socket || !friend) return
+
+        const handleMessageReceived = ({senderUsername, content, type}) => {
+            if (senderUsername !== friend.username) {
+                mutate("/api/check")
+                return
+            }
+
+            fetch(`/api/user/friend/message?id=${friend.id}`).then(() => {
+                mutate("/api/check")
+            })
+
+            const newMessage: Message = {
+                id: Date.now(),
+                content,
+                senderId: friend.id,
+                createdAt: new Date(),
+                type
+            }
+            setMessages((prev: Message[]) => [...prev, newMessage])
+        }
+        socket.on('messageReceived', handleMessageReceived)
+        return () => {
+            socket.off('messageReceived', handleMessageReceived)
+        }
+    }, [user, friend, socket, setMessages])
 
     async function sendMessage() {
         if (!currentId) return
@@ -48,28 +89,25 @@ export default function MessageBox({currentId, friend, messageList}) {
             })
         })
         if (response.ok) {
+            if (socket && friend && user && inputValue.trim()) {
+                socket.emit("sendMessage", {
+                    senderUsername: user.username,
+                    receiverUsername: friend.username,
+                    content: inputValue
+                })
+            }
             setMessages((prev) => [...prev, {
                 id: Date.now(),
                 content: inputValue,
                 senderId: user!.id,
-                createdAt: new Date()
+                createdAt: new Date(),
+                type: "MESSAGE"
             }])
         }
     }
 
     const [inputValue, setInputValue] = useState('')
-    const socket = socketClient.getSocket()
-    useEffect(() => {
-        if (!user || !socket) return
-        socket.emit('login', user.username);
 
-        socket.on('messageReceived', (message: Message) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
-        });
-        return () => {
-            socket.emit('logout');
-        };
-    }, [user,socket]);
     return (
         <div className="flex-1 flex flex-col">
             {/* Chat Area */}
@@ -98,7 +136,16 @@ export default function MessageBox({currentId, friend, messageList}) {
                                         : "bg-muted"
                                 )}
                             >
-                                {message.content}
+                                {message.type && message.type === "SHARE" ?
+                                    <div>
+                                        <div className={'font-bold'}>分享了一篇文章</div>
+                                        <Button
+                                            className={`my-1 ${message.senderId === user?.id && "bg-slate-700 dark:bg-pink-100"}`}
+                                            onClick={() => {
+                                                router.push(message.content)
+                                            }}>点击查看</Button>
+                                    </div> :
+                                    message.content}
                                 <div
                                     className="text-xs mt-1 opacity-70">{format(message.createdAt, 'MM月dd日 HH:mm:ss')}</div>
                             </div>

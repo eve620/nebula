@@ -12,36 +12,6 @@ export async function GET(request: NextRequest) {
         if (!id) {
             return NextResponse.json({error: '好友ID都是必需的'}, {status: 400});
         }
-        // const messages = await prisma.message.findMany({
-        //     where: {
-        //         OR: [
-        //             {senderId: currentUser.id, receiverId: Number(friendId)},
-        //             {senderId: Number(friendId), receiverId: currentUser.id}
-        //         ]
-        //     },
-        //     orderBy: {
-        //         createdAt: 'asc'
-        //     },
-        //     include: {
-        //         sender: {
-        //             select: {
-        //                 id: true,
-        //                 username: true,
-        //                 nickname: true,
-        //                 image: true
-        //             }
-        //         },
-        //         receiver: {
-        //             select: {
-        //                 id: true,
-        //                 username: true,
-        //                 nickname: true,
-        //                 image: true
-        //             }
-        //         }
-        //     }
-        // });
-
         const messages = await prisma.message.findMany({
             where: {
                 OR: [
@@ -56,10 +26,14 @@ export async function GET(request: NextRequest) {
                 id: true,
                 content: true,
                 createdAt: true,
-                senderId: true
+                senderId: true,
+                type: true
             },
         });
-
+        await prisma.message.updateMany({
+            where: {senderId: Number(id), receiverId: currentUser?.id, isRead: false},
+            data: {isRead: true}
+        })
         return NextResponse.json(messages);
     } catch (error) {
         console.error('获取消息时发生错误:', error);

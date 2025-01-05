@@ -70,3 +70,11 @@ export interface Tag {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface Friend {
+    id: string;
+    username: string;
+    nickname:string;
+    bio:string;
+    image:string
+}
