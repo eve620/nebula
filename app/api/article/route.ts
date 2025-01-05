@@ -4,9 +4,6 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export async function GET() {
     const articles = await prisma.article.findMany({
-        where: {
-            visibility: "PUBLIC"
-        },
         include: {
             createdBy: {select: {nickname: true, username: true}},
             _count: {select: {likes: true}},
@@ -31,7 +28,16 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
     const currentUser = await getCurrentUser()
     if (!currentUser) return NextResponse.json({error: '未登录'}, {status: 401});
-    const {id, title, content, tags} = await request.json()
+    const {id, title, content, tags, visibility} = await request.json()
+    if (visibility) {
+        await prisma.article.update({
+            where: {
+                id
+            },
+            data: {visibility},
+        })
+        return NextResponse.json("修改成功", {status: 201})
+    }
     const article = await prisma.article.update({
         where: {
             id

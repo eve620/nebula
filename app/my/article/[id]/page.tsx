@@ -35,6 +35,22 @@ export default function Page() {
         }
     }
 
+    async function changeVisibility() {
+        const changeArticle = await fetch("/api/article", {
+            method: "PUT",
+            body: JSON.stringify({
+                id: article?.id,
+                visibility: article.visibility === "PUBLIC" ? "PRIVATE" : "PUBLIC"
+            })
+        })
+        if (changeArticle.ok) {
+            showMessage("修改成功！")
+            router.refresh()
+        } else {
+            showMessage("修改失败")
+        }
+    }
+
     return (
         <div>
             <div className="flex gap-3 items-center">
@@ -49,6 +65,23 @@ export default function Page() {
                     <span key={index} className="tag">{item}</span>)
                 }
                 <div className={"flex-1"}></div>
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button>{article.visibility === "PUBLIC" ? "公开" : "私有"}</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>切换{article.visibility !== "PUBLIC" ? "公开" : "私有"}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                当前文章为{article.visibility === "PUBLIC" ? "公开" : "私有"}，你要设置为私有吗？
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>取消</AlertDialogCancel>
+                            <AlertDialogAction onClick={changeVisibility}>确认</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
                 <Button onClick={() => {
                     router.push(`/my/article/${article?.id}/edit`)
                 }}>

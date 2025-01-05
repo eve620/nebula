@@ -1,10 +1,13 @@
 import {prisma} from "@/lib/prisma";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 
-export default async function getArticleList() {
+export default async function getMyArticleList() {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return []
     try {
         return await prisma.article.findMany({
             where: {
-                visibility: "PUBLIC"
+                createdById: currentUser.id
             },
             include: {
                 createdBy: {select: {id: true, nickname: true, username: true}},
