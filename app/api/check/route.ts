@@ -30,7 +30,6 @@ export async function GET() {
         prisma.childComment.count({where: {commentToById: id, isRead: false}})
     ]);
     const unreadSenders = senders.map(item => item.senderId);
-    console.log(unreadSenders)
 
     // 返回查询结果
     return NextResponse.json({

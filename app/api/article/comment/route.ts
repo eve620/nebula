@@ -27,7 +27,6 @@ export async function POST(request: Request) {
         return NextResponse.json({error: '未登录'}, {status: 403})
     }
     const {articleId, content} = await request.json()
-    console.log(typeof articleId)
     const article = await prisma.article.findFirst({
         where: {
             id: articleId

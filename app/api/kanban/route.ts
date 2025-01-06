@@ -12,7 +12,6 @@ export async function GET(request: NextRequest) {
                 createdById: id,
             }
         })
-        console.log(events)
         const data = events.map((item) => {
             return {
                 id: item.id,

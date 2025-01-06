@@ -73,7 +73,9 @@ export function EditProfileModal({isOpen, onClose}: EditProfileModalProps) {
         formData.append('username', currentUser?.username || "")
         formData.append('nickname', nickname || "")
         formData.append('bio', bio || "")
-        formData.append('image', selectedFile)
+        if(selectedFile){
+            formData.append('image', selectedFile)
+        }
         if (isChangePassword) {
             formData.append('oldPassword', oldPassword)
             formData.append('newPassword', newPassword)
@@ -110,7 +112,7 @@ export function EditProfileModal({isOpen, onClose}: EditProfileModalProps) {
                             />
                             <div className="relative w-32 h-32 cursor-pointer" onClick={handleSelectImage}>
                                 <Image
-                                    src={croppedImage || currentUser?.image || "/storage/avatar/avatar.png"}
+                                    src={croppedImage || currentUser?.image || "/avatar.png"}
                                     alt="Cropped avatar"
                                     fill
                                     objectFit="cover"

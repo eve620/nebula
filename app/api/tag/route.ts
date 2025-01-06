@@ -38,7 +38,6 @@ export async function DELETE(request: NextRequest) {
     if (!currentUser || currentUser.role !== "Admin") return NextResponse.json({ error: '权限不足' }, { status: 403 });
     try {
         const tag = await request.json()
-        console.log(tag)
         await prisma.tag.delete({
             where: {
                 content: tag

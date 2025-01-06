@@ -1,22 +1,23 @@
 'use client'
 
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
-import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter} from "@/components/ui/dialog"
-import {Label} from "@/components/ui/label"
-import {Textarea} from "@/components/ui/textarea"
 import {toast} from "@/hooks/use-toast";
 import {Article} from "@/types";
 import {format} from "date-fns";
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel,
+    AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 
 
 export function ArticleManagement() {
     const [articles, setArticles] = useState<Article[]>([])
-    const [newPost, setNewPost] = useState({title: '', content: '', author: ''})
-    const [editingPost, setEditingPost] = useState<Article | null>(null)
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
     useEffect(() => {
         fetchArticles()
@@ -39,41 +40,38 @@ export function ArticleManagement() {
         }
     }
 
-    const handleDeletePost = (id: number) => {
-        console.log(id)
-    }
-
-    const handleEditPost = (article: Article) => {
-        setEditingPost(article)
-        setIsEditModalOpen(true)
-    }
-
-    const handleSaveEdit = () => {
-        if (editingPost) {
-            setIsEditModalOpen(false)
-            setEditingPost(null)
+    const handleDeletePost = async (id: number) => {
+        try {
+            const response = await fetch(`/api/admin/article`, {
+                method: 'DELETE',
+                body: JSON.stringify({
+                    id
+                })
+            })
+            if (!response.ok) {
+                throw new Error('删除文章失败')
+            }
+            await fetchArticles()
+            toast({
+                title: "成功",
+                description: "文章删除成功",
+            })
+        } catch {
+            toast({
+                title: "错误",
+                description: "删除文章失败",
+                variant: "destructive",
+            })
         }
     }
 
     return (
         <div className="space-y-4">
-            <div className="grid grid-cols-3 gap-4">
-                <Input
-                    placeholder="标题"
-                    value={newPost.title}
-                    onChange={(e) => setNewPost({...newPost, title: e.target.value})}
-                />
-                <Input
-                    placeholder="作者"
-                    value={newPost.author}
-                    onChange={(e) => setNewPost({...newPost, author: e.target.value})}
-                />
-            </div>
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>标题</TableHead>
-                        <TableHead>日期</TableHead>
+                        <TableHead className={'w-28'}>标题</TableHead>
+                        <TableHead className={'w-28'}>日期</TableHead>
                         <TableHead>内容</TableHead>
                         <TableHead>作者</TableHead>
                         <TableHead>操作</TableHead>
@@ -84,67 +82,38 @@ export function ArticleManagement() {
                         {articles.map((post) => (
                             <TableRow key={post.id}>
                                 <TableCell>{post.title}</TableCell>
-                                <TableCell>{format(post.createdAt, "yyyy年MM月dd日 HH:mm:ss")}</TableCell>
-                                <TableCell>{post.content}</TableCell>
+                                <TableCell>{format(post.createdAt, "yyyy.MM.dd HH:mm:ss")}</TableCell>
+                                <TableCell>
+                                    <div className={"h-40 overflow-auto"}>
+                                        {post.content}
+                                    </div>
+                                </TableCell>
                                 <TableCell>{post.createdBy.username}</TableCell>
                                 <TableCell>
-                                    <Button variant="outline" className="mr-2"
-                                            onClick={() => handleEditPost(post)}>编辑</Button>
-                                    <Button variant="destructive"
-                                            onClick={() => handleDeletePost(post.id)}>删除</Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button>删除</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>确定要删除吗？</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    此操作无法撤消。这将永久删除您的笔记，且无法恢复。
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>取消</AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    onClick={() => handleDeletePost(post.id)}>确认删除</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </>
                 </TableBody>
             </Table>
-
-            <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>编辑帖子</DialogTitle>
-                    </DialogHeader>
-                    <>
-                        {editingPost && (
-                            <div className="grid gap-4 py-4">
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="title" className="text-right">
-                                        标题
-                                    </Label>
-                                    <Input
-                                        id="title"
-                                        value={editingPost.title}
-                                        className="col-span-3"
-                                    />
-                                </div>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="content" className="text-right">
-                                        内容
-                                    </Label>
-                                    <Textarea
-                                        id="content"
-                                        value={editingPost.content}
-                                        className="col-span-3"
-                                    />
-                                </div>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="author" className="text-right">
-                                        作者
-                                    </Label>
-                                    <Input
-                                        id="author"
-                                        value={editingPost.createdBy.username}
-                                        className="col-span-3"
-                                    />
-                                </div>
-                            </div>
-                        )}
-                    </>
-                    <DialogFooter>
-                        <Button onClick={handleSaveEdit}>保存</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
         </div>
     )
 }

@@ -1,20 +1,8 @@
 import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
-import getCurrentUser from "@/app/actions/getCurrentUser";
 import {compare, hash} from "bcrypt";
 import {v4 as uuid} from 'uuid'
 import {del, put} from "@vercel/blob";
-
-export async function GET() {
-    const currentUser = await getCurrentUser()
-    if (!currentUser || currentUser.role !== "Admin") return NextResponse.json({error: '无权限'}, {status: 401});
-    try {
-        const users = await prisma.user.findMany()
-        return NextResponse.json(users)
-    } catch {
-        return NextResponse.json({error: '服务器内部错误'}, {status: 500});
-    }
-}
 
 export async function POST(request: NextRequest) {
     try {
