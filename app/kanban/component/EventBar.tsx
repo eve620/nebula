@@ -55,8 +55,8 @@ const EventBar = ({events, setEvents, currentEvent, setCurrentEvent}) => {
                     <div style={{transitionProperty: 'background-color'}}
                          key={item.title}
                          className={`px-8 mb-2 text-xl py-2 rounded-3xl truncate hover:duration-200
-                        hover:bg-[#deacde] dark:hover:bg-[#2c4885] hover:text-white
-                        ${currentEvent && currentEvent.title === item.title && 'text-white bg-[#f1bbf1] dark:bg-[#406cc7]'}`}
+                        hover:bg-[#2c4885] hover:text-white
+                        ${currentEvent && currentEvent.title === item.title && 'text-white bg-[#406cc7]'}`}
                          onClick={() => setCurrentEvent(item)}
                     >
                         {item.title}

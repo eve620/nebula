@@ -17,7 +17,7 @@ export default function About() {
                     </div>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                    <div className="text-black text-center max-w-52 min-w-44 space-x-2 pt-4">
+                    <div className=" text-center max-w-52 min-w-44 space-x-2 pt-4">
                         <span className="tag mb-3">#HTML</span>
                         <span className="tag mb-3">#CSS</span>
                         <span className="tag mb-3">#JS</span>

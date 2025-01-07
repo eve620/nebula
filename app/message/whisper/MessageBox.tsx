@@ -28,7 +28,6 @@ export default function MessageBox({currentId, messageList, friend, more}) {
     const scrollAreaRef = useRef<HTMLDivElement>(null);
     const socket = socketClient.getSocket();
     const [inputValue, setInputValue] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const previousScrollHeight = useRef(0)
     const scrollToBottom = () => {
@@ -46,16 +45,6 @@ export default function MessageBox({currentId, messageList, friend, more}) {
 
     useEffect(() => {
         setMessages(messageList)
-        setTimeout(() => {
-            const scrollElement = scrollAreaRef.current?.querySelector(
-                "[data-radix-scroll-area-viewport]"
-            );
-
-            if (scrollElement) {
-                scrollElement.scrollTop = scrollElement.scrollHeight;
-            }
-        }, 0);
-
     }, [messageList]);
 
     useEffect(() => {
@@ -87,7 +76,6 @@ export default function MessageBox({currentId, messageList, friend, more}) {
     }, [user, friend, socket, setMessages]);
 
     const getMessages = async () => {
-        setIsLoading(true);
         const offset = messages.length;
 
         const scrollElement = scrollAreaRef.current?.querySelector(
@@ -103,7 +91,6 @@ export default function MessageBox({currentId, messageList, friend, more}) {
             setMessages((prevMessages) => [...messages.reverse(), ...prevMessages]);
             setHasMore(hasMore);
         }
-        setIsLoading(false);
     };
 
     useLayoutEffect(() => {
@@ -111,7 +98,7 @@ export default function MessageBox({currentId, messageList, friend, more}) {
             "[data-radix-scroll-area-viewport]"
         );
 
-        if (scrollElement && !isLoading) {
+        if (scrollElement) {
             const newScrollHeight = scrollElement.scrollHeight;
             scrollElement.scrollTop = newScrollHeight - previousScrollHeight.current;
         }
@@ -160,7 +147,7 @@ export default function MessageBox({currentId, messageList, friend, more}) {
         if (scrollElement) {
             const handleScroll = (e: Event) => {
                 const target = e.target as HTMLDivElement;
-                if (target.scrollTop === 0 && hasMore && !isLoading) {
+                if (target.scrollTop === 0 && hasMore) {
                     const currentScrollHeight = target.scrollHeight;
                     getMessages().then(() => {
                         target.scrollTop = target.scrollHeight - currentScrollHeight;
@@ -173,7 +160,7 @@ export default function MessageBox({currentId, messageList, friend, more}) {
                 scrollElement.removeEventListener("scroll", handleScroll);
             };
         }
-    }, [hasMore, isLoading]);
+    }, [hasMore]);
 
     return (
         <div className="flex-1 flex flex-col">

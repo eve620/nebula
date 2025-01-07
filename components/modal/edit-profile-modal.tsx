@@ -181,7 +181,7 @@ export function EditProfileModal({isOpen, onClose}: EditProfileModalProps) {
                             介绍
                         </Label>
                         <Textarea
-                            id="bio"
+                            id="description"
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
                             className="col-span-3 max-h-28"

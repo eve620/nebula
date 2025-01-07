@@ -34,7 +34,6 @@ export default function ProgressPage() {
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold">{userData.streakDays} 天</div>
-                    <Progress value={userData.streakDays} max={100} className="mt-2"/>
                 </CardContent>
             </Card>
             <Card>
@@ -43,7 +42,6 @@ export default function ProgressPage() {
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold">{userData.streakDays} 天</div>
-                    <Progress value={userData.streakDays} max={100} className="mt-2"/>
                 </CardContent>
             </Card>
             <Card>
@@ -52,7 +50,6 @@ export default function ProgressPage() {
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold">{userData.vocabularyProgress}%</div>
-                    <Progress value={userData.vocabularyProgress} className="mt-2"/>
                 </CardContent>
             </Card>
             <Card>

@@ -69,9 +69,9 @@ export default function Forum() {
                 <Pagination className={'mt-5'}>
                     <PaginationContent>
                         <PaginationItem>
-                            <PaginationPrevious
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                isActive={currentPage === 1}
+                            <PaginationPrevious role="link"
+                                                onClick={() => handlePageChange(currentPage - 1)}
+                                                isActive={currentPage === 1}
                             />
                         </PaginationItem>
                         <>
@@ -87,9 +87,9 @@ export default function Forum() {
                             ))}
                         </>
                         <PaginationItem>
-                            <PaginationNext
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                isActive={currentPage === totalPages}
+                            <PaginationNext role="link"
+                                            onClick={() => handlePageChange(currentPage + 1)}
+                                            isActive={currentPage === totalPages}
                             />
                         </PaginationItem>
                     </PaginationContent>

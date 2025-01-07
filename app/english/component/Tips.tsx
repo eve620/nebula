@@ -32,7 +32,7 @@ const Tips: React.FC<TipsProps> = ({statementIndex, handleWord, showAnswer, engl
     };
     return (
         <div className={"flex justify-between py-4"}>
-            <button className={"hover:text-fuchsia-400"} onClick={() => {
+            <button aria-label={"上一个单词"} className={"hover:text-fuchsia-400"} onClick={() => {
                 handleWord(statementIndex - 1)
             }}>
                 <svg
@@ -57,7 +57,7 @@ const Tips: React.FC<TipsProps> = ({statementIndex, handleWord, showAnswer, engl
             <button onClick={showAnswer}
                     className={"text-sm font-semibold px-3 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-800"}>显示答案
             </button>
-            <button className={"hover:text-fuchsia-400"} onClick={() => {
+            <button aria-label={"下一个单词"} className={"hover:text-fuchsia-400"} onClick={() => {
                 handleWord(statementIndex + 1)
             }}>
                 <svg

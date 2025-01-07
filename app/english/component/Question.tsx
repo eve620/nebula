@@ -166,7 +166,7 @@ function Question({word: {chinese, english, soundmark}, failedCount, handleFaile
                         {inputWords[index]}
                     </div>
                 ))}
-                <input type="text" value={inputValue}
+                <input type="text" aria-label={"单词输入"} value={inputValue}
                        onChange={handleInputValue}
                        onKeyDown={handleKeyDown}
                        onMouseDown={(event) => {
