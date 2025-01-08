@@ -1,9 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import {compare, hash} from "bcrypt";
-import {v4 as uuid} from 'uuid'
-import {del, put} from "@vercel/blob";
+import {hash} from "bcrypt";
 
 export async function GET() {
     const currentUser = await getCurrentUser()

@@ -20,15 +20,22 @@ import {
     SelectContent,
     SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
 
+interface editUser {
+    username:string,
+    bio:string,
+    role:"Admin"|"User",
+    nickname:string,
+    newPassword:string
+}
+
 export function UserManagement() {
     const [users, setUsers] = useState<User[]>([])
     const [newUser, setNewUser] = useState({username: '', password: '', role: 'User'})
-    const [editingUser, setEditingUser] = useState()
+    const [editingUser, setEditingUser] = useState<editUser>()
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
     useEffect(() => {
@@ -249,7 +256,10 @@ export function UserManagement() {
                                         角色
                                     </Label>
                                     <Select value={editingUser.role}
-                                            onValueChange={(value) => setEditingUser({...editingUser, role: value})}>
+                                            onValueChange={(value: "Admin" | "User") => setEditingUser({
+                                                ...editingUser,
+                                                role: value
+                                            })}>
                                         <SelectTrigger className="w-[200px]">
                                             <SelectValue placeholder="请选择权限"/>
                                         </SelectTrigger>

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
@@ -42,6 +43,7 @@
     "lucide-react": "^0.468.0",
     "next": "15.1.2",
     "next-auth": "^4.24.11",
+    "pg": "^8.13.1",
     "react": "^19.0.0",
     "react-day-picker": "8.10.1",
     "react-dom": "^19.0.0",

@@ -8,7 +8,6 @@ import {Friend} from "@/types";
 import Avatar from "@/components/avatar";
 import {socketClient} from "@/lib/globalSocket";
 import {useUser} from "@/contexts/user-context";
-import {usePathname} from "next/navigation";
 import showMessage from "@/components/message";
 
 
@@ -18,7 +17,7 @@ interface ShareModalProps {
     articleId: number
 }
 
-export function ShareModal({isOpen, onClose, articleId}: ShareModalProps) {
+export function ShareModal({isOpen, onClose}: ShareModalProps) {
     const [selectedFriend, setSelectedFriend] = useState<Friend>()
     const [friends, setFriends] = useState<Friend[]>([])
     const socket = socketClient.getSocket()

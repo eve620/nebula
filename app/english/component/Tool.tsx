@@ -25,7 +25,7 @@ const Tool: React.FC<ToolProps> = ({currentCourse, statementIndex, handleCourse,
 
     const courseRef = useRef<HTMLDivElement>(null);
     const statementRef = useRef<HTMLDivElement>(null);
-    const courseButtonRef = useRef<HTMLDivElement>(null);
+    const courseButtonRef = useRef<HTMLButtonElement>(null);
     const statementButtonRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
