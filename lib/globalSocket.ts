@@ -1,4 +1,4 @@
-import { io, Socket } from "socket.io-client";
+import {io, Socket} from "socket.io-client";
 
 class SocketClient {
     private static instance: SocketClient;
@@ -7,7 +7,8 @@ class SocketClient {
     private readonly MAX_RECONNECT_ATTEMPTS = 5;
     private readonly RECONNECT_INTERVAL = 5000;
 
-    private constructor() {}
+    private constructor() {
+    }
 
     public static getInstance(): SocketClient {
         if (!SocketClient.instance) {
@@ -18,7 +19,7 @@ class SocketClient {
 
     public getSocket(): Socket | null {
         if (!this.socket) {
-            this.socket = io('http://localhost:3100', {
+            this.socket = io(process.env.NEXT_PUBLIC_WS_URL, {
                 reconnection: true,
                 reconnectionAttempts: this.MAX_RECONNECT_ATTEMPTS,
                 reconnectionDelay: this.RECONNECT_INTERVAL,
@@ -72,7 +73,7 @@ class SocketClient {
         if (this.socket && this.isConnected()) {
             this.socket.emit(event, data);
         } else {
-            console.warn('Socket is not connected. Message not sent:', { event, data });
+            console.warn('Socket is not connected. Message not sent:', {event, data});
         }
     }
 }
