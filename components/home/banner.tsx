@@ -41,7 +41,7 @@ export default function Banner() {
                 />
             </div>
             <div className="relative z-10 text-center">
-                <h1 className="text-6xl font-bold mb-4 animate-pulse">SUZVC</h1>
+                <h1 className="text-6xl font-bold mb-4 animate-pulse">NEBULA</h1>
                 <p className="text-xl mb-8">
                     <AnimatedText text="探索知识的海洋"/>
                 </p>

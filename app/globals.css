@@ -91,7 +91,7 @@ body {
 @layer components {
     .tag {
         @apply bg-pink-300/20 dark:bg-blue-300/30 px-2 rounded-xl
-        hover:bg-pink-300/40 dark:hover:bg-blue-300/50 duration-200 inline-block cursor-default;
+        hover:bg-pink-300/40 dark:hover:bg-blue-300/50 inline-block cursor-default;
     }
 }
 

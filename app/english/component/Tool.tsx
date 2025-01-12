@@ -154,7 +154,7 @@ const Tool: React.FC<ToolProps> = ({currentCourse, statementIndex, handleCourse,
             <div className={"flex items-center"}>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <button aria-label={"重置进度"} aria-expanded={null}
+                        <button aria-label={"重置进度"} title={"重置进度"} aria-expanded={null}
                                 className="link-item mr-4 hover:text-fuchsia-400 cursor-pointer">
                             <svg
                                 width="25"

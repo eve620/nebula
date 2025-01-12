@@ -22,7 +22,7 @@ const Notice: React.FC<DevLogProps> = ({notices}) => {
     return (
         <div className={"mx-auto max-w-6xl"}>
             {(notices.length !== 0 || currentUser?.role === 'Admin') &&
-                <h2 className="text-4xl font-bold mb-12 text-center">开发日志</h2>}
+                <h2 className="text-4xl font-bold mb-12 text-center">更新日志</h2>}
             {currentUser?.role === 'Admin' && <NoticePublish/>}
             <div className={"flex justify-center flex-wrap"}>
                 {notices.map((notice, index) => {

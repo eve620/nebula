@@ -59,7 +59,8 @@ const Column = ({tag, currentEvent, events, setEvents}) => {
         setIsModalShow(true)
         setCurrentTaskId(id)
     };
-    const taskSubmit = () => {
+    const taskSubmit = (e) => {
+        e.preventDefault()
         if (operation === 'ADD') {
             if (!(newTaskName.trim() && newTaskDetail.trim())) {
                 //toast

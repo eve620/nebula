@@ -9,13 +9,13 @@ const Guide: React.FC = () => {
                 <Image className={"mx-auto mt-2 rounded-md"} width={150} height={150}
                        src={"/storage/avatar/avatar1.jpg"}
                        alt={"picture"}/>
-                <p className={"text-center text-lg leading-loose font-semibold"}>如何记录好项目、笔记</p>
-                <p className={"text-center text-lg leading-loose font-semibold"}>请开始使用Suzvc</p>
+                <p className={"text-center text-xl leading-loose font-semibold"}>开始使用Nebula</p>
+                <p className={"text-center text leading-loose font-semibold"}>探索知识的宇宙</p>
                 <Link className="
                     w-full py-2 mt-5 mx-auto sm:w-48 text-center rounded-md font-bold hover:duration-200 block
                     text-black dark:text-gray-300
                     bg-gray-200 dark:bg-neutral-800
-                    hover:bg-gray-300 dark:hover:bg-neutral-900" href={"#"}>Github</Link>
+                    hover:bg-gray-300 dark:hover:bg-neutral-900" target={"_blank"} href={"https://github.com/eve620"}>Github</Link>
             </div>
             <div>
                 <div className="overflow-hidden
@@ -24,10 +24,35 @@ const Guide: React.FC = () => {
                                 rounded-2xl p-4 hover:duration-200
                                 hover:shadow-lg dark:shadow-md dark:hover:shadow-slate-700/70
                                 ">
-                    <div className={"pr-2"}>
-                        <h2 className={"text-xl font-bold py-4"}>使用指南</h2>
-                        <h3 className={"pb-2 font-semibold"}>点击这里开始哦</h3>
-                        <p className={"py-1 leading-7 text-sm"}>教你一下怎么用教你一下怎么用教你一下怎么用教你一下怎么用教你一下怎么用教你一下怎么用教你一下怎么用教你一下怎么用教你一下怎么用教你一下怎么用教你一下怎么用教你一下怎么用</p>
+                    <div className="pr-2">
+                        <section>
+                            <h2 className="text-xl font-bold mb-4">欢迎来到Nebula🌟</h2>
+                            <p className="text-sm leading-relaxed mb-8">
+                                Nebula是一款致力于个人开发的学习与知识分享平台。
+                                加入我们，一起分享学习心得，记录项目历程，提升英语水平，管理待办事项。
+                            </p>
+                        </section>
+
+                        <section>
+                            <h3 className="text-lg font-semibold mb-2">互动与社交</h3>
+                            <p className="text-sm leading-relaxed mb-4">
+                                在这里，您可以轻松添加好友，共享精彩文章，实时交流，让学习之路不再孤单。
+                            </p>
+                        </section>
+
+                        <section>
+                            <h3 className="text-lg font-semibold mb-2">每日打卡与排行📅</h3>
+                            <p className="text-sm leading-relaxed mb-4">
+                                每天打卡，记录您的学习进展，通过持续的努力提高自己的排名，见证自己的成长。
+                            </p>
+                        </section>
+
+                        <section>
+                            <h3 className="text-lg font-semibold mb-2">便捷工具</h3>
+                            <p className="text-sm leading-relaxed mb-4">
+                                我们还提供了多种实用工具帮助您更高效地学习和工作。
+                            </p>
+                        </section>
                     </div>
                 </div>
             </div>
