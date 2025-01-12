@@ -36,16 +36,20 @@ export function ShareModal({isOpen, onClose}: ShareModalProps) {
     }, [isOpen])
 
     const handleShare = async () => {
+        let url = window.location.href
+        if (window.location.pathname.startsWith("/my/article")) {
+            url = url.replace("/my/article", "/forum")
+        }
         const response = await fetch("/api/user/friend/message", {
             method: "POST",
-            body: JSON.stringify({receiverId: selectedFriend.id, content: window.location.href, type: "SHARE"})
+            body: JSON.stringify({receiverId: selectedFriend.id, content: url, type: "SHARE"})
         })
         if (response.ok) {
             showMessage("分享成功！")
             socket.emit("sendMessage", {
                 senderUsername: user.username,
                 receiverUsername: selectedFriend.username,
-                content: window.location.href,
+                content: url,
                 type: "SHARE"
             })
             onClose()

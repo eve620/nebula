@@ -8,18 +8,26 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div>
                         <h4 className="text-xl font-bold mb-4">关于我</h4>
-                        <p className="text-muted-foreground">一个人类</p>
+                        <p className="text-muted-foreground">一个热爱技术的开发者，专注于前端与全栈开发。</p>
                     </div>
                     <div>
-                        <h4 className="text-xl font-bold mb-4">快速链接</h4>
-                        <ul className="space-y-2">
-                            <li><Link href="#" className="text-muted-foreground hover:text-foreground">公告</Link></li>
+                        <h4 className="text-xl font-bold mb-5">快速链接</h4>
+                        <ul className="flex justify-center space-x-4">
+                            <li><Link href={"/forum"}
+                                      className="text-muted-foreground hover:text-foreground">论坛</Link></li>
+                            <li><Link href={"/english"}
+                                      className="text-muted-foreground hover:text-foreground">英语</Link>
+                            </li>
+                            <li><Link href={"/kanban"}
+                                      className="text-muted-foreground hover:text-foreground">代办</Link>
+                            </li>
                         </ul>
                     </div>
                     <div>
                         <h4 className="text-xl font-bold mb-4">关注我</h4>
-                        <div className="flex justify-center space-x-4">
-                            <Link href="#" className="text-muted-foreground hover:text-foreground">
+                        <div className="flex justify-center space-x-4 mb-4">
+                            <Link href={"https://gitee.com/suzvc"} target={"_blank"}
+                                  className="text-muted-foreground hover:text-foreground">
                                 <span className="sr-only">Gitee</span>
                                 <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 1024 1024">
                                     <path
@@ -28,14 +36,17 @@ export function Footer() {
                                 </svg>
                             </Link>
 
-                            <Link href="#" className="text-muted-foreground hover:text-foreground">
+                            <Link href={"https://github.com/eve620"} target={"_blank"}
+                                  className="text-muted-foreground hover:text-foreground">
                                 <span className="sr-only">GitHub</span>
                                 <Github/>
                             </Link>
                         </div>
+                        <p className={'text-muted-foreground'}>联系我：121121620@qq.com</p>
                     </div>
                 </div>
-                <p className="mt-8 text-muted-foreground">&copy; 2024 NABULA. All rights reserved.</p>
+                <p className="mt-8 text-muted-foreground">&copy; 2024-2025 NABULA. All rights reserved.</p>
+                <p className="text-muted-foreground text-xs">本项目当前为个人开发，未来可能以开源形式发布</p>
             </div>
         </footer>
     )

@@ -10,6 +10,7 @@ import {usePathname} from "next/navigation";
 import {useUser} from "@/contexts/user-context";
 import useLoginModal from "@/hooks/use-login-modal";
 import showMessage from "@/components/message";
+import Image from "next/image";
 
 interface NavbarProps {
     curTheme: 'light' | 'dark'
@@ -22,7 +23,7 @@ export function Navbar({curTheme}: NavbarProps) {
         {name: '论坛', href: '/forum'},
         {name: '我的', href: '/my'},
         {name: '英语', href: '/english'},
-        {name: '看板', href: '/kanban'},
+        {name: '代办', href: '/kanban'},
     ]
     const [isOpen, setIsOpen] = useState(false)
     const pathname = usePathname()
@@ -61,8 +62,9 @@ export function Navbar({curTheme}: NavbarProps) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
-                        <Link href="/" className="flex-shrink-0">
-                            <span className="text-xl font-semibold italic">NABULA</span>
+                        <Link href="/" className="flex flex-shrink-0">
+                            <Image src={"/star.png"} alt={"logo"} width={30} height={30}/>
+                            <span className="text-xl ml-2 font-semibold italic">NABULA</span>
                         </Link>
                     </div>
                     <div className="hidden md:block">

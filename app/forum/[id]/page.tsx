@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {Button} from "@/components/ui/button"
 import {ThumbsUp, MessageSquare, Share2, ArrowLeft} from 'lucide-react'
@@ -49,6 +49,16 @@ export default function ForumPost() {
         if (comment) {
             comment.scrollIntoView({behavior: "smooth"})
         }
+    }
+
+    useEffect(() => {
+        if (article.visibility !== "PUBLIC") {
+            showMessage("该文章已隐藏")
+            router.push("/forum")
+        }
+    }, [router, article])
+    if (article.visibility !== "PUBLIC") {
+        return <></>
     }
     return (
         <div className={'min-w-fit'}>

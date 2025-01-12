@@ -7,7 +7,7 @@ import {Input} from "@/components/ui/input"
 import {Textarea} from "@/components/ui/textarea"
 import {Label} from "@/components/ui/label"
 import Image from 'next/image'
-import {Eye, Trash2, CalendarIcon, ArrowLeft} from 'lucide-react'
+import {Eye, Trash2, CalendarIcon, Plus} from 'lucide-react'
 import {Modal} from "@/components/modal/modal";
 import showMessage from "@/components/message";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
@@ -17,6 +17,7 @@ import {zhCN} from "date-fns/locale";
 import {DateRange} from "react-day-picker"
 import {Calendar} from "@/components/ui/calendar"
 import {useProject} from "@/contexts/project-context";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 
 export default function PublishProject() {
     const router = useRouter()
@@ -90,138 +91,137 @@ export default function PublishProject() {
     }
 
     return (
-        <div>
-            <Button
-                variant="outline"
-                size="sm"
-                className="mb-4"
-                onClick={() => router.back()}>
-                <ArrowLeft className="mr-2 h-4 w-4"/>
-                返回
-            </Button>
-            <div className="space-y-6 max-w-6xl mx-auto">
-                <span className="text-gray-500 dark:text-gray-300 text-2xl">
-                编辑项目
-                </span>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="title" className="text-right">标题</Label>
-                        <Input id="title" name="title" value={title} onChange={(e) => setTitle(e.target.value)} required
-                               className="col-span-3 md:col-span-2"/>
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <label className="text-right">时间</label>
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    id="date"
-                                    variant={"outline"}
-                                    className={cn(
-                                        "col-span-3 md:col-span-2 h-10 justify-start text-left font-normal bg-transparent border border-gray-300 dark:border-neutral-600",
-                                        !date && "text-muted-foreground"
-                                    )}
-                                >
-                                    <>
-                                        <CalendarIcon className="mr-2 h-4 w-4"/>
-                                        {date?.from ? (
-                                            date.to ? (
-                                                <>
-                                                    {format(date.from, "yyyy年MM月dd日")} -{" "}
-                                                    {format(date.to, "yyyy年MM月dd日")}
-                                                </>
-                                            ) : (
-                                                format(date.from, "yyyy年MM月dd日")
-                                            )
-                                        ) : (
-                                            <span>请选择日期...</span>
-                                        )}
-                                    </>
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0 dark:border-neutral-700 dark:bg-slate-950"
-                                            align="start">
-                                <Calendar
-                                    locale={zhCN}
-                                    initialFocus
-                                    mode="range"
-                                    defaultMonth={date?.from}
-                                    selected={date}
-                                    onSelect={setDate}
-                                    numberOfMonths={2}
-                                />
-                            </PopoverContent>
-                        </Popover>
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="responsibility" className="text-right">职责</Label>
-                        <Input id="responsibility" name="responsibility" value={job}
-                               onChange={(e) => setJob(e.target.value)}
-                               required className="col-span-3 md:col-span-2"/>
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="techStack" className="text-right">技术栈</Label>
-                        <div className="col-span-3 md:col-span-2">
-                            {stacks.length !== 0 &&
-                                <div
-                                    className={'border-neutral-300 flex flex-wrap gap-2 p-2 mb-2 bg-transparent border dark:border-neutral-600 rounded-md outline-none'}>
-                                    {stacks.map((item, index) => {
-                                        return <span key={index} onClick={() => {
-                                            const newStacks = [...stacks];
-                                            newStacks.splice(index, 1);
-                                            setStacks(newStacks)
+        <Card className="w-full max-w-4xl mx-auto">
+            <CardHeader>
+                <CardTitle className="text-2xl font-bold">新建项目</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="gap-6">
+                        <div className="space-y-4">
+                            <div>
+                                <Label htmlFor="title">标题</Label>
+                                <Input id="title" name="title" value={title} onChange={(e) => setTitle(e.target.value)}
+                                       required/>
+                            </div>
+                            <div className={"flex flex-col"}>
+                                <Label className={'mb-1'}>时间</Label>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            id="date"
+                                            variant={"outline"}
+                                            className={cn(
+                                                "w-full justify-start text-left font-normal",
+                                                !date && "text-muted-foreground"
+                                            )}
+                                        >
+                                            <CalendarIcon className="mr-2 h-4 w-4"/>
+                                            <>
+                                                {date?.from ? (
+                                                    date.to ? (
+                                                        <>
+                                                            {format(date.from, "yyyy年MM月dd日")} -{" "}
+                                                            {format(date.to, "yyyy年MM月dd日")}
+                                                        </>
+                                                    ) : (
+                                                        format(date.from, "yyyy年MM月dd日")
+                                                    )
+                                                ) : (
+                                                    <span>请选择日期...</span>
+                                                )}
+                                            </>
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                        <Calendar
+                                            locale={zhCN}
+                                            initialFocus
+                                            mode="range"
+                                            defaultMonth={date?.from}
+                                            selected={date}
+                                            onSelect={setDate}
+                                            numberOfMonths={2}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
+                            <div>
+                                <Label htmlFor="responsibility">职责</Label>
+                                <Input id="responsibility" name="responsibility" value={job}
+                                       onChange={(e) => setJob(e.target.value)} required/>
+                            </div>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <Label htmlFor="techStack">技术栈</Label>
+                                {stacks.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mb-2">
+                                        {stacks.map((item, index) => {
+                                            return <span key={index} onClick={() => {
+                                                const newStacks = [...stacks];
+                                                newStacks.splice(index, 1);
+                                                setStacks(newStacks)
+                                            }}
+                                                         className={'tag'}>{item}</span>
+                                        })}
+                                    </div>
+                                )}
+                                <div className="flex gap-2">
+                                    <Input
+                                        value={newStack}
+                                        onChange={(e) => setNewStack(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === " ") {
+                                                e.preventDefault();
+                                            }
                                         }}
-                                                     className={'tag'}>{item}</span>
-                                    })}
-                                </div>}
-                            <div className={'flex gap-3 items-center'}>
-                                <Input value={newStack}
-                                       onKeyDown={(e) => {
-                                           if (e.key === " ") {
-                                               e.preventDefault();
-                                           }
-                                       }}
-                                       className={'px-2 py-1 bg-transparent rounded-md outline-none'}
-                                       onChange={(e) => setNewStack(e.target.value)}/>
-                                <Button type="button" onClick={() => {
-                                    if (newStack.trim().length === 0) {
-                                        showMessage('不能为空')
-                                        setNewStack('')
-                                        return
-                                    }
-                                    console.log(newStack)
-                                    setStacks([...stacks, newStack.trim()])
-                                    setNewStack('')
-                                }}>添加</Button>
+                                        placeholder="输入技术栈..."
+                                    />
+                                    <Button type="button" onClick={() => {
+                                        if (newStack.trim().length === 0) {
+                                            showMessage('不能为空');
+                                            setNewStack('');
+                                            return;
+                                        }
+                                        setStacks([...stacks, newStack.trim()]);
+                                        setNewStack('');
+                                    }}>
+                                        <Plus className="h-4 w-4 mr-2"/>
+                                        添加
+                                    </Button>
+                                </div>
+                            </div>
+                            <div>
+                                <Label htmlFor="description">描述</Label>
+                                <Textarea id="description" name="description" value={describe}
+                                          onChange={(e) => setDescribe(e.target.value)} required/>
+                            </div>
+                            <div>
+                                <Label htmlFor="highlights">亮点</Label>
+                                <Textarea id="highlights" name="highlights" value={highlight}
+                                          onChange={(e) => setHighlight(e.target.value)} required/>
                             </div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="description" className="text-right">描述</Label>
-                        <Textarea id="description" name="description" value={describe}
-                                  onChange={(e) => setDescribe(e.target.value)}
-                                  required className="col-span-3 md:col-span-2"/>
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="highlights" className="text-right">亮点</Label>
-                        <Textarea id="highlights" name="highlights" value={highlight}
-                                  onChange={(e) => setHighlight(e.target.value)}
-                                  required className="col-span-3 md:col-span-2"/>
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="image" className="text-right">图片</Label>
-                        <div className="col-span-3 md:col-span-2">
+                    <div>
+                        <Label htmlFor="image">图片</Label>
+                        <div className="flex items-center gap-4 mt-2">
                             <Button type="button" onClick={() => fileInputRef.current?.click()}>
                                 选择图片
                             </Button>
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                className="hidden"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                multiple
-                            />
+                            <span className="text-sm text-muted-foreground">
+                                已上传 {images.length}/{maxImages} 张图片
+                            </span>
                         </div>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            className="hidden"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            multiple
+                        />
                     </div>
                     {images.length > 0 && (
                         <div className="grid grid-cols-4 gap-4">
@@ -261,28 +261,29 @@ export default function PublishProject() {
                             </div>
                         </div>
                     )}
-                    <div className="flex gap-4 justify-end mt-4">
-                        <div className={"flex-1"}></div>
-                        <Button type={"submit"}>保存</Button>
-                    </div>
                 </form>
-            </div>
-
-
-            {previewImage && (
-                <Modal isOpen={!!previewImage} onClose={() => setPreviewImage(null)} title="图片预览">
-                    <div className="flex justify-center">
-                        <Image
-                            src={previewImage}
-                            alt="Preview"
-                            width={600}
-                            height={400}
-                            className="object-contain"
-                        />
-                    </div>
-                </Modal>
-            )}
-        </div>
+            </CardContent>
+            <CardFooter className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => router.back()}>
+                    取消
+                </Button>
+                <Button onClick={handleSubmit}>发布</Button>
+            </CardFooter>
+            <>
+                {previewImage && (
+                    <Modal isOpen={!!previewImage} onClose={() => setPreviewImage(null)} title="图片预览">
+                        <div className="flex justify-center">
+                            <Image
+                                src={previewImage}
+                                alt="Preview"
+                                width={600}
+                                height={400}
+                                className="object-contain"
+                            />
+                        </div>
+                    </Modal>
+                )}
+            </>
+        </Card>
     )
 }
-
