@@ -1,5 +1,5 @@
 "use client"
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef} from 'react';
 import Column from './Column';
 import {DragDropContext, DropResult} from "@hello-pangea/dnd";
 import {Button} from "@/components/ui/button";
@@ -12,10 +12,10 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
-import {useRouter} from "next/navigation";
+import showMessage from "@/components/message";
 
 const TaskBox = ({events, setEvents, currentEvent, setCurrentEvent}) => {
-    const router = useRouter()
+    const debounceTimer = useRef<NodeJS.Timeout | null>(null);
     const handleRemove = useCallback(async () => {
         const removeEvent = await fetch("/api/kanban", {
             method: "DELETE",
@@ -29,40 +29,48 @@ const TaskBox = ({events, setEvents, currentEvent, setCurrentEvent}) => {
                 }
                 return result;
             });
-            router.refresh()
+            showMessage("删除成功")
         }
-    }, [setEvents, currentEvent, setCurrentEvent,router]);
+    }, [setEvents, currentEvent, setCurrentEvent]);
+    const handleChange = (newEvent) => {
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+        debounceTimer.current = setTimeout(() => {
+            fetch("/api/kanban", {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newEvent)
+            });
+        }, 2000)
+    };
 
-    const handleDragEnd = useCallback((result: DropResult) => {
+    const handleDragEnd = useCallback(async (result: DropResult) => {
         if (!result.destination) return;
         const {source, destination} = result;
-
-        setEvents(prevEvents =>
-            prevEvents.map(event => {
-                if (event.title !== currentEvent.title) return event; // 不修改与当前事件无关的事件
-
-                // 深拷贝当前的 event，确保不会直接修改原数据
-                const eventCopy = {...event};
-
-                // 深拷贝 source 和 destination 的 task 列表，确保不修改原数组
-                const sourceList = [...eventCopy[source.droppableId]];
-                const destinationList = [...eventCopy[destination.droppableId]];
-
-                // 取出 source 位置的任务
-                const [movedTask] = sourceList.splice(source.index, 1);
-
-                // 将任务插入到 destination 位置
-                destinationList.splice(destination.index, 0, movedTask);
-
-                // 更新 eventCopy 中的 source 和 destination 列表
-                eventCopy[source.droppableId] = sourceList;
-                eventCopy[destination.droppableId] = destinationList;
-
-                return eventCopy;
-            })
-        );
-    }, [currentEvent,setEvents]);
-
+        const eventCopy = {
+            ...currentEvent
+        }
+        const sourceList = [...eventCopy[source.droppableId]];
+        const destinationList = [...eventCopy[destination.droppableId]];
+        // 取出 source 位置的任务
+        const [movedTask] = sourceList.splice(source.index, 1);
+        // 将任务插入到 destination 位置
+        destinationList.splice(destination.index, 0, movedTask);
+        // 更新 eventCopy 中的 source 和 destination 列表
+        eventCopy[source.droppableId] = sourceList;
+        eventCopy[destination.droppableId] = destinationList;
+        const nextEvents = events.map(event => {
+            if (event.title === currentEvent.title) {
+                return eventCopy
+            }
+        })
+        handleChange(eventCopy)
+        setCurrentEvent(eventCopy)
+        setEvents(nextEvents)
+    }, [events, currentEvent, setEvents, setCurrentEvent]);
     return (
         <>
             <div className='flex flex-col flex-1'>
@@ -87,7 +95,7 @@ const TaskBox = ({events, setEvents, currentEvent, setCurrentEvent}) => {
                     </AlertDialog>
 
                 </header>
-                <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
+                <DragDropContext onDragEnd={handleDragEnd}>
                     <div className='flex w-full justify-evenly mt-12 items-start mx-3'>
                         {
                             ['toDo', 'inProgress', 'completed'].map((tag) => (

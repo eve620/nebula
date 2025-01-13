@@ -10,7 +10,6 @@ import {useArticle} from "@/contexts/article-context"
 import showMessage from "@/components/message"
 import {Card, CardContent, CardHeader, CardTitle, CardFooter} from "@/components/ui/card"
 import {Label} from "@/components/ui/label"
-import {ShareModal} from "@/components/modal/share-modal";
 
 export default function Page() {
     const article = useArticle()

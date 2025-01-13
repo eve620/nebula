@@ -27,38 +27,50 @@ export async function GET(request: NextRequest) {
     }
 }
 
+export async function POST(request: NextRequest) {
+    const currentUser = await getCurrentUser()
+    if (!currentUser || !currentUser.id) return NextResponse.json({error: '未登录'}, {status: 401});
+    try {
+        const {title, toDo, inProgress, completed} = await request.json()
+        await prisma.event.create({
+            data: {
+                title,
+                toDo: JSON.stringify(toDo),
+                inProgress: JSON.stringify(inProgress),
+                completed: JSON.stringify(completed),
+                createdById: currentUser.id
+            },
+        });
+        return NextResponse.json({message: 'ok'})
+    } catch {
+        throw new Error("服务器出错")
+    }
+}
+
 export async function PUT(request: NextRequest) {
     const currentUser = await getCurrentUser()
     if (!currentUser || !currentUser.id) return NextResponse.json({error: '未登录'}, {status: 401});
     try {
-        const {events} = await request.json()
-        for (const event of events) {
-            await prisma.event.upsert({
-                // 设定查找条件，这里使用title作为示例，实际中推荐使用ID
-                where: {
-                    title_createdById: {
-                        title: event.title,
-                        createdById: currentUser.id,
-                    }
-                },
-                // 如果找到匹配项，这些字段将被更新
-                update: {
-                    toDo: JSON.stringify(event.toDo),
-                    inProgress: JSON.stringify(event.inProgress),
-                    completed: JSON.stringify(event.completed),
-                },
-                // 如果没有找到匹配项，将使用这些字段创建新记录
-                create: {
-                    title: event.title,
-                    toDo: JSON.stringify(event.toDo),
-                    inProgress: JSON.stringify(event.inProgress),
-                    completed: JSON.stringify(event.completed),
-                    createdBy: {connect: {id: currentUser.id}}
-                },
-            });
-        }
+        const {title, toDo, inProgress, completed} = await request.json()
+        console.log(toDo)
+        console.log(inProgress)
+        console.log(completed)
+        await prisma.event.update({
+            where: {
+                title_createdById: {
+                    title,
+                    createdById: currentUser.id,
+                }
+            },
+            data: {
+                toDo: JSON.stringify(toDo),
+                inProgress: JSON.stringify(inProgress),
+                completed: JSON.stringify(completed),
+            },
+        });
+        console.log(111)
         return NextResponse.json({message: 'ok'})
-    } catch  {
+    } catch {
         throw new Error("服务器出错")
     }
 }
@@ -89,7 +101,7 @@ export async function DELETE(request: NextRequest) {
             }
         })
         return NextResponse.json({message: 'ok'})
-    } catch  {
+    } catch {
         throw new Error("服务器出错")
     }
 }

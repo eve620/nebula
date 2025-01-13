@@ -122,8 +122,7 @@ const Column = ({tag, currentEvent, events, setEvents}) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                {events
-                                    .find((event) => event.title === currentEvent.title)
+                                {currentEvent
                                     ?.[tag].map((item, index: number) => (
                                     <Draggable
                                         key={item.id}

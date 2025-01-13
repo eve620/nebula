@@ -1,10 +1,10 @@
 "use client"
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import TaskBox from "@/app/kanban/component/TaskBox";
 import EventBar from "@/app/kanban/component/EventBar";
-import {useRouter} from "next/navigation";
 import {EventType} from "@/types";
-import {useUser} from "@/contexts/user-context";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {CalendarPlus, PlusCircle} from "lucide-react";
 
 export interface KanbanBoardProps {
     eventData: EventType[]
@@ -13,29 +13,10 @@ export interface KanbanBoardProps {
 const KanbanBoard: React.FC<KanbanBoardProps> = ({eventData}) => {
     const [events, setEvents] = useState<EventType[]>(eventData);
     const [currentEvent, setCurrentEvent] = useState(events[0] || null);
-    const [prevLength, setPrevLength] = useState(events.length);
-    const router = useRouter()
-    const user = useUser()
-    const updateProgress = useCallback(async () => {
-        if (user) {
-            const response = await fetch("/api/kanban", {
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({events})
-            });
-            if (response.ok) router.refresh()
-        }
-    }, [events,user,router]);
 
     useEffect(() => {
-        const currentLength = events.length;
-        updateProgress()
-        if (currentLength !== prevLength) {
-            setPrevLength(currentLength);
-        }
-    }, [user, updateProgress, prevLength, events]);
+        setEvents(eventData)
+    }, [setEvents, eventData]);
 
     return (
         <div className='flex h-full'>
@@ -50,9 +31,23 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({eventData}) => {
                 currentEvent={currentEvent}
                 events={events}
                 setCurrentEvent={setCurrentEvent}
-            /> : <div className={"text-nowrap flex-1 flex justify-center items-center text-3xl font-bold px-8"}>
-                点击左侧➕添加事件
-            </div>}
+            /> : (
+                <div className="flex-1 flex justify-center items-center p-8">
+                    <Card className="w-full max-w-md">
+                        <CardHeader>
+                            <CardTitle className="text-center">没有事件</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex flex-col items-center space-y-4">
+                                <CalendarPlus className="h-16 w-16 text-muted-foreground"/>
+                                <p className="text-center text-muted-foreground">
+                                    点击左侧 <PlusCircle className="inline h-5 w-5"/> 添加新事件
+                                </p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            )}
         </div>
     );
 }

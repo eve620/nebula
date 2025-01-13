@@ -22,14 +22,14 @@ export default function Forum() {
     const articles = useArticles() || []
 
     const [currentPage, setCurrentPage] = useState(1)
-    const postsPerPage = 3
+    const articlesPerPage = 3
     const user = useUser()
 
     const [currentTags, setCurrentTags] = useState<string[]>([])
     const [searchKeyword, setSearchKeyword] = useState<string>(''); // 搜索关键字
 
-    const indexOfLastPost = currentPage * postsPerPage
-    const indexOfFirstPost = indexOfLastPost - postsPerPage
+    const indexOfLastArticle = currentPage * articlesPerPage
+    const indexOfFirstArticle = indexOfLastArticle - articlesPerPage
 
     const filterArticles = useMemo(() => {
         setCurrentPage(1)
@@ -39,8 +39,8 @@ export default function Forum() {
             (currentTags.length === 0 || currentTags.every(tag => article.tags.includes(tag)))
         );
     }, [searchKeyword, currentTags])
-    const currentArticles = filterArticles.slice(indexOfFirstPost, indexOfLastPost)
-    const totalPages = Math.ceil(filterArticles.length / postsPerPage)
+    const currentArticles = filterArticles.slice(indexOfFirstArticle, indexOfLastArticle)
+    const totalPages = Math.ceil(filterArticles.length / articlesPerPage)
 
     const handlePageChange = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {

@@ -93,7 +93,7 @@ export default function PublishProject() {
     return (
         <Card className="w-full max-w-4xl mx-auto">
             <CardHeader>
-                <CardTitle className="text-2xl font-bold">新建项目</CardTitle>
+                <CardTitle className="text-2xl font-bold">编辑项目</CardTitle>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -267,7 +267,7 @@ export default function PublishProject() {
                 <Button variant="outline" onClick={() => router.back()}>
                     取消
                 </Button>
-                <Button onClick={handleSubmit}>发布</Button>
+                <Button onClick={handleSubmit}>保存</Button>
             </CardFooter>
             <>
                 {previewImage && (

@@ -14,30 +14,40 @@ const EventBar = ({events, setEvents, currentEvent, setCurrentEvent}) => {
     const [newEventName, setNewEventName] = useState('')
     const user = useUser()
     const loginStore = useLoginModal()
-    const handleAdd = useCallback(() => {
-        // Prevent Duplicated
+    const handleAdd = useCallback(async (e) => {
+        e.preventDefault()
         if (events.find((event) => event.title.toLowerCase() === newEventName.trim().toLowerCase())) {
-            //toast
+            showMessage("事件已存在")
             return;
         }
         if (!newEventName) {
-            //toast
+            showMessage("事件名不能为空")
         }
         // Add new event
-        if (newEventName) {
-            setEvents((prev) => [
-                ...prev,
-                {
-                    title: newEventName.trim(),
-                    toDo: [],
-                    inProgress: [],
-                    completed: [],
-                },
-            ]);
+        if (newEventName && user) {
+            const newEvent = {
+                title: newEventName.trim(),
+                toDo: [],
+                inProgress: [],
+                completed: [],
+            }
+            const newEvents = [
+                ...events,
+                newEvent,
+            ]
+            const response = await fetch("/api/kanban", {
+                method: "POST",
+                body: JSON.stringify(newEvent)
+            });
+            if (response.ok) {
+                showMessage("添加成功！")
+                setEvents(newEvents)
+                setCurrentEvent(newEvents[newEvents.length - 1])
+            }
         }
-        setNewEventName("")
         setIsAddEvent(false)
-    }, [newEventName, events, setEvents]);
+        setNewEventName("")
+    }, [user, newEventName, events, setEvents, setCurrentEvent]);
 
     return (
         <div className='text-center border-r-2 min-w-52 max-w-64'>
