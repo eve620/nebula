@@ -15,7 +15,7 @@ export default function Banner() {
         const access = searchParams.get('no-access')
         if (auth) {
             showMessage("请先登录！")
-        }else if(access){
+        } else if (access) {
             showMessage("无权限！")
         }
     }, [searchParams])
@@ -36,7 +36,8 @@ export default function Banner() {
                     src="/bg3.jpg"
                     alt="Cyberpunk city background"
                     fill
-                    objectFit="cover"
+                    priority={true}
+                    style={{objectFit: "cover"}}
                     className="opacity-95 dark:opacity-60 group-hover:scale-105 transition-transform duration-700"
                 />
             </div>

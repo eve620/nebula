@@ -28,7 +28,7 @@ export function UserMenu() {
     const [isFriendManagementModalOpen, setIsFriendManagementModalOpen] = useState(false)
     const [isDailyCheckInModalOpen, setIsDailyCheckInModalOpen] = useState(false)
     const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false); // Add state for EditProfileModal
-    const {data: newMessage, error} = useSWR('/api/check', fetcher, {
+    const {data: newMessage, error} = useSWR(currentUser ? '/api/check' : null, fetcher, {
         refreshInterval: 5000, // 每5秒轮询一次
     })
     useEffect(() => {

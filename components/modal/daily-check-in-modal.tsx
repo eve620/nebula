@@ -16,7 +16,7 @@ interface DailyCheckInModalProps {
 interface LeaderboardEntry {
     userId: number
     username: string
-    avatarUrl: string
+    image: string
     nickname: string
     totalCheckIns: number
 }
@@ -103,14 +103,14 @@ export function DailyCheckInModal({isOpen, onClose}: DailyCheckInModalProps) {
             calendarDays.push(
                 <div
                     key={i}
-                    className={`w-4 h-4 rounded mx-auto text-foreground/70 dark:text-background/80 select-none text-center font-semibold ${
+                    className={`w-4 h-4 rounded mx-auto text-foreground select-none text-center font-semibold ${
                         isCurrentMonth
                             ? calendarDay?.length
-                                ? 'ring-green-500 ring-[1px] bg-green-500/60 dark:bg-slate-400 dark:ring-slate-600'
-                                : 'ring-ring ring-[1px] bg-gray-200 dark:bg-white'
+                                ? 'bg-green-500'
+                                : 'bg-gray-200 dark:bg-white'
                             : 'opacity-0'
                     }`}
-                >{dayNumber}</div>
+                />
             )
         }
 
@@ -120,7 +120,7 @@ export function DailyCheckInModal({isOpen, onClose}: DailyCheckInModalProps) {
     const canGoForward = currentDate.getMonth() < today.getMonth() || currentDate.getFullYear() < today.getFullYear()
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="每日打卡">
+        <Modal isOpen={isOpen} onClose={onClose} description={"记录学习的每一天"} title="每日打卡">
             <div className="space-y-4">
                 <div className="flex flex-col justify-between items-center">
                     <h3 className="font-semibold">打卡日历</h3>
@@ -157,8 +157,8 @@ export function DailyCheckInModal({isOpen, onClose}: DailyCheckInModalProps) {
                             {leaderboard.map((entry, index) => (
                                 <li key={entry.userId} className="flex items-center space-x-2">
                                     <span className="font-bold">{index + 1}.</span>
-                                    <Image src={entry?.avatarUrl || "/avatar.png"} alt={entry.username}
-                                           width={6} height={6} className={'rounded-full'}/>
+                                    <Image src={entry?.image || "/avatar.png"} alt={entry.username}
+                                           width={30} height={30} className={'rounded-full'}/>
                                     <span>{entry?.nickname || entry.username}</span>
                                     <span className="ml-auto">总打卡 {entry.totalCheckIns} 次</span>
                                 </li>
