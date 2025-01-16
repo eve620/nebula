@@ -13,30 +13,49 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import showMessage from "@/components/message";
+import {useUser} from "@/contexts/user-context";
+import {removeLocalEvent, updateLocalEvent} from "@/utils/eventsStorage";
 
-const TaskBox = ({events, setEvents, currentEvent, setCurrentEvent}) => {
+const TaskBox = ({events, setEvents, currentIndex, setCurrentIndex}) => {
     const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+    const user = useUser()
     const handleRemove = useCallback(async () => {
+        if (!user) {
+            const res = removeLocalEvent(events[currentIndex].title)
+            if (res.status) {
+                const data = res.data
+                setEvents(data);
+                if (data.length) {
+                    setCurrentIndex(0);
+                }
+                showMessage("删除成功")
+            }
+            return
+        }
         const removeEvent = await fetch("/api/kanban", {
             method: "DELETE",
-            body: JSON.stringify({title: currentEvent.title}),
+            body: JSON.stringify({title: events[currentIndex].title}),
         })
         if (removeEvent.ok) {
             setEvents((prev) => {
-                const result = prev.filter((item) => item.title != currentEvent.title);
+                const result = prev.filter((item) => item.title != events[currentIndex].title);
                 if (result.length) {
-                    setCurrentEvent(result[0]);
+                    setCurrentIndex(0);
                 }
                 return result;
             });
             showMessage("删除成功")
         }
-    }, [setEvents, currentEvent, setCurrentEvent]);
+    }, [user, setEvents]);
     const handleChange = (newEvent) => {
         if (debounceTimer.current) {
             clearTimeout(debounceTimer.current);
         }
         debounceTimer.current = setTimeout(() => {
+            if (!user) {
+                updateLocalEvent(newEvent)
+                return
+            }
             fetch("/api/kanban", {
                 method: "PUT",
                 headers: {
@@ -51,7 +70,7 @@ const TaskBox = ({events, setEvents, currentEvent, setCurrentEvent}) => {
         if (!result.destination) return;
         const {source, destination} = result;
         const eventCopy = {
-            ...currentEvent
+            ...events[currentIndex]
         }
         const sourceList = [...eventCopy[source.droppableId]];
         const destinationList = [...eventCopy[destination.droppableId]];
@@ -63,14 +82,14 @@ const TaskBox = ({events, setEvents, currentEvent, setCurrentEvent}) => {
         eventCopy[source.droppableId] = sourceList;
         eventCopy[destination.droppableId] = destinationList;
         const nextEvents = events.map(event => {
-            if (event.title === currentEvent.title) {
+            if (event.title === events[currentIndex].title) {
                 return eventCopy
             }
+            return event
         })
         handleChange(eventCopy)
-        setCurrentEvent(eventCopy)
         setEvents(nextEvents)
-    }, [events, currentEvent, setEvents, setCurrentEvent]);
+    }, [currentIndex, handleChange, events, setEvents]);
     return (
         <>
             <div className='flex flex-col flex-1'>
@@ -104,7 +123,7 @@ const TaskBox = ({events, setEvents, currentEvent, setCurrentEvent}) => {
                                     tag={tag}
                                     events={events}
                                     setEvents={setEvents}
-                                    currentEvent={currentEvent}
+                                    currentIndex={currentIndex}
                                 />
                             ))
                         }

@@ -1,6 +1,6 @@
 'use client'
 
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
@@ -28,6 +28,12 @@ export function LoginModal() {
     const [isRegistering, setIsRegistering] = useState(false)
     const [errors, setErrors] = useState(undefined)
     const router = useRouter()
+
+    useEffect(() => {
+        setUsername("")
+        setPassword("")
+        setNickname("")
+    }, [isRegistering])
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setErrors(undefined)
@@ -82,13 +88,8 @@ export function LoginModal() {
                     showMessage("登录失败")
                 }
             }
-            // 为演示目的，我们仍然关闭模态框
         } catch (error) {
             console.log(error)
-            // if (error instanceof z.ZodError) {
-            //     const errors = error.flatten().fieldErrors
-            //     setErrors(errors)
-            // }
         }
     }
 

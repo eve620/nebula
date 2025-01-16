@@ -5,6 +5,8 @@ import EventBar from "@/app/kanban/component/EventBar";
 import {EventType} from "@/types";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {CalendarPlus, PlusCircle} from "lucide-react";
+import {useUser} from "@/contexts/user-context";
+import {getLocalEvents} from "@/utils/eventsStorage";
 
 export interface KanbanBoardProps {
     eventData: EventType[]
@@ -12,25 +14,29 @@ export interface KanbanBoardProps {
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({eventData}) => {
     const [events, setEvents] = useState<EventType[]>(eventData);
-    const [currentEvent, setCurrentEvent] = useState(events[0] || null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const user = useUser()
+
 
     useEffect(() => {
-        setEvents(eventData)
-    }, [setEvents, eventData]);
+        if (!user) {
+            setEvents(getLocalEvents())
+        } else setEvents(eventData)
+    }, [user, setEvents, eventData]);
 
     return (
         <div className='flex h-full'>
             <EventBar
                 events={events}
                 setEvents={setEvents}
-                currentEvent={currentEvent}
-                setCurrentEvent={setCurrentEvent}
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
             />
-            {events.length && currentEvent ? <TaskBox
+            {events.length ? <TaskBox
                 setEvents={setEvents}
-                currentEvent={currentEvent}
                 events={events}
-                setCurrentEvent={setCurrentEvent}
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
             /> : (
                 <div className="flex-1 flex justify-center items-center p-8">
                     <Card className="w-full max-w-md">

@@ -52,9 +52,6 @@ export async function PUT(request: NextRequest) {
     if (!currentUser || !currentUser.id) return NextResponse.json({error: '未登录'}, {status: 401});
     try {
         const {title, toDo, inProgress, completed} = await request.json()
-        console.log(toDo)
-        console.log(inProgress)
-        console.log(completed)
         await prisma.event.update({
             where: {
                 title_createdById: {

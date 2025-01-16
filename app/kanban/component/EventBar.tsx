@@ -6,16 +6,27 @@ import {Modal} from "@/components/modal/modal";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {useUser} from "@/contexts/user-context";
-import useLoginModal from "@/hooks/use-login-modal";
 import showMessage from "@/components/message";
+import {addLocalEvent} from "@/utils/eventsStorage";
 
-const EventBar = ({events, setEvents, currentEvent, setCurrentEvent}) => {
+const EventBar = ({events, setEvents, currentIndex, setCurrentIndex}) => {
     const [isAddEvent, setIsAddEvent] = useState(false)
     const [newEventName, setNewEventName] = useState('')
     const user = useUser()
-    const loginStore = useLoginModal()
     const handleAdd = useCallback(async (e) => {
         e.preventDefault()
+        if (!user) {
+            const res = addLocalEvent(newEventName.trim().toLowerCase())
+            if (res.status) {
+                const data = res.data
+                setEvents(data)
+                setCurrentIndex(data.length - 1)
+                setIsAddEvent(false)
+                setNewEventName("")
+            }
+            showMessage(res.message)
+            return
+        }
         if (events.find((event) => event.title.toLowerCase() === newEventName.trim().toLowerCase())) {
             showMessage("事件已存在")
             return;
@@ -42,32 +53,27 @@ const EventBar = ({events, setEvents, currentEvent, setCurrentEvent}) => {
             if (response.ok) {
                 showMessage("添加成功！")
                 setEvents(newEvents)
-                setCurrentEvent(newEvents[newEvents.length - 1])
+                setCurrentIndex(newEvents.length - 1)
             }
         }
         setIsAddEvent(false)
         setNewEventName("")
-    }, [user, newEventName, events, setEvents, setCurrentEvent]);
+    }, [user, newEventName, events, setEvents, setCurrentIndex]);
 
     return (
         <div className='text-center border-r-2 min-w-52 max-w-64'>
             <h1 className='text-2xl font-semibold pt-5 pb-2'>代办事项</h1>
             <AddButton handleClick={() => {
-                if (!user) {
-                    showMessage("请登录以使用完整功能。")
-                    loginStore.onOpen()
-                    return
-                }
                 setIsAddEvent(true)
             }}/>
             <div className='px-8 cursor-pointer'>
-                {events.map((item) => (
+                {events.map((item, index) => (
                     <div style={{transitionProperty: 'background-color'}}
                          key={item.title}
                          className={`px-8 mb-2 text-xl py-2 rounded-3xl truncate hover:duration-200
                         hover:bg-[#2c4885] hover:text-white
-                        ${currentEvent && currentEvent.title === item.title && 'text-white bg-[#406cc7]'}`}
-                         onClick={() => setCurrentEvent(item)}
+                        ${events && events[currentIndex].title === item.title && 'text-white bg-[#406cc7]'}`}
+                         onClick={() => setCurrentIndex(index)}
                     >
                         {item.title}
                     </div>

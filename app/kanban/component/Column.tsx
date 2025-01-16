@@ -8,6 +8,8 @@ import {Modal} from "@/components/modal/modal";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {Label} from "@/components/ui/label";
+import {updateLocalEvent} from "@/utils/eventsStorage";
+import {useUser} from "@/contexts/user-context";
 
 const tagTextMap = {
     toDo: '代办',
@@ -15,27 +17,31 @@ const tagTextMap = {
     completed: '已完成',
 };
 
-const Column = ({tag, currentEvent, events, setEvents}) => {
+const Column = ({tag, currentIndex, events, setEvents}) => {
     const [isModalShow, setIsModalShow] = useState(false)
     const [newTaskName, setNewTaskName] = useState('')
     const [newTaskDetail, setNewTaskDetail] = useState('')
     const [operation, setOperation] = useState<'ADD' | 'EDIT'>('ADD');
     const [currentTaskId, setCurrentTaskId] = useState<number | undefined>();
+    const user = useUser()
     const handleAdd = () => {
         setOperation("ADD")
         setIsModalShow(true)
     };
-
+    const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const handleRemove = (id: number, e: Event) => {
         // 禁止冒泡到上层:修改task
         e.stopPropagation();
         setEvents((prev) =>
             prev.map((event) => {
-                if (event.title === currentEvent.title) {
+                if (event.title === events[currentIndex].title) {
                     const taskList = event[tag];
                     const index = taskList.findIndex((item) => item.id === id);
+                    if (index < 0) return event
                     taskList.splice(index, 1);
-                    return {...event, [tag]: [...taskList]};
+                    const newEvent = {...event, [tag]: [...taskList]}
+                    if (!user) updateLocalEvent(newEvent)
+                    return newEvent;
                 } else {
                     return event;
                 }
@@ -44,7 +50,7 @@ const Column = ({tag, currentEvent, events, setEvents}) => {
     };
     useEffect(() => {
         if (operation === 'EDIT' && currentTaskId !== undefined) {
-            const taskToEdit = events.find((event) => event.title === currentEvent.title)?.[tag]?.find((task) => task.id === currentTaskId);
+            const taskToEdit = events.find((event) => event.title === events[currentIndex].title)?.[tag]?.find((task) => task.id === currentTaskId);
             if (taskToEdit) {
                 setNewTaskName(taskToEdit.name);
                 setNewTaskDetail(taskToEdit.details);
@@ -53,7 +59,7 @@ const Column = ({tag, currentEvent, events, setEvents}) => {
             setNewTaskName("")
             setNewTaskDetail("")
         }
-    }, [operation, currentTaskId, events, currentEvent, tag]);
+    }, [operation, currentTaskId, events, currentIndex, tag]);
     const handleUpdate = (id: number) => {
         setOperation('EDIT');
         setIsModalShow(true)
@@ -69,17 +75,18 @@ const Column = ({tag, currentEvent, events, setEvents}) => {
             setEvents((prev) => {
                 const arrCopy = [...prev];
                 const index = prev.findIndex(
-                    (event) => event.title === currentEvent.title
+                    (event) => event.title === events[currentIndex].title
                 );
                 const eventCopy = arrCopy[index];
-                // Remove old and add the latest data
-                arrCopy.splice(index, 1, {
+                const addTask = {
                     ...eventCopy,
                     [tag]: [
                         ...eventCopy[tag],
-                        {name: newTaskName.trim(), id: crypto.randomUUID(), details: newTaskDetail.trim()},
+                        {name: newTaskName.trim(), id: generateId(), details: newTaskDetail.trim()},
                     ],
-                });
+                }
+                arrCopy.splice(index, 1, addTask);
+                if (!user) updateLocalEvent(addTask)
                 return arrCopy;
             });
         } else if (operation === 'EDIT') {
@@ -89,7 +96,7 @@ const Column = ({tag, currentEvent, events, setEvents}) => {
             }
             setEvents((prev) =>
                 prev.map((event) => {
-                    if (event.title === currentEvent.title) {
+                    if (event.title === events[currentIndex].title) {
                         const taskList = event[tag];
                         const index = taskList.findIndex((item) => item.id === currentTaskId);
                         const updatedTask = {
@@ -97,8 +104,10 @@ const Column = ({tag, currentEvent, events, setEvents}) => {
                             name: newTaskName.trim(),
                             details: newTaskDetail.trim(),
                         };
-                        taskList.splice(index, 1);
-                        return {...event, [tag]: [...taskList, updatedTask]};
+                        taskList.splice(index, 1, updatedTask);
+                        const newEvent = {...event, [tag]: taskList}
+                        if (!user) updateLocalEvent(newEvent)
+                        return newEvent;
                     } else {
                         return event;
                     }
@@ -122,7 +131,7 @@ const Column = ({tag, currentEvent, events, setEvents}) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                {currentEvent
+                                {events[currentIndex]
                                     ?.[tag].map((item, index: number) => (
                                     <Draggable
                                         key={item.id}

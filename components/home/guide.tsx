@@ -15,7 +15,8 @@ const Guide: React.FC = () => {
                     w-full py-2 mt-5 mx-auto sm:w-48 text-center rounded-md font-bold hover:duration-200 block
                     text-black dark:text-gray-300
                     bg-gray-200 dark:bg-neutral-800
-                    hover:bg-gray-300 dark:hover:bg-neutral-900" target={"_blank"} href={"https://github.com/eve620"}>Github</Link>
+                    hover:bg-gray-300 dark:hover:bg-neutral-900" target={"_blank"}
+                      href={"https://github.com/eve620"}>Github</Link>
             </div>
             <div>
                 <div className="overflow-hidden
@@ -34,6 +35,13 @@ const Guide: React.FC = () => {
                         </section>
 
                         <section>
+                            <h3 className="text-lg font-semibold mb-2">知识分享与交流</h3>
+                            <p className="text-sm leading-relaxed mb-4">
+                                总结自己的学习经验，点赞和评论他人的文章，并分享给好友~
+                            </p>
+                        </section>
+
+                        <section>
                             <h3 className="text-lg font-semibold mb-2">互动与社交</h3>
                             <p className="text-sm leading-relaxed mb-4">
                                 在这里，您可以轻松添加好友，共享精彩文章，实时交流，让学习之路不再孤单。
@@ -48,9 +56,10 @@ const Guide: React.FC = () => {
                         </section>
 
                         <section>
-                            <h3 className="text-lg font-semibold mb-2">便捷工具</h3>
+                            <h3 className="text-lg font-semibold mb-2">英语与待办事项</h3>
                             <p className="text-sm leading-relaxed mb-4">
-                                我们还提供了多种实用工具帮助您更高效地学习和工作。
+                                每日一点点，学习英语并推进自己的学习进度吧。
+                                如果没有登录，数据会存储在浏览器中哦。
                             </p>
                         </section>
                     </div>

@@ -36,7 +36,7 @@ const EnglishLayout: React.FC<EnglishLayoutProps> = ({courseData, wordIndex}) =>
             const localProgress = getLocalProgress();
             const fetchData = async () => {
                 try {
-                    const response = await fetch(`/api/course?id=${localProgress.courseId}`);
+                    const response = await fetch(`/api/course?id=${localProgress.courseId || courseData}`);
                     if (response.ok) {
                         const data = await response.json();
                         setCurrentCourse(data)
@@ -51,10 +51,10 @@ const EnglishLayout: React.FC<EnglishLayoutProps> = ({courseData, wordIndex}) =>
             };
             if (localProgress) {
                 fetchData();
-                setStatementIndex(localProgress.wordIndex);
+                setStatementIndex(localProgress.wordIndex || wordIndex);
             }
         }
-    }, [user]);
+    }, [user, courseData, wordIndex]);
 
     useEffect(() => {
         async function updateProgress() {
