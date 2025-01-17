@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
@@ -38,7 +38,7 @@ export function UserManagement() {
     const [newUser, setNewUser] = useState({username: '', password: '', role: 'User'})
     const [editingUser, setEditingUser] = useState<editUser>()
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-    const [isLoading,setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
     useEffect(() => {
         fetchUsers()
     }, [])
