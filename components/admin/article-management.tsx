@@ -13,10 +13,12 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
+import {Loader2} from "lucide-react";
 
 
 export function ArticleManagement() {
     const [articles, setArticles] = useState<Article[]>([])
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         fetchArticles()
@@ -24,6 +26,7 @@ export function ArticleManagement() {
 
     const fetchArticles = async () => {
         try {
+            setIsLoading(true)
             const response = await fetch('/api/article')
             if (!response.ok) {
                 throw new Error('获取文章列表失败')
@@ -36,6 +39,8 @@ export function ArticleManagement() {
                 description: "获取文章列表失败",
                 variant: "destructive",
             })
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -65,55 +70,61 @@ export function ArticleManagement() {
     }
 
     return (
-        <div className="space-y-4">
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className={'w-28'}>标题</TableHead>
-                        <TableHead className={'w-28'}>日期</TableHead>
-                        <TableHead>内容</TableHead>
-                        <TableHead>作者</TableHead>
-                        <TableHead>操作</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <>
-                        {articles.map((post) => (
-                            <TableRow key={post.id}>
-                                <TableCell>{post.title}</TableCell>
-                                <TableCell>{format(post.createdAt, "yyyy.MM.dd HH:mm:ss")}</TableCell>
-                                <TableCell>
-                                    <div className={"h-40 overflow-auto"}>
-                                        {post.content}
-                                    </div>
-                                </TableCell>
-                                <TableCell>{post.createdBy.username}</TableCell>
-                                <TableCell>
-                                    <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                            <Button>删除</Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>确定要删除吗？</AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    此操作无法撤消。这将永久删除您的笔记，且无法恢复。
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>取消</AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    onClick={() => handleDeletePost(post.id)}>确认删除</AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </TableCell>
+        <>
+            {isLoading ?
+                <div className="flex items-center justify-center h-[60vh]">
+                    <Loader2 className="w-10 h-10 animate-spin text-primary"/>
+                </div> :
+                <div className="space-y-4">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className={'w-28'}>标题</TableHead>
+                                <TableHead className={'w-28'}>日期</TableHead>
+                                <TableHead>内容</TableHead>
+                                <TableHead>作者</TableHead>
+                                <TableHead>操作</TableHead>
                             </TableRow>
-                        ))}
-                    </>
-                </TableBody>
-            </Table>
-        </div>
+                        </TableHeader>
+                        <TableBody>
+                            <>
+                                {articles.map((post) => (
+                                    <TableRow key={post.id}>
+                                        <TableCell>{post.title}</TableCell>
+                                        <TableCell>{format(post.createdAt, "yyyy.MM.dd HH:mm:ss")}</TableCell>
+                                        <TableCell>
+                                            <div className={"h-40 overflow-auto"}>
+                                                {post.content}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>{post.createdBy.username}</TableCell>
+                                        <TableCell>
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button>删除</Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>确定要删除吗？</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            此操作无法撤消。这将永久删除您的笔记，且无法恢复。
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>取消</AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() => handleDeletePost(post.id)}>确认删除</AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </>
+                        </TableBody>
+                    </Table>
+                </div>}
+        </>
     )
 }
 

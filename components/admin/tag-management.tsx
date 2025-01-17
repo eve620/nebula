@@ -2,7 +2,7 @@
 
 import {Input} from "@/components/ui/input";
 import {Toggle} from "@/components/ui/toggle";
-import {X} from "lucide-react";
+import {Loader2, X} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import React, {useEffect, useRef, useState} from "react";
 import {toast} from "@/hooks/use-toast";
@@ -11,6 +11,7 @@ import showMessage from "@/components/message";
 export function TagManagement() {
     const [currentTags, setCurrentTags] = useState([]);
     const latestInputRef = useRef<HTMLInputElement>(null);
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         if (latestInputRef.current) {
@@ -24,6 +25,7 @@ export function TagManagement() {
 
     const fetchTags = async () => {
         try {
+            setIsLoading(true)
             const response = await fetch('/api/tag')
             if (!response.ok) {
                 throw new Error('获取文章列表失败')
@@ -36,6 +38,8 @@ export function TagManagement() {
                 description: "获取标签列表失败",
                 variant: "destructive",
             })
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -79,28 +83,33 @@ export function TagManagement() {
         }
     }
     return (
-        <div className="space-y-4">
-            <div className="space-y-6 pt-2 px-2 pr-4">
-                {currentTags.length ?
-                    currentTags.map((item, index) => (
-                        <div className={'flex items-center'} key={index}>
-                            <Input value={currentTags[index]}
-                                   ref={index === currentTags.length - 1 ? latestInputRef : null}
-                                   onChange={(e) => handleInputChange(index, e.target.value)}/>
-                            <Toggle className={"ml-2"} pressed={false} onClick={() => {
-                                handleDeleteTag(item)
-                            }} size={"sm"}>
-                                <X/>
-                            </Toggle>
-                        </div>
-                    )) :
-                    <div className={'flex justify-center items-center h-full'}>暂无标签...</div>}
-            </div>
-            <div className="flex justify-end space-x-3 mr-10">
-                <Button variant={"outline"} onClick={handleAdd}>添加</Button>
-                <Button onClick={handleOnSubmit}>保存</Button>
-            </div>
-        </div>
+        <>
+            {isLoading ?
+                <div className="flex items-center justify-center h-[60vh]">
+                    <Loader2 className="w-10 h-10 animate-spin text-primary"/>
+                </div> : <div className="space-y-4">
+                    <div className="space-y-6 pt-2 px-2 pr-4">
+                        {currentTags.length ?
+                            currentTags.map((item, index) => (
+                                <div className={'flex items-center'} key={index}>
+                                    <Input value={currentTags[index]}
+                                           ref={index === currentTags.length - 1 ? latestInputRef : null}
+                                           onChange={(e) => handleInputChange(index, e.target.value)}/>
+                                    <Toggle className={"ml-2"} pressed={false} onClick={() => {
+                                        handleDeleteTag(item)
+                                    }} size={"sm"}>
+                                        <X/>
+                                    </Toggle>
+                                </div>
+                            )) :
+                            <div className={'flex justify-center items-center h-full'}>暂无标签...</div>}
+                    </div>
+                    <div className="flex justify-end space-x-3 mr-10">
+                        <Button variant={"outline"} onClick={handleAdd}>添加</Button>
+                        <Button onClick={handleOnSubmit}>保存</Button>
+                    </div>
+                </div>}
+        </>
     )
 }
 
