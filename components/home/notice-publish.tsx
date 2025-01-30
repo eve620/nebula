@@ -109,13 +109,13 @@ export default function NoticePublish() {
                         onChange={(e) => setTitle(e.target.value)}
                         className="mb-4"
                     />
-                    <Textarea
+                    <Input
                         placeholder="版本号"
                         value={version}
                         onChange={(e) => setVersion(e.target.value)}
                         className="mb-4"
                     />
-                    <Input
+                    <Textarea
                         placeholder="更新内容"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}

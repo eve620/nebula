@@ -20,29 +20,34 @@ const Notice: React.FC<DevLogProps> = ({notices}) => {
     })
 
     return (
-        <div className={"mx-auto max-w-6xl"}>
-            {(notices.length !== 0 || currentUser?.role === 'Admin') &&
-                <h2 className="text-4xl font-bold mb-12 text-center">更新日志</h2>}
-            {currentUser?.role === 'Admin' && <NoticePublish/>}
-            <div className={"flex justify-center flex-wrap"}>
-                {notices.map((notice, index) => {
-                    return (
-                        <div key={index} className={"md:w-1/2 lg:w-1/3 xl:w-1/4  scroll-auto p-1 md:p-3"}>
-                            <div className="
-                                bg-gray-50 border border-gray-200 dark:border-gray-500
-                                dark:from-[#525252e6] dark:bg-gradient-to-b dark:to-gray-900
-                                rounded-2xl pt-4 pl-4 pb-4
-                                hover:shadow-xl dark:shadow-md dark:hover:shadow-slate-700
-                                ">
-                                <div className={"overflow-y-auto pr-2 h-32"}>
-                                    <span>{format(new Date(notice.time), 'yyyy.MM.dd')}</span>
-                                    <p className={"whitespace-pre-wrap"}>{notice.version}</p>
-                                    <p className={"whitespace-pre-wrap"}>{notice.content}</p>
-                                </div>
+        <div className="mx-auto max-w-6xl">
+            {(notices.length !== 0 || currentUser?.role === "Admin") && (
+                <h2 className="text-4xl font-bold mb-12 text-center">更新日志</h2>
+            )}
+            {currentUser?.role === "Admin" && <NoticePublish/>}
+            <div className="flex justify-center flex-wrap">
+                {notices.map((notice, index) => (
+                    <div key={index} className="md:w-1/2 lg:w-1/3 xl:w-1/4 p-2 md:p-3">
+                        <div
+                            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
+                            rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 p-4"
+                        >
+                            <div className="flex justify-between items-center mb-2">
+                                <span
+                                    className="text-sm font-semibold text-blue-600 dark:text-blue-400">{notice.version}</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">
+                                    {format(new Date(notice.time), "yyyy.MM.dd")}
+                                </span>
+                            </div>
+                            <div
+                                className="overflow-y-auto pr-2 h-24">
+                                <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+                                    {notice.content}
+                                </p>
                             </div>
                         </div>
-                    )
-                })}
+                    </div>
+                ))}
             </div>
         </div>
     )
