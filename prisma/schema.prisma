@@ -164,7 +164,7 @@ model Comment {
   isRead        Boolean        @default(false)
   articleById   Int
   articleId     Int
-  article       Article        @relation(fields: [articleId], references: [id])
+  article       Article        @relation(fields: [articleId], references: [id], onDelete: Cascade)
   createdById   Int
   createdBy     User           @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdAt     DateTime       @default(now())
