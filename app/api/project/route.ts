@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {deleteFiles, extractFormData} from "@/app/api/project/utils";
+import {extractFormData} from "@/app/api/project/utils";
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import {del, put} from "@vercel/blob";
