@@ -122,7 +122,7 @@ export default function Page() {
                                 <AlertDialogHeader>
                                     <AlertDialogTitle>确定要删除吗？</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        此操作无法撤消。这将永久删除您的笔记，且无法恢复。
+                                        此操作无法撤消。这将永久删除您的文章，且无法恢复。
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
