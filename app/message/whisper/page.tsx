@@ -45,7 +45,7 @@ export default async function Page({searchParams}) {
                 type: true
             },
             skip: 0,
-            take: 20
+            take: 10
         });
         // 更新未读消息状态
         await prisma.message.updateMany({

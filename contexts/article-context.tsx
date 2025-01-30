@@ -14,7 +14,7 @@ interface Article {
     isLiked: boolean;
     isPinned: boolean;
     isLocked: boolean;
-    comments: any[]
+    comments
     _count: {
         likes: number
     }

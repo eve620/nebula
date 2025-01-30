@@ -10,8 +10,7 @@ export async function GET(request: NextRequest) {
         const {searchParams} = new URL(request.url)
         const id = searchParams.get('id')
         const offset = parseInt(searchParams.get('offset') || '0', 10)
-        const limit = parseInt(searchParams.get('limit') || '20', 10)
-
+        const limit = parseInt(searchParams.get('limit') || '10', 10)
         if (!id) {
             return NextResponse.json({error: '好友ID是必需的'}, {status: 400});
         }
