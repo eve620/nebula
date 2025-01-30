@@ -3,12 +3,20 @@
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
-import { ArrowLeft, Briefcase, Calendar, Code, FileText, Lightbulb, User, Edit } from 'lucide-react'
+import {ArrowLeft, Briefcase, Calendar, Code, FileText, Lightbulb, User, Edit, Trash2} from 'lucide-react'
 import { useProject } from "@/contexts/project-context"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import React from "react"
 import { format } from "date-fns"
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel,
+    AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import showMessage from "@/components/message";
 
 export default function ProjectDetail() {
     const project = useProject()
@@ -19,6 +27,21 @@ export default function ProjectDetail() {
         return <div className="flex justify-center items-center h-screen">Loading...</div>
     }
 
+    async function deleteProject() {
+        const deleteArticle = await fetch('/api/project', {
+            method: "DELETE",
+            body: JSON.stringify({
+                id: project?.id
+            })
+        })
+        if (deleteArticle.ok) {
+            router.push('/my/project')
+            router.refresh()
+            showMessage("删除成功")
+        } else {
+            showMessage("删除失败")
+        }
+    }
     return (
         <div className="container mx-auto px-4 py-4">
             <Button
@@ -33,10 +56,31 @@ export default function ProjectDetail() {
             <Card className="mb-8">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-3xl font-bold">{project.title}</CardTitle>
-                    <Button onClick={() => router.push(`/my/project/${id}/edit`)}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        编辑项目
-                    </Button>
+                    <div>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button>
+                                    <Trash2 className="mr-2 h-4 w-4"/> 删除
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>确定要删除吗？</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        此操作无法撤消。这将永久删除您的笔记，且无法恢复。
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>取消</AlertDialogCancel>
+                                    <AlertDialogAction onClick={deleteProject}>确认删除</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                        <Button className={"ml-2"} onClick={() => router.push(`/my/project/${id}/edit`)}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            编辑
+                        </Button>
+                    </div>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

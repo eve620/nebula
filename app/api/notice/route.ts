@@ -3,7 +3,9 @@ import {prisma} from "@/lib/prisma";
 
 export async function GET() {
     try {
-        const data = await prisma.devLog.findMany()
+        const data = await prisma.devLog.findMany({
+            orderBy: {createdAt: 'asc'},
+        })
         return NextResponse.json({data});
     } catch {
         // 如果发生错误，返回404

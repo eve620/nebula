@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
             }
         })
         return NextResponse.json({data});
-    } catch  {
+    } catch {
         // 如果发生错误，返回404
         throw new Error('服务器出错')
     }
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
         });
 
         return NextResponse.json({message: "添加成功"});
-    } catch  {
+    } catch {
         throw new Error("服务器出错")
     }
 }
@@ -125,30 +125,50 @@ export async function PUT(request: NextRequest) {
             }
         });
         return NextResponse.json({message: "更新成功"});
-    } catch  {
+    } catch {
         throw new Error("服务器出错")
     }
 }
 
+
 export async function DELETE(request: NextRequest) {
+    const currentUser = await getCurrentUser()
+    if (!currentUser) return NextResponse.json({error: "未登录"}, {status: 401})
+
     try {
-        const id = await request.json()
+        const {id} = await request.json()
+
+        if (!id) {
+            return NextResponse.json({error: "缺少项目ID"}, {status: 400})
+        }
 
         const project = await prisma.project.findUnique({
-            where: {
-                id
-            }
-        });
-        if (!project) return NextResponse.json({error: "未找到项目"}, {status: 404});
-        const filesToDelete = JSON.parse(project.imageUrl)
-        await deleteFiles(filesToDelete);
-        await prisma.project.delete({
-            where: {
-                id
-            }
+            where: {id},
         })
-        return NextResponse.json({message: "删除成功"});
-    } catch  {
-        throw new Error("服务器出错")
+
+        if (!project) {
+            return NextResponse.json({error: "项目未找到"}, {status: 404})
+        }
+
+        // 检查当前用户是否有权限删除这个项目
+        if (project.createdById !== currentUser.id) {
+            return NextResponse.json({error: "没有权限删除此项目"}, {status: 403})
+        }
+
+        // 删除相关的图片
+        const imageUrls = JSON.parse(project.imageUrl)
+        for (const url of imageUrls) {
+            await del(url)
+        }
+
+        // 删除项目记录
+        await prisma.project.delete({
+            where: {id},
+        })
+
+        return NextResponse.json({message: "删除成功"})
+    } catch (error) {
+        console.error("删除项目时出错:", error)
+        return NextResponse.json({error: "服务器出错"}, {status: 500})
     }
 }
