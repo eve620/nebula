@@ -190,7 +190,7 @@ export function FriendManagementModal({isOpen, onClose}: FriendManagementModalPr
                                 </>
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuContent align="end" className="">
                             <>
                                 {friendRequests.length === 0 ? (
                                     <DropdownMenuItem disabled>暂无好友请求</DropdownMenuItem>
@@ -198,14 +198,14 @@ export function FriendManagementModal({isOpen, onClose}: FriendManagementModalPr
                                     friendRequests.map((request) => (
                                         <DropdownMenuItem key={request.id}
                                                           className="flex items-center justify-between p-2">
-                                            <div className="flex items-center space-x-2">
+                                            <div className="flex items-center flex-nowrap space-x-2">
                                                 <Image
                                                     src={request.image || "/avatar.png"}
                                                     alt={request.nickname || request.username}
-                                                    width={8} height={8}
+                                                    width={30} height={30}
                                                     className="rounded-full"
                                                 />
-                                                <span>{request.nickname || request.username}</span>
+                                                <span className={'w-20 truncate'}>{request.nickname || request.username}</span>
                                             </div>
                                             <div>
                                                 <Button variant="outline" size="sm" className="mr-2"

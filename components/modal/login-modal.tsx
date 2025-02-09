@@ -1,6 +1,6 @@
 'use client'
 
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
@@ -28,12 +28,16 @@ export function LoginModal() {
     const [isRegistering, setIsRegistering] = useState(false)
     const [errors, setErrors] = useState(undefined)
     const router = useRouter()
+    const usernameInputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         setUsername("")
         setPassword("")
         setNickname("")
-    }, [isRegistering])
+        if (loginStore.isOpen && usernameInputRef.current) {
+            usernameInputRef.current.focus()
+        }
+    }, [loginStore.isOpen, isRegistering])
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setErrors(undefined)
@@ -103,6 +107,7 @@ export function LoginModal() {
                         autoComplete="username"
                         id="username"
                         value={username}
+                        ref={usernameInputRef}
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder="输入用户名"
                         required
