@@ -1,5 +1,9 @@
 import EnglishLayout from "@/app/english/component/EnglishLayout";
 import getProgress from "@/app/actions/getProgress";
+import {Metadata} from "next";
+export const metadata: Metadata = {
+    title: "英语",
+}
 
 export default async function Page() {
     const progress = await getProgress()

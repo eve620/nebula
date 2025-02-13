@@ -2,7 +2,10 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
 import {UserManagement} from '@/components/admin/user-management'
 import {ArticleManagement} from '@/components/admin/article-management'
 import {TagManagement} from "@/components/admin/tag-management";
-
+import {Metadata} from "next";
+export const metadata: Metadata = {
+    title: "后台",
+}
 export default function AdminDashboard() {
     return (
         <div className="bg-background text-foreground">

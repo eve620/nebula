@@ -3,6 +3,11 @@ import getArticleList from "@/app/actions/getArticleList";
 import {ArticlesProvider} from "@/contexts/articles-context";
 import getTagList from "@/app/actions/getTagList";
 import {TagProvider} from "@/contexts/tag-context";
+import {Metadata} from "next";
+
+export const metadata: Metadata = {
+    title: "论坛",
+}
 
 export default async function Layout({children}: Readonly<{ children: React.ReactNode; }>) {
     const articles = await getArticleList()

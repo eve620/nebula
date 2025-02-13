@@ -9,7 +9,10 @@ import {UserProvider} from "@/contexts/user-context";
 import {Toaster} from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-    title: '星云',
+    title: {
+        template: '星云 | %s',
+        default: '星云', // a default is required when creating a template
+    },
     description: '星云学习',
 }
 
@@ -19,6 +22,11 @@ export default async function RootLayout({children,}: { children: React.ReactNod
     const currentUser = await getCurrentUser()
     return (
         <html lang="zh" className={`${notoSansSC.variable} ${isDark && 'dark'}`}>
+        <head>
+            <title>
+                星云
+            </title>
+        </head>
         <body>
         <UserProvider value={currentUser}>
             <Navbar

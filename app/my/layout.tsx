@@ -1,5 +1,9 @@
 import React from 'react';
 import OperationBar from "@/app/my/OperationBar";
+import {Metadata} from "next";
+export const metadata: Metadata = {
+    title: "我的",
+}
 
 export default function Layout({children}: Readonly<{ children: React.ReactNode; }>) {
     return (
