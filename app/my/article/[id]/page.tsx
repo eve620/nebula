@@ -27,7 +27,6 @@ export default function Page() {
     const article = useArticle()
     const tags = JSON.parse(article.tags)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
-
     async function deleteArticle() {
         const deleteArticle = await fetch('/api/article', {
             method: "DELETE",
@@ -77,7 +76,7 @@ export default function Page() {
                     </div>
                     <div className={'flex'}>
                         <CardTitle className="text-3xl font-bold mb-2">{article.title}</CardTitle>
-                        <div className="flex items-center flex-wrap gap-2">
+                        <div className="ml-4 flex items-center flex-wrap gap-2">
                             {tags.map((item, index) =>
                                 <span key={index} className="tag">{item}</span>)
                             }

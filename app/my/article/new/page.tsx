@@ -24,6 +24,10 @@ export default function Page() {
     }
 
     async function addNote() {
+        if(!title) {
+            showMessage("标题不能为空")
+            return
+        }
         const addNote = await fetch("/api/article", {
             method: "POST",
             body: JSON.stringify({
@@ -73,6 +77,7 @@ export default function Page() {
                             <div className="space-y-2">
                                 <Label htmlFor="title" className="flex items-center text-nowrap">标题</Label>
                                 <input
+                                    required={true}
                                     id="title"
                                     placeholder=""
                                     value={title}

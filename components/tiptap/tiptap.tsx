@@ -10,6 +10,7 @@ import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import ImageResize from "tiptap-extension-resize-image";
 import Toolbar from "@/components/tiptap/toolbar";
+import {useEffect} from "react";
 
 export default function RichTextEditor({content, onChange}) {
     const editor = useEditor({
@@ -49,16 +50,38 @@ export default function RichTextEditor({content, onChange}) {
                     const blob = image.getAsFile()
 
                     if (blob) {
-                        const reader = new FileReader()
-                        reader.onload = (e) => {
-                            const result = e.target?.result
-                            if (typeof result === 'string') {
-                                view.dispatch(view.state.tr.replaceSelectionWith(
-                                    view.state.schema.nodes.image.create({src: result})
-                                ))
-                            }
-                        }
-                        reader.readAsDataURL(blob)
+                        const formData = new FormData()
+                        formData.append("image", blob)
+                        fetch("/api/article/image", {
+                            method: "POST",
+                            body: formData as BodyInit,
+                        })
+                            .then((addImage) => {
+                                if (addImage.ok) {
+                                    return addImage.json();  // 返回解析后的 JSON 数据
+                                }
+                                return Promise.reject('上传失败');  // 如果响应不OK，返回一个 rejected promise
+                            })
+                            .then((res) => {
+                                if (typeof res === 'string') {
+                                    view.dispatch(view.state.tr.replaceSelectionWith(
+                                        view.state.schema.nodes.image.create({src: res})
+                                    ));
+                                }
+                            })
+                            .catch((error) => {
+                                console.error('图片上传失败:', error);  // 处理错误
+                            });
+                        // const reader = new FileReader()
+                        // reader.onload = (e) => {
+                        //     const result = e.target?.result
+                        //     if (typeof result === 'string') {
+                        //         view.dispatch(view.state.tr.replaceSelectionWith(
+                        //             view.state.schema.nodes.image.create({src: result})
+                        //         ))
+                        //     }
+                        // }
+                        // reader.readAsDataURL(blob)
                         return true
                     }
                 }
@@ -69,6 +92,12 @@ export default function RichTextEditor({content, onChange}) {
             onChange(editor.getHTML());
         },
     });
+
+    useEffect(() => {
+        if (editor && editor.getHTML() !== content) {
+            editor.commands.setContent(content)
+        }
+    }, [content, editor])
 
     return (
         <div className={'border-2 rounded'}>

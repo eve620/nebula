@@ -26,6 +26,10 @@ export default function Page() {
     }
 
     async function editArticle() {
+        if(!title) {
+            showMessage("标题不能为空")
+            return
+        }
         const editArticle = await fetch("/api/article", {
             method: "PUT",
             body: JSON.stringify({

@@ -13,17 +13,29 @@ type Props = {
 const Toolbar = ({editor}: Props) => {
     const fileInputRef = useRef<HTMLInputElement>(null)
     if (!editor) return null
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (file) {
-            const reader = new FileReader()
-            reader.onload = (e) => {
-                const result = e.target?.result
-                if (typeof result === 'string') {
-                    editor.chain().focus().setImage({src: result}).run()
+            const formData = new FormData()
+            formData.append("image", file)
+            const addImage = await fetch("/api/article/image", {
+                method: "POST",
+                body: formData as BodyInit,
+            })
+            if (addImage.ok) {
+                const res = await addImage.json()
+                if (typeof res === 'string') {
+                    editor.chain().focus().setImage({src: res}).run()
                 }
             }
-            reader.readAsDataURL(file)
+            // const reader = new FileReader()
+            // reader.onload = (e) => {
+            //     const result = e.target?.result
+            //     if (typeof result === 'string') {
+            //         editor.chain().focus().setImage({src: result}).run()
+            //     }
+            // }
+            // reader.readAsDataURL(file)
         }
     }
     const addImage = () => {

@@ -6,7 +6,14 @@ interface ViewerProps {
 
 const Viewer: React.FC<ViewerProps> = ({content}) => {
     return (
-        <div className={'p-10 text-wrap leading-8'} dangerouslySetInnerHTML={{__html: content}}/>
+        <div>
+            <style jsx>{`
+                img {
+                    cursor: default !important;
+                }
+            `}</style>
+            <div className={'p-10 text-wrap leading-8'} dangerouslySetInnerHTML={{__html: content}}/>
+        </div>
     );
 };
 
