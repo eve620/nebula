@@ -11,7 +11,7 @@ export default function About() {
                     <Image src="/storage/avatar/avatar1.jpg" width={120} height={120} alt={"avatar"}
                            className={"rounded-full border-4 border-gray-200 z-10 shadow-lg"}/>
                     <div className="text-center sm:text-left">
-                        <h2 className="text-2xl font-bold">qjg</h2>
+                        <h2 className="text-2xl font-bold">suzvc</h2>
                         <p className="text-muted-foreground">西安电子科技大学</p>
                         <p className="text-muted-foreground">前端开发</p>
                     </div>
@@ -25,8 +25,13 @@ export default function About() {
                         <span className="tag mb-3">#Vue</span>
                         <span className="tag mb-3">#Web</span>
                     </div>
-                    <div className="text-xl leading-9 float-left max-w-[380px] px-2">
-                        我是一名来自地球的人类
+                    <div className="indent-6 text-sm leading-9 float-left max-w-[380px] px-2">
+                        <p>
+                            我是一名来自西安的前端开发者，目前在读研二，喜欢开发好看、有意思的页面。
+                        </p>
+                        <p>
+                            开发这个网站的初衷是为了学习一些B端开发的知识，在开发功能的过程中逐渐加入了一些自己平常学习中用的上的一些功能，希望可以创造一个即简约又实用的学习网站...
+                        </p>
                     </div>
                 </CardContent>
             </Card>
