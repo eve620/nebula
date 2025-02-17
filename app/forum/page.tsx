@@ -22,7 +22,7 @@ export default function Forum() {
     const articles = useArticles() || []
 
     const [currentPage, setCurrentPage] = useState(1)
-    const articlesPerPage = 3
+    const articlesPerPage = 10
     const user = useUser()
 
     const [currentTags, setCurrentTags] = useState<string[]>([])

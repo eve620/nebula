@@ -1,6 +1,6 @@
 'use client'
 
-import {useState, useRef} from 'react'
+import React, {useState, useRef} from 'react'
 import {useRouter} from 'next/navigation'
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
@@ -55,6 +55,18 @@ export default function PublishProject() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if(!title){
+            showMessage("标题不能为空")
+            return
+        }
+        if(!job){
+            showMessage("职责不能为空")
+            return
+        }
+        if(!describe){
+            showMessage("描述不能为空")
+            return
+        }
         const formData = new FormData()
         formData.append('title', title || "")
         formData.append('job', job || "")
@@ -93,7 +105,7 @@ export default function PublishProject() {
                         <div className="space-y-4">
                             <div>
                                 <Label htmlFor="title">标题</Label>
-                                <Input id="title" name="title" value={title} onChange={(e) => setTitle(e.target.value)}
+                                <Input id="title" name="title" className={"dark:border-slate-600"} value={title} onChange={(e) => setTitle(e.target.value)}
                                        required/>
                             </div>
                             <div className={"flex flex-col"}>
@@ -104,7 +116,7 @@ export default function PublishProject() {
                                             id="date"
                                             variant={"outline"}
                                             className={cn(
-                                                "w-full justify-start text-left font-normal",
+                                                "w-full justify-start text-left font-normal bg-transparent border dark:border-slate-600",
                                                 !date && "text-muted-foreground"
                                             )}
                                         >
@@ -140,7 +152,7 @@ export default function PublishProject() {
                             </div>
                             <div>
                                 <Label htmlFor="responsibility">职责</Label>
-                                <Input id="responsibility" name="responsibility" value={job}
+                                <Input id="responsibility" name="responsibility" value={job} className={"dark:border-slate-600"}
                                        onChange={(e) => setJob(e.target.value)} required/>
                             </div>
                         </div>
@@ -161,7 +173,7 @@ export default function PublishProject() {
                                 )}
                                 <div className="flex gap-2">
                                     <Input
-                                        value={newStack}
+                                        value={newStack} className={"dark:border-slate-600"}
                                         onChange={(e) => setNewStack(e.target.value)}
                                         onKeyDown={(e) => {
                                             if (e.key === " ") {
@@ -186,12 +198,12 @@ export default function PublishProject() {
                             </div>
                             <div>
                                 <Label htmlFor="description">描述</Label>
-                                <Textarea id="description" name="description" value={describe}
+                                <Textarea id="description" name="description" value={describe} className={"dark:border-slate-600"}
                                           onChange={(e) => setDescribe(e.target.value)} required/>
                             </div>
                             <div>
                                 <Label htmlFor="highlights">亮点</Label>
-                                <Textarea id="highlights" name="highlights" value={highlight}
+                                <Textarea id="highlights" name="highlights" value={highlight} className={"dark:border-slate-600"}
                                           onChange={(e) => setHighlight(e.target.value)} required/>
                             </div>
                         </div>
@@ -216,39 +228,41 @@ export default function PublishProject() {
                         />
                     </div>
                     {images.length > 0 && (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                            {images.map((item, index) => (
-                                <div key={index} className="relative group">
-                                    <Image
-                                        src={item.url}
-                                        alt={`Uploaded image ${index + 1}`}
-                                        width={100}
-                                        height={100}
-                                        className="rounded object-cover w-full h-24"
-                                    />
-                                    <div
-                                        className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
-                                            className="text-white hover:text-blue-400"
-                                            onClick={() => setPreviewImage(item.url)}
-                                        >
-                                            <Eye className="h-4 w-4"/>
-                                        </Button>
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
-                                            className="text-white hover:text-red-400"
-                                            onClick={() => handleRemoveImage(index)}
-                                        >
-                                            <Trash2 className="h-4 w-4"/>
-                                        </Button>
-                                    </div>
+                        <div className="grid grid-cols-4 gap-4">
+                            <div className="col-span-3">
+                                <div className="flex gap-4">
+                                    {images.map((item, index) => (
+                                        <div key={index} className="relative w-24 h-24 group">
+                                            <Image
+                                                src={typeof item === "string" ? item : item.url}
+                                                alt={`Uploaded image ${index + 1}`}
+                                                fill
+                                                objectFit="cover"
+                                                className="rounded"
+                                            />
+                                            <div
+                                                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                <button
+                                                    type="button"
+                                                    className="text-white p-1 hover:text-blue-400"
+                                                    onClick={() => setPreviewImage(typeof item === "string" ? item : item.url)}
+                                                >
+                                                    <Eye size={20}/>
+                                                    <span className="sr-only">Preview image</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="text-white p-1 hover:text-red-400"
+                                                    onClick={() => handleRemoveImage(index)}
+                                                >
+                                                    <Trash2 size={20}/>
+                                                    <span className="sr-only">Delete image</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            </div>
                         </div>
                     )}
                 </form>

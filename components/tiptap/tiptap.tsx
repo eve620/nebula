@@ -100,7 +100,7 @@ export default function RichTextEditor({content, onChange}) {
     }, [content, editor])
 
     return (
-        <div className={'border-2 rounded'}>
+        <div className={'border-2 rounded dark:border-slate-600'}>
             <Toolbar editor={editor}/>
             <EditorContent editor={editor}/>
         </div>

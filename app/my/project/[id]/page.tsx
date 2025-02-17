@@ -26,7 +26,6 @@ export default function ProjectDetail() {
     if (!project) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>
     }
-
     async function deleteProject() {
         const deleteArticle = await fetch('/api/project', {
             method: "DELETE",
@@ -87,22 +86,22 @@ export default function ProjectDetail() {
                         <div className="space-y-4">
                             <InfoItem icon={Calendar} label="项目周期" value={`${format(project.startTime, "yyyy年MM月")} - ${project.endTime ? format(project.endTime, "yyyy年MM月") : '至今'}`} />
                             <InfoItem icon={User} label="开发者" value={project.createdBy.nickname || project.createdBy.username} />
-                            <InfoItem icon={Briefcase} label="职责" value={project.job} />
+                            <InfoItem icon={Briefcase} label="职责" value={project.job||"暂无..."} />
                             <InfoItem
                                 icon={Code}
                                 label="技术栈"
                                 value={
                                     <div className="flex flex-wrap gap-2">
-                                        {project.stacks.map((tech, index) => (
+                                        {project.stacks.length>0? project.stacks.map((tech, index) => (
                                             <span className={'tag'} key={index}>{tech}</span>
-                                        ))}
+                                        )):"暂无..."}
                                     </div>
                                 }
                             />
                         </div>
                         <div className="space-y-4">
-                            <InfoItem icon={FileText} label="项目描述" value={project.describe} />
-                            <InfoItem icon={Lightbulb} label="项目亮点" value={project.highlight} />
+                            <InfoItem icon={FileText} label="项目描述" value={project.describe||"暂无..."} />
+                            <InfoItem icon={Lightbulb} label="项目亮点" value={project.highlight||"暂无..."} />
                         </div>
                     </div>
                 </CardContent>
@@ -120,7 +119,7 @@ export default function ProjectDetail() {
                                     <CarouselItem key={index}>
                                         <Card>
                                             <CardContent className="flex aspect-square items-center justify-center p-6">
-                                                <Image src={url} width={300} height={300} alt={`Project image ${index + 1}`} className="rounded-lg object-cover" />
+                                                <Image src={url} width={300} height={300} alt={`项目图片${index + 1}`} className="rounded-lg object-cover" />
                                             </CardContent>
                                         </Card>
                                     </CarouselItem>

@@ -42,7 +42,7 @@ const Toolbar = ({editor}: Props) => {
         fileInputRef.current?.click()
     };
     return (
-        <div className="border-b-2 p-1">
+        <div className="border-b-2 dark:border-slate-600 p-1">
             <input
                 type="file"
                 ref={fileInputRef}

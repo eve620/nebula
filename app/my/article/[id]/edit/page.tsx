@@ -26,7 +26,7 @@ export default function Page() {
     }
 
     async function editArticle() {
-        if(!title) {
+        if (!title) {
             showMessage("标题不能为空")
             return
         }
@@ -85,7 +85,7 @@ export default function Page() {
                                 placeholder=""
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                                className="flex h-9 w-full rounded-md border border-input dark:border-slate-600 bg-transparent px-3 py-1 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                             />
                         </div>
                         <div className="space-y-2">
@@ -109,7 +109,7 @@ export default function Page() {
                                 <button
                                     type="button"
                                     onClick={() => setIsTagListShow(!isTagListShow)}
-                                    className="flex items-center h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                                    className="flex items-center h-9 w-full rounded-md border dark:border-slate-600 bg-transparent px-3 py-1 text-base shadow-sm  placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                                 >
                                     <div className="w-11/12 text-left truncate">
                                         {currentTags.length ? (
@@ -133,7 +133,7 @@ export default function Page() {
                                         </span>
                                 </button>
                                 {isTagListShow && (
-                                    <ul className="absolute dark:ring-white bg-white dark:bg-slate-900 z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-transparent py-1 text-base shadow-lg dark:shadow-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                                    <ul className="absolute dark:ring-slate-600 bg-white dark:bg-slate-800 z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-transparent py-1 text-base shadow-lg dark:shadow-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                                         tabIndex={-1}
                                         role="listbox"
                                     >

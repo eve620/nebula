@@ -57,6 +57,18 @@ export default function PublishProject() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if(!title){
+            showMessage("标题不能为空")
+            return
+        }
+        if(!job){
+            showMessage("职责不能为空")
+            return
+        }
+        if(!describe){
+            showMessage("描述不能为空")
+            return
+        }
         const formData = new FormData()
         formData.append('title', title)
         formData.append('job', job)
@@ -101,7 +113,7 @@ export default function PublishProject() {
                         <div className="space-y-4">
                             <div>
                                 <Label htmlFor="title">标题</Label>
-                                <Input id="title" name="title" value={title} onChange={(e) => setTitle(e.target.value)}
+                                <Input id="title" name="title" value={title} className={"dark:border-slate-600"} onChange={(e) => setTitle(e.target.value)}
                                        required/>
                             </div>
                             <div className={"flex flex-col"}>
@@ -112,7 +124,7 @@ export default function PublishProject() {
                                             id="date"
                                             variant={"outline"}
                                             className={cn(
-                                                "w-full justify-start text-left font-normal",
+                                                "w-full justify-start text-left font-normal bg-transparent border dark:border-slate-600",
                                                 !date && "text-muted-foreground"
                                             )}
                                         >
@@ -148,7 +160,7 @@ export default function PublishProject() {
                             </div>
                             <div>
                                 <Label htmlFor="responsibility">职责</Label>
-                                <Input id="responsibility" name="responsibility" value={job}
+                                <Input id="responsibility" name="responsibility" value={job} className={"dark:border-slate-600"}
                                        onChange={(e) => setJob(e.target.value)} required/>
                             </div>
                         </div>
@@ -168,8 +180,8 @@ export default function PublishProject() {
                                     </div>
                                 )}
                                 <div className="flex gap-2">
-                                    <Input
-                                        value={newStack}
+                                    <Input className={"dark:border-slate-600"}
+                                           value={newStack}
                                         onChange={(e) => setNewStack(e.target.value)}
                                         onKeyDown={(e) => {
                                             if (e.key === " ") {
@@ -194,12 +206,12 @@ export default function PublishProject() {
                             </div>
                             <div>
                                 <Label htmlFor="description">描述</Label>
-                                <Textarea id="description" name="description" value={describe}
+                                <Textarea id="description" name="description" value={describe} className={"dark:border-slate-600"}
                                           onChange={(e) => setDescribe(e.target.value)} required/>
                             </div>
                             <div>
                                 <Label htmlFor="highlights">亮点</Label>
-                                <Textarea id="highlights" name="highlights" value={highlight}
+                                <Textarea id="highlights" name="highlights" value={highlight} className={"dark:border-slate-600"}
                                           onChange={(e) => setHighlight(e.target.value)} required/>
                             </div>
                         </div>
@@ -225,7 +237,7 @@ export default function PublishProject() {
                     </div>
                     {images.length > 0 && (
                         <div className="grid grid-cols-4 gap-4">
-                            <div className="col-start-2 col-span-3">
+                            <div className="col-span-3">
                                 <div className="flex gap-4">
                                     {images.map((item, index) => (
                                         <div key={index} className="relative w-24 h-24 group">
