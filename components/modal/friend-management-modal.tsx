@@ -21,6 +21,7 @@ interface Friend {
     id: string;
     nickname: string;
     username: string;
+    bio: string;
     image: string;
 }
 

@@ -8,7 +8,10 @@ export default async function getEventList() {
         const events = await prisma.event.findMany({
             where: {
                 createdById: currentUser.id,
-            }
+            },
+            orderBy: {
+                id: 'asc', // 'asc' 表示升序
+            },
         })
         return events.map((item) => {
             return {
