@@ -127,7 +127,10 @@ export function UserMenu() {
 
             <FriendManagementModal
                 isOpen={isFriendManagementModalOpen}
-                onClose={() => setIsFriendManagementModalOpen(false)}
+                onClose={() => {
+                    router.refresh()
+                    setIsFriendManagementModalOpen(false)
+                }}
             />
             <DailyCheckInModal
                 isOpen={isDailyCheckInModalOpen}
