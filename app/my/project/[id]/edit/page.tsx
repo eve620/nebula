@@ -236,41 +236,37 @@ export default function PublishProject() {
                         />
                     </div>
                     {images.length > 0 && (
-                        <div className="grid grid-cols-4 gap-4">
-                            <div className="col-span-3">
-                                <div className="flex gap-4">
-                                    {images.map((item, index) => (
-                                        <div key={index} className="relative w-24 h-24 group">
-                                            <Image
-                                                src={typeof item === "string" ? item : item.url}
-                                                alt={`Uploaded image ${index + 1}`}
-                                                fill
-                                                objectFit="cover"
-                                                className="rounded"
-                                            />
-                                            <div
-                                                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                                <button
-                                                    type="button"
-                                                    className="text-white p-1 hover:text-blue-400"
-                                                    onClick={() => setPreviewImage(typeof item === "string" ? item : item.url)}
-                                                >
-                                                    <Eye size={20}/>
-                                                    <span className="sr-only">Preview image</span>
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="text-white p-1 hover:text-red-400"
-                                                    onClick={() => handleRemoveImage(index)}
-                                                >
-                                                    <Trash2 size={20}/>
-                                                    <span className="sr-only">Delete image</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                            {images.map((item, index) => (
+                                <div key={index} className="relative w-36 h-36 mx-auto group">
+                                    <Image
+                                        src={typeof item === "string" ? item : item.url}
+                                        alt={`Uploaded image ${index + 1}`}
+                                        fill
+                                        objectFit="cover"
+                                        className="rounded"
+                                    />
+                                    <div
+                                        className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                        <button
+                                            type="button"
+                                            className="text-white p-1 hover:text-blue-400"
+                                            onClick={() => setPreviewImage(typeof item === "string" ? item : item.url)}
+                                        >
+                                            <Eye size={20}/>
+                                            <span className="sr-only">Preview image</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="text-white p-1 hover:text-red-400"
+                                            onClick={() => handleRemoveImage(index)}
+                                        >
+                                            <Trash2 size={20}/>
+                                            <span className="sr-only">Delete image</span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            ))}
                         </div>
                     )}
                 </form>

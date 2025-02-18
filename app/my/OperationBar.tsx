@@ -18,7 +18,7 @@ const OperationBar = () => {
     const currentTab = getCurrentTab()
 
     return (
-        <Tabs value={currentTab} className="w-full">
+        <Tabs value={currentTab} className="w-full min-w-fit">
             <div className="flex justify-between items-center pb-2 pr-6">
                 <TabsList className="grid w-[420px] grid-cols-3">
                     <TabsTrigger value="article" asChild>
