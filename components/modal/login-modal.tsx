@@ -73,7 +73,7 @@ export function LoginModal() {
                     setIsRegistering(false)
                 } else {
                     const message = await user.json()
-                    console.log(message)
+                    showMessage(message?.error||"注册失败")
                 }
             } else {
                 loginSchema.parse({username, password})

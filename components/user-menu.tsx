@@ -1,8 +1,8 @@
 'use client'
 
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import Image from 'next/image'
-import {useRouter} from 'next/navigation'
+import {usePathname, useRouter, useSearchParams} from 'next/navigation'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -31,11 +31,21 @@ export function UserMenu() {
     const {data: newMessage, error} = useSWR(currentUser ? '/api/check' : null, fetcher, {
         refreshInterval: 5000, // 每5秒轮询一次
     })
-    useEffect(() => {
-    }, [newMessage]);
+    const pathname = usePathname()
+    const id = Number(useSearchParams().get("id"))
     if (!newMessage || error) {
         return <div className="w-8 h-8"/>
     }
+
+    const hasNewNotifications = () => {
+        return newMessage.hasNewLike ||
+            newMessage.hasNewComment ||
+            newMessage.hasFriendRequest ||
+            (newMessage.unreadSenders.length > 0 &&
+                !(pathname === "/message/whisper" &&
+                    newMessage.unreadSenders.length === 1 &&
+                    newMessage.unreadSenders[0] === id));
+    };
 
     return (
         <>
@@ -46,7 +56,7 @@ export function UserMenu() {
                             className="w-full h-full rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80">
                             <Image src={currentUser?.image || '/avatar.png'} alt="avatar" width={100} height={100}/>
                         </div>
-                        {(newMessage.hasNewLike || newMessage.unreadSenders.length > 0 || newMessage.hasNewComment || newMessage.hasFriendRequest) && (
+                        {hasNewNotifications() && (
                             <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
                         )}
                     </div>

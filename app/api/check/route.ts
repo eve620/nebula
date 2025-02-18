@@ -34,7 +34,7 @@ export async function GET() {
     // 返回查询结果
     return NextResponse.json({
         hasFriendRequest: friendRequestCount > 0,
-        unreadSenders,
+        unreadSenders: unreadSenders || [],
         hasNewComment: newCommentCount + newChildCommentCount > 0,
         hasNewLike: newLikeCount > 0
     });
