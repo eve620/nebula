@@ -63,24 +63,30 @@ const TaskBox = ({events, setEvents, currentIndex, setCurrentIndex}) => {
                 },
                 body: JSON.stringify(newEvent)
             });
-        }, 2000)
+        }, 1000)
     };
 
-    const handleDragEnd = useCallback(async (result: DropResult) => {
+    const handleDragEnd = async (result: DropResult) => {
         if (!result.destination) return;
         const {source, destination} = result;
         const eventCopy = {
             ...events[currentIndex]
         }
-        const sourceList = [...eventCopy[source.droppableId]];
-        const destinationList = [...eventCopy[destination.droppableId]];
-        // 取出 source 位置的任务
-        const [movedTask] = sourceList.splice(source.index, 1);
-        // 将任务插入到 destination 位置
-        destinationList.splice(destination.index, 0, movedTask);
-        // 更新 eventCopy 中的 source 和 destination 列表
-        eventCopy[source.droppableId] = sourceList;
-        eventCopy[destination.droppableId] = destinationList;
+        if (source.droppableId === destination.droppableId) {
+            const sourceList = [...eventCopy[source.droppableId]];
+            [sourceList[source.index], sourceList[destination.index]] = [sourceList[destination.index], sourceList[source.index]]
+            eventCopy[source.droppableId] = sourceList;
+        } else {
+            const sourceList = [...eventCopy[source.droppableId]];
+            const destinationList = [...eventCopy[destination.droppableId]];
+            // 取出 source 位置的任务
+            const [movedTask] = sourceList.splice(source.index, 1);
+            // 将任务插入到 destination 位置
+            destinationList.splice(destination.index, 0, movedTask);
+            // 更新 eventCopy 中的 source 和 destination 列表
+            eventCopy[source.droppableId] = sourceList;
+            eventCopy[destination.droppableId] = destinationList;
+        }
         const nextEvents = events.map(event => {
             if (event.title === events[currentIndex].title) {
                 return eventCopy
@@ -89,7 +95,8 @@ const TaskBox = ({events, setEvents, currentIndex, setCurrentIndex}) => {
         })
         handleChange(eventCopy)
         setEvents(nextEvents)
-    }, [currentIndex, handleChange, events, setEvents]);
+    };
+
     return (
         <>
             <div className='flex flex-col flex-1'>
@@ -123,6 +130,7 @@ const TaskBox = ({events, setEvents, currentIndex, setCurrentIndex}) => {
                                     tag={tag}
                                     events={events}
                                     setEvents={setEvents}
+                                    handleChange={handleChange}
                                     currentIndex={currentIndex}
                                 />
                             ))

@@ -17,7 +17,7 @@ const tagTextMap = {
     completed: '已完成',
 };
 
-const Column = ({tag, currentIndex, events, setEvents}) => {
+const Column = ({tag, currentIndex, events, handleChange, setEvents}) => {
     const [isModalShow, setIsModalShow] = useState(false)
     const [newTaskName, setNewTaskName] = useState('')
     const [newTaskDetail, setNewTaskDetail] = useState('')
@@ -41,6 +41,9 @@ const Column = ({tag, currentIndex, events, setEvents}) => {
                     taskList.splice(index, 1);
                     const newEvent = {...event, [tag]: [...taskList]}
                     if (!user) updateLocalEvent(newEvent)
+                    else {
+                        handleChange(newEvent)
+                    }
                     return newEvent;
                 } else {
                     return event;
@@ -87,6 +90,9 @@ const Column = ({tag, currentIndex, events, setEvents}) => {
                 }
                 arrCopy.splice(index, 1, addTask);
                 if (!user) updateLocalEvent(addTask)
+                else {
+                    handleChange(addTask)
+                }
                 return arrCopy;
             });
         } else if (operation === 'EDIT') {
@@ -107,6 +113,9 @@ const Column = ({tag, currentIndex, events, setEvents}) => {
                         taskList.splice(index, 1, updatedTask);
                         const newEvent = {...event, [tag]: taskList}
                         if (!user) updateLocalEvent(newEvent)
+                        else {
+                            handleChange(newEvent)
+                        }
                         return newEvent;
                     } else {
                         return event;
