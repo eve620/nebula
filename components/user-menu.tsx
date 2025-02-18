@@ -43,7 +43,7 @@ export function UserMenu() {
                 <DropdownMenuTrigger asChild>
                     <div className="relative w-8 h-8" aria-expanded={null}>
                         <div
-                            className="w-full h-full bg-blue-300 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80">
+                            className="w-full h-full rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80">
                             <Image src={currentUser?.image || '/avatar.png'} alt="avatar" width={100} height={100}/>
                         </div>
                         {(newMessage.hasNewLike || newMessage.unreadSenders.length > 0 || newMessage.hasNewComment || newMessage.hasFriendRequest) && (

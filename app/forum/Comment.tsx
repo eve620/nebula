@@ -57,7 +57,7 @@ export function Comment({comment}) {
     return (
         <div className="flex">
             <div
-                className={"w-9 mt-2 h-9 bg-blue-300 rounded-full overflow-hidden mr-2"}>
+                className={"w-9 mt-2 h-9 rounded-full overflow-hidden mr-2"}>
                 <Image src={comment.createdBy?.image || '/avatar.png'} alt="avatar" width={100}
                        height={100}/>
             </div>

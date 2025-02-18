@@ -249,7 +249,7 @@ export default function MessageBox({currentId, messageList, friend, more}) {
                             </div>
                             {user?.id === message.senderId && (
                                 <div
-                                    className={"w-9 h-9 bg-blue-300 rounded-full overflow-hidden ml-2 mt-1"}>
+                                    className={"w-9 h-9 rounded-full overflow-hidden ml-2 mt-1"}>
                                     <img src={user?.image || '/avatar.png'} alt="avatar"/>
                                 </div>
                             )}

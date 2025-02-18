@@ -70,7 +70,7 @@ export default async function Page() {
                     <Link href={`/forum/${reply.articleId}`} key={reply.id}
                           className="p-4 bg-muted rounded-lg flex items-center">
                         <div
-                            className={"w-9 mt-2 h-9 bg-blue-300 rounded-full overflow-hidden mr-2"}>
+                            className={"w-9 mt-2 h-9 rounded-full overflow-hidden mr-2"}>
                             <Avatar url={reply.createdBy.image}/>
                         </div>
                         <div>
