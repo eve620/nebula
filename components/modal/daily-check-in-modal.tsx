@@ -97,7 +97,7 @@ export function DailyCheckInModal({isOpen, onClose}: DailyCheckInModalProps) {
             const isCurrentMonth = dayNumber > 0 && dayNumber <= daysInMonth
             const calendarDay = checkedInDates.find(day => {
                 const date = new Date(day)
-                return date.getMonth() === month && date.getDate() === dayNumber
+                return date.getFullYear() === year && date.getMonth() === month && date.getDate() === dayNumber
             })
 
             calendarDays.push(
