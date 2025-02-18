@@ -66,15 +66,15 @@ export default async function Page() {
     return (
         <div className="space-y-4 h-[calc(100vh-11rem)] overflow-auto px-2">
             {combinedList.length !== 0 ?
-                combinedList.map((reply) => (
-                    <Link href={`/forum/${reply.articleId}`} key={reply.id}
+                combinedList.map((reply,index) => (
+                    <Link href={`/forum/${reply.articleId}`} key={index}
                           className="p-4 bg-muted rounded-lg flex items-center">
                         <div
-                            className={"w-9 mt-2 h-9 rounded-full overflow-hidden mr-2"}>
+                            className={"w-9 mt-2 h-9 rounded-full overflow-hidden mr-2 min-w-fit"}>
                             <Avatar url={reply.createdBy.image}/>
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold">{reply.content} 回复了我的评论</h3>
+                            <h3 className="text-lg font-semibold">{reply.createdBy.nickname||reply.createdBy.username} 回复了我的评论</h3>
                             <p className="text-muted-foreground"> {reply.content}</p>
                             <p className="text-sm text-muted-foreground"> {format(reply.createdAt, "yyyy年MM月dd日 HH:mm:ss")}</p>
                         </div>
