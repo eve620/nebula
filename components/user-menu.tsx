@@ -11,7 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {User as UserIcon, Settings, LogOut, ShieldCheck, UserPlus, MessageSquareText, Calendar} from 'lucide-react'
+import {User as UserIcon, LogOut, ShieldCheck, UserPlus, MessageSquareText, Calendar} from 'lucide-react'
 import {FriendManagementModal} from "@/components/modal/friend-management-modal";
 import {DailyCheckInModal} from "@/components/modal/daily-check-in-modal";
 import {EditProfileModal} from "@/components/modal/edit-profile-modal";
