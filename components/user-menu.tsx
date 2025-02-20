@@ -99,10 +99,10 @@ export function UserMenu() {
                         <Calendar className="mr-2 h-4 w-4"/>
                         <span>每日打卡</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Settings className="mr-2 h-4 w-4"/>
-                        <span>设置</span>
-                    </DropdownMenuItem>
+                    {/*<DropdownMenuItem>*/}
+                    {/*    <Settings className="mr-2 h-4 w-4"/>*/}
+                    {/*    <span>设置</span>*/}
+                    {/*</DropdownMenuItem>*/}
                     <>
                         {currentUser?.role === "Admin" && (
                             <DropdownMenuItem onClick={() => router.push('/admin')}>

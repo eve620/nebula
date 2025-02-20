@@ -39,7 +39,7 @@ export default function RichTextEditor({content, onChange}) {
         content: content,
         editorProps: {
             attributes: {
-                class: 'py-4 px-8 leading-8 outline-none min-h-[38vh] prose dark:text-white prose-headings:dark:text-white prose-h1:text-3xl prose-h1:font-normal'
+                class: 'py-4 px-8 leading-8 outline-none min-h-[38vh] max-h-[70vh] overflow-y-auto prose dark:text-white prose-headings:dark:text-white prose-h1:text-3xl prose-h1:font-normal'
             },
             handlePaste: (view, event) => {
                 const items = Array.from(event.clipboardData?.items || [])
