@@ -3,7 +3,6 @@ import {io, Socket} from "socket.io-client";
 class SocketClient {
     private static instance: SocketClient;
     private socket: Socket | null = null;
-    private reconnectAttempts = 0;
     private readonly MAX_RECONNECT_ATTEMPTS = 5;
     private readonly RECONNECT_INTERVAL = 5000;
 
@@ -24,45 +23,8 @@ class SocketClient {
                 reconnectionAttempts: this.MAX_RECONNECT_ATTEMPTS,
                 reconnectionDelay: this.RECONNECT_INTERVAL,
             });
-
-            this.setupEventListeners();
         }
         return this.socket;
-    }
-
-    private setupEventListeners(): void {
-        if (!this.socket) return;
-
-        this.socket.on("connect", () => {
-            console.log("Socket connected successfully");
-            this.reconnectAttempts = 0;
-        });
-
-        this.socket.on("disconnect", (reason) => {
-            console.log("Socket disconnected:", reason);
-            if (reason === "io server disconnect") {
-                // 服务器主动断开连接，需要手动重连
-                this.socket?.connect();
-            }
-        });
-
-        this.socket.on("connect_error", (error) => {
-            console.error("Connection error:", error);
-            this.reconnectAttempts++;
-
-            if (this.reconnectAttempts >= this.MAX_RECONNECT_ATTEMPTS) {
-                console.error("Max reconnection attempts reached");
-                this.close();
-            }
-        });
-    }
-
-    public close(): void {
-        if (this.socket) {
-            this.socket.removeAllListeners();
-            this.socket.close();
-            this.socket = null;
-        }
     }
 
     public isConnected(): boolean {
@@ -74,6 +36,14 @@ class SocketClient {
             this.socket.emit(event, data);
         } else {
             console.warn('Socket is not connected. Message not sent:', {event, data});
+        }
+    }
+
+    public close(): void {
+        if (this.socket) {
+            this.socket.removeAllListeners();
+            this.socket.close();
+            this.socket = null;
         }
     }
 }

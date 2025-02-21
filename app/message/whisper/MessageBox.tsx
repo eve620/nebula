@@ -18,7 +18,7 @@ interface Message {
     senderId: number;
     type: "MESSAGE" | "SHARE";
     createdAt: Date;
-    pending?:boolean
+    pending?: boolean
 }
 
 export default function MessageBox({currentId, messageList, friend, more}) {
@@ -27,14 +27,13 @@ export default function MessageBox({currentId, messageList, friend, more}) {
     const user = useUser();
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
-    const socket = socketClient.getSocket();
     const [inputValue, setInputValue] = useState("");
     const router = useRouter();
     const previousScrollHeight = useRef(0)
     const formRef = useRef(null);
     const [optimisticMessages, addOptimisticMessage] = useOptimistic(
         messages,
-        (state, newMessage:Message) => [
+        (state, newMessage: Message) => [
             ...state,
             {...newMessage, pending: true}
         ]
@@ -73,7 +72,11 @@ export default function MessageBox({currentId, messageList, friend, more}) {
     }, [hasMore]);
 
     useEffect(() => {
-        if (!user || !socket || !friend) return;
+        if (!user || !friend) return;
+
+        const socket = socketClient.getSocket();
+
+        socket.emit('login', user.username);
 
         const handleMessageReceived = ({senderUsername, content, type}) => {
             if (senderUsername !== friend.username) {
@@ -95,10 +98,12 @@ export default function MessageBox({currentId, messageList, friend, more}) {
             setMessages((prev: Message[]) => [...prev, newMessage]);
         };
         socket.on("messageReceived", handleMessageReceived);
+
         return () => {
-            socket.off("messageReceived", handleMessageReceived);
+            socket.emit('logout')
+            socketClient.close()
         };
-    }, [user, friend, socket, setMessages]);
+    }, [user, friend, setMessages]);
 
     const getMessages = async (messages) => {
         const offset = messages.length;
@@ -172,8 +177,8 @@ export default function MessageBox({currentId, messageList, friend, more}) {
         });
         if (response.ok) {
             previousScrollHeight.current = 0
-            if (socket && friend && user && inputValue.trim()) {
-                socket.emit("sendMessage", {
+            if (friend && user && inputValue.trim()) {
+                socketClient.emit("sendMessage", {
                     senderUsername: user.username,
                     receiverUsername: friend.username,
                     content: inputValue,

@@ -66,7 +66,12 @@ export default function ArticleContent() {
                 variant="outline"
                 size="sm"
                 className="mb-4"
-                onClick={() => router.back()}
+                onClick={() => {
+                    router.back()
+                    setTimeout(() => {
+                        router.refresh()
+                    }, 100)
+                }}
             >
                 <ArrowLeft className="mr-2 h-4 w-4"/>
                 返回

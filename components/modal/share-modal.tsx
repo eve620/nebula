@@ -20,19 +20,24 @@ interface ShareModalProps {
 export function ShareModal({isOpen, onClose}: ShareModalProps) {
     const [selectedFriend, setSelectedFriend] = useState<Friend>()
     const [friends, setFriends] = useState<Friend[]>([])
-    const socket = socketClient.getSocket()
     const user = useUser()
     useEffect(() => {
-        // 这里应该有实际的获取好友列表的逻辑
+        if (!isOpen || !user) return
         const fetchFriends = async () => {
             const response = await fetch("/api/user/friend")
             const res = await response.json()
             setFriends(res)
         }
+        const socket = socketClient.getSocket()
 
-        if (isOpen) {
-            fetchFriends()
-        }
+        socket.emit('login', user.username);
+
+        fetchFriends()
+
+        return () => {
+            socket.emit('logout')
+            socketClient.close()
+        };
     }, [isOpen])
 
     const handleShare = async () => {
@@ -46,7 +51,7 @@ export function ShareModal({isOpen, onClose}: ShareModalProps) {
         })
         if (response.ok) {
             showMessage("分享成功！")
-            socket.emit("sendMessage", {
+            socketClient.emit("sendMessage", {
                 senderUsername: user.username,
                 receiverUsername: selectedFriend.username,
                 content: url,

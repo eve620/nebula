@@ -29,7 +29,7 @@ export function UserMenu() {
     const [isDailyCheckInModalOpen, setIsDailyCheckInModalOpen] = useState(false)
     const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false); // Add state for EditProfileModal
     const {data: newMessage, error} = useSWR(currentUser ? '/api/check' : null, fetcher, {
-        refreshInterval: 5000, // 每5秒轮询一次
+        refreshInterval:3000, // 每3秒轮询一次
     })
     const pathname = usePathname()
     const id = Number(useSearchParams().get("id"))

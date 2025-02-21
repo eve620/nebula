@@ -37,14 +37,17 @@ interface FriendManagementModalProps {
     onClose: () => void
 }
 
+
 export function FriendManagementModal({isOpen, onClose}: FriendManagementModalProps) {
     const [friendAccount, setFriendAccount] = useState('')
     const [friends, setFriends] = useState<Friend[]>([])
     const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([])
     const user = useUser()
-    const socket = socketClient.getSocket()
     useEffect(() => {
-        if (!user || !socket) return
+        if (!user || !isOpen) return
+
+        const socket = socketClient.getSocket()
+
         socket.emit('login', user.username);
 
         socket.on('friendRequestReceived', () => {
@@ -58,9 +61,10 @@ export function FriendManagementModal({isOpen, onClose}: FriendManagementModalPr
         });
 
         return () => {
-            socket.emit('logout');
+            socket.emit('logout')
+            socketClient.close()
         };
-    }, [user, socket]);
+    }, [isOpen, user]);
     useEffect(() => {
         if (isOpen) {
             getFriendRequestList()
@@ -95,7 +99,7 @@ export function FriendManagementModal({isOpen, onClose}: FriendManagementModalPr
 
         const res = await response.json()
         if (response.ok) {
-            socket.emit('sendFriendRequest', {
+            socketClient.emit('sendFriendRequest', {
                 senderUsername: user?.username,
                 receiverUsername: friendAccount
             })
@@ -127,7 +131,7 @@ export function FriendManagementModal({isOpen, onClose}: FriendManagementModalPr
         const res = await response.json()
         if (response.ok) {
             initData()
-            socket.emit('acceptFriendRequest', {
+            socketClient.emit('acceptFriendRequest', {
                 receiverUsername: username
             })
             showMessage(res.message)
@@ -206,7 +210,8 @@ export function FriendManagementModal({isOpen, onClose}: FriendManagementModalPr
                                                     width={30} height={30}
                                                     className="rounded-full"
                                                 />
-                                                <span className={'w-20 truncate'}>{request.nickname || request.username}</span>
+                                                <span
+                                                    className={'w-20 truncate'}>{request.nickname || request.username}</span>
                                             </div>
                                             <div>
                                                 <Button variant="outline" size="sm" className="mr-2"
