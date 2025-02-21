@@ -90,7 +90,7 @@ export default function ArticleContent() {
                 <Viewer content={article?.content || ""}/>
                 <div className="flex items-center space-x-4 mb-6">
                     <Button variant="outline" size="sm" onClick={handleLike}>
-                        <ThumbsUp className={`mr-2 h-4 w-4 ${article?.isLiked && "text-red-600"} dark:fill-red-700`}/>
+                        <ThumbsUp className={`mr-2 h-4 w-4 ${article?.isLiked && "text-red-600 dark:fill-red-700"}`}/>
                         {article?._count.likes}
                     </Button>
                     <Button variant="outline" size="sm" onClick={scrollToComment}>

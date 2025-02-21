@@ -14,7 +14,9 @@ const SideBar = () => {
     const currentTab = pathname.split('/').pop() || "whisper"
 
     useEffect(() => {
-        mutate("/api/check")
+        setTimeout(() => {
+            mutate("/api/check")
+        }, 300)
     }, [pathname]);
 
 
