@@ -96,7 +96,7 @@ export default function PublishProject() {
         })
 
         if (request.ok) {
-            showMessage("添加成功！")
+            showMessage("编辑成功！")
             router.push("/my/project")
             router.refresh()
         }

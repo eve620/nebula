@@ -141,7 +141,7 @@ function InfoItem({ icon: Icon, label, value }) {
             <Icon className="w-5 h-5 mt-1 text-muted-foreground" />
             <div>
                 <h3 className="font-semibold text-lg">{label}</h3>
-                <div className="text-sm text-muted-foreground">{value}</div>
+                <div className="text-sm text-muted-foreground text-wrap">{value}</div>
             </div>
         </div>
     )

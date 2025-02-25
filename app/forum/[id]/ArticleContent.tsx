@@ -12,7 +12,9 @@ import showMessage from "@/components/message";
 import {useArticle} from "@/contexts/article-context";
 import {CommentList} from "@/app/forum/CommentList";
 
-export default function ArticleContent() {
+export default function ArticleContent({isLiked, likeCount}) {
+    const [like, setLike] = useState(isLiked)
+    const [count, setCount] = useState(likeCount)
     const router = useRouter()
     const article = useArticle()
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
@@ -28,7 +30,12 @@ export default function ArticleContent() {
                 })
             })
             if (response.ok) {
-                router.refresh()
+                if (like) {
+                    setCount(count - 1)
+                } else {
+                    setCount(count + 1)
+                }
+                setLike(!like)
             }
         } else {
             showMessage("请先登录")
@@ -90,8 +97,8 @@ export default function ArticleContent() {
                 <Viewer content={article?.content || ""}/>
                 <div className="flex items-center space-x-4 mb-6">
                     <Button variant="outline" size="sm" onClick={handleLike}>
-                        <ThumbsUp className={`mr-2 h-4 w-4 ${article?.isLiked && "text-red-600 dark:fill-red-700"}`}/>
-                        {article?._count.likes}
+                        <ThumbsUp className={`mr-2 h-4 w-4 ${like && "text-red-600 dark:fill-red-700"}`}/>
+                        {count}
                     </Button>
                     <Button variant="outline" size="sm" onClick={scrollToComment}>
                         <MessageSquare className="mr-2 h-4 w-4"/>

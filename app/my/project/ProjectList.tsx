@@ -43,10 +43,10 @@ const ProjectList = ({projectList}) => {
                                                       key={index}>{stack}</span>)
                                         })}
                                     </div>
-                                    <div className={"truncate"}>
+                                    <div className={"text-wrap truncate line-clamp-3"}>
                                         <p>{item.describe}</p>
                                     </div>
-                                    <div className={"mt-4 truncate"}>
+                                    <div className={"mt-4 text-wrap truncate line-clamp-3"}>
                                         <p>{item.highlight}</p>
                                     </div>
                                     <div className={"my-4"}/>
@@ -74,9 +74,9 @@ const ProjectList = ({projectList}) => {
             }
             <Modal isOpen={previewImage} autofocus={false} description={previewTitle}
                    onClose={() => {
-                setPreviewImage(false)
-                setImageIndex(0)
-            }} title="图片展示">
+                       setPreviewImage(false)
+                       setImageIndex(0)
+                   }} title="图片展示">
                 <div className="flex justify-center">
                     <Image
                         src={images[imageIndex]}
