@@ -43,10 +43,10 @@ const ProjectList = ({projectList}) => {
                                                       key={index}>{stack}</span>)
                                         })}
                                     </div>
-                                    <div className={""}>
+                                    <div className={"truncate"}>
                                         <p>{item.describe}</p>
                                     </div>
-                                    <div className={"mt-4"}>
+                                    <div className={"mt-4 truncate"}>
                                         <p>{item.highlight}</p>
                                     </div>
                                     <div className={"my-4"}/>
