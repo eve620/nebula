@@ -3,7 +3,7 @@ import {prisma} from "@/lib/prisma";
 import {ArticleProvider} from "@/contexts/article-context";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import ArticleContent from "@/app/forum/[id]/ArticleContent";
-import NotFound from "@/app/not-found";
+import {notFound} from "next/navigation";
 
 export default async function Page({params}) {
     const {id} = await params
@@ -29,8 +29,7 @@ export default async function Page({params}) {
         },
     });
     if (!article) {
-        return <NotFound/>
-
+        notFound()
     }
     // 单独查询点赞数
     const likeCount = await prisma.like.count({
