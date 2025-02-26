@@ -22,7 +22,6 @@ export default function ProjectDetail() {
     const project = useProject()
     const router = useRouter()
     const { id } = useParams()
-
     if (!project) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>
     }

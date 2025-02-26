@@ -7,11 +7,11 @@ export function Footer() {
             <div className="max-w-6xl mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div>
-                        <h4 className="text-xl font-bold mb-4">关于我</h4>
+                        <div className="text-xl font-bold mb-4">关于我</div>
                         <p className="text-muted-foreground">一个热爱技术的开发者，专注于前端与全栈开发。</p>
                     </div>
                     <div>
-                        <h4 className="text-xl font-bold mb-5">快速链接</h4>
+                        <div className="text-xl font-bold mb-5">快速链接</div>
                         <ul className="flex justify-center space-x-4">
                             <li><Link href={"/forum"}
                                       className="text-muted-foreground hover:text-foreground">论坛</Link></li>
@@ -24,7 +24,7 @@ export function Footer() {
                         </ul>
                     </div>
                     <div>
-                        <h4 className="text-xl font-bold mb-4">关注我</h4>
+                        <div className="text-xl font-bold mb-4">关注我</div>
                         <div className="flex justify-center space-x-4 mb-4">
                             <Link href={"https://gitee.com/suzvc"} target={"_blank"}
                                   className="text-muted-foreground hover:text-foreground">

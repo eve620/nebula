@@ -48,7 +48,7 @@ export default function Navigate() {
                       }}
                       className="bg-card p-6 rounded-lg shadow-lg dark:shadow-slate-800 hover:bg-accent transition-transform hover:transition ease-in-out hover:-translate-y-1">
                     <div className="text-4xl mb-4">{item.icon}</div>
-                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                    <div className="text-xl font-bold mb-2">{item.title}</div>
                     <p className="text-muted-foreground">{item.description}</p>
                 </Link>
             ))}
