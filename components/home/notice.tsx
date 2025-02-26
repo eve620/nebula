@@ -1,30 +1,28 @@
-"use client"
-import React, {useRef, useState} from "react";
-import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/internal/hooks/use-on-click-outside";
-import {useUser} from "@/contexts/user-context";
-import NoticePublish from "@/components/home/notice-publish";
-import {Notice as NoticeType} from "@/types";
+import React from "react";
+// import {useOnClickOutside} from "next/dist/client/components/react-dev-overlay/internal/hooks/use-on-click-outside";
+// import {useUser} from "@/contexts/user-context";
+// import NoticePublish from "@/components/home/notice-publish";
+// import {Notice as NoticeType} from "@/types";
 import {format} from "date-fns";
+import getNoticeList from "@/app/actions/getNoticeList";
 
-interface DevLogProps {
-    notices: NoticeType[]
-}
+export default async function Notice() {
+    const notices = await getNoticeList()
 
-const Notice: React.FC<DevLogProps> = ({notices}) => {
-    const currentUser = useUser()
-    const [isAdd, setIsAdd] = useState(false)
-    const addRef = useRef(null)
-
-    useOnClickOutside(addRef.current, () => {
-        if (isAdd) setIsAdd(false)
-    })
+    // const currentUser = useUser()
+    // const [isAdd, setIsAdd] = useState(false)
+    // const addRef = useRef(null)
+    //
+    // useOnClickOutside(addRef.current, () => {
+    //     if (isAdd) setIsAdd(false)
+    // })
 
     return (
         <div className="mx-auto max-w-6xl">
-            {(notices.length !== 0 || currentUser?.role === "Admin") && (
+            {notices.length !== 0 && (
                 <h2 className="text-4xl font-bold mb-12 text-center">更新日志</h2>
             )}
-            {currentUser?.role === "Admin" && <NoticePublish/>}
+            {/*{currentUser?.role === "Admin" && <NoticePublish/>}*/}
             <div className="flex justify-center flex-wrap">
                 {notices.map((notice, index) => (
                     <div key={index} className="md:w-1/2 lg:w-1/3 xl:w-1/4 p-2 md:p-3">
@@ -52,5 +50,3 @@ const Notice: React.FC<DevLogProps> = ({notices}) => {
         </div>
     )
 }
-
-export default Notice

@@ -6,7 +6,6 @@ import React from "react";
 import {notoSansSC} from "@/app/fonts";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import {UserProvider} from "@/contexts/user-context";
-import {Toaster} from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
     title: {
@@ -36,7 +35,6 @@ export default async function RootLayout({children,}: { children: React.ReactNod
                 {children}
             </main>
         </UserProvider>
-        <Toaster/>
         </body>
         </html>
     )

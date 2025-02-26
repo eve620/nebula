@@ -7,7 +7,7 @@ import {useSearchParams} from "next/navigation";
 import showMessage from "@/components/message";
 import {useEffect} from "react";
 
-export default function Banner({bgImage}) {
+export default function Banner() {
     const searchParams = useSearchParams()
 
     useEffect(() => {
@@ -33,16 +33,14 @@ export default function Banner({bgImage}) {
     return (
         <div className={"group"}>
             <div className="absolute inset-0 z-0 overflow-hidden">
-                {bgImage &&
-                    <Image
-                        src={bgImage}
-                        alt="Cyberpunk city background"
-                        fill
-                        priority={true}
-                        style={{objectFit: "cover"}}
-                        className="opacity-95 dark:opacity-60 group-hover:scale-105 transition-transform duration-700"
-                    />
-                }
+                <Image
+                    src={"/bg/bg6.jpeg"}
+                    alt="Cyberpunk city background"
+                    fill
+                    priority={true}
+                    style={{objectFit: "cover"}}
+                    className="opacity-95 dark:opacity-60 group-hover:scale-105 transition-transform duration-700"
+                />
             </div>
             <div className="relative z-10 text-center">
                 <h1 className="text-6xl font-bold mb-4 animate-pulse">NEBULA</h1>

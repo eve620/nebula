@@ -3,6 +3,8 @@ import {UserManagement} from '@/components/admin/user-management'
 import {ArticleManagement} from '@/components/admin/article-management'
 import {TagManagement} from "@/components/admin/tag-management";
 import {Metadata} from "next";
+import {Toaster} from "@/components/ui/toaster";
+import React from "react";
 export const metadata: Metadata = {
     title: "后台",
 }
@@ -27,6 +29,7 @@ export default function AdminDashboard() {
                         <TagManagement/>
                     </TabsContent>
                 </Tabs>
+                <Toaster/>
             </main>
         </div>
     )
