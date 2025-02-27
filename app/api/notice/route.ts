@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
+import {revalidateTag} from "next/cache";
 
 export async function GET() {
     try {
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
                 title
             }
         });
+        revalidateTag("notices")
         return NextResponse.json({message: "添加成功"});
     } catch {
         throw new Error("服务器出错")

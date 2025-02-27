@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {prisma} from "@/lib/prisma";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import {revalidateTag} from "next/cache";
 
 export async function GET() {
     const articles = await prisma.article.findMany({
@@ -21,7 +22,9 @@ export async function POST(request: Request) {
     const article = await prisma.article.create({
         data: {title, content, tags, createdById: currentUser.id},
     })
-
+    if (article) {
+        revalidateTag("article" + article.id)
+    }
     return NextResponse.json(article, {status: 201})
 }
 
@@ -44,6 +47,9 @@ export async function PUT(request: Request) {
         },
         data: {title, content, tags, createdById: currentUser.id},
     })
+    if (article) {
+        revalidateTag("article" + article.id)
+    }
 
     return NextResponse.json(article, {status: 201})
 }
@@ -59,6 +65,8 @@ export async function DELETE(request: NextRequest) {
                 createdById: currentUser.id
             }
         })
+        revalidateTag("article" + id)
+
         return NextResponse.json({message: "删除成功"});
     } catch {
         throw new Error("删除错误")

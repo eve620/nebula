@@ -14,7 +14,7 @@ import {CommentList} from "@/app/forum/CommentList";
 
 export default function ArticleContent({isLiked, likeCount}) {
     const [like, setLike] = useState(isLiked)
-    const [count, setCount] = useState(likeCount)
+    const [count, setCount] = useState(likeCount || 0)
     const router = useRouter()
     const article = useArticle()
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
