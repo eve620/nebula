@@ -18,6 +18,7 @@ export default async function Page({searchParams}) {
                     image: true,
                     username: true,
                     nickname: true,
+                    bio:true
                 }
             },
         }

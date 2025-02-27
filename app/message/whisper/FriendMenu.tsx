@@ -7,6 +7,7 @@ import useSWR from "swr";
 
 export default function FriendMenu({currentId, friendList}) {
     const {data} = useSWR("/api/check")
+    console.log(friendList)
     return (
         <div className="w-full md:w-80 border-r">
             <div className="p-4 border-b ">

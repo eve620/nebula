@@ -111,14 +111,14 @@ export default function ProjectDetail() {
                     <CardHeader>
                         <CardTitle className="text-2xl font-semibold">项目展示</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <Carousel className="w-full max-w-xl mx-auto">
+                    <CardContent className={"mx-10"}>
+                        <Carousel className="w-full min-w-fit">
                             <CarouselContent>
                                 {project.imageUrl.map((url, index) => (
-                                    <CarouselItem key={index}>
+                                    <CarouselItem key={index}  className="flex items-center">
                                         <Card>
-                                            <CardContent className="flex aspect-square items-center justify-center p-6">
-                                                <Image src={url} width={300} height={300} alt={`项目图片${index + 1}`} className="rounded-lg object-cover" />
+                                            <CardContent>
+                                                <Image src={url} width={2000} height={10} alt={`项目图片${index + 1}`} className="rounded-lg object-cover" />
                                             </CardContent>
                                         </Card>
                                     </CarouselItem>

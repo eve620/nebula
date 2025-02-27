@@ -75,7 +75,9 @@ const ProjectList = ({projectList}) => {
             <Modal isOpen={previewImage} autofocus={false} description={previewTitle}
                    onClose={() => {
                        setPreviewImage(false)
-                       setImageIndex(0)
+                       setTimeout(()=>{
+                           setImageIndex(0)
+                       },200)
                    }} title="图片展示">
                 <div className="flex justify-center">
                     <Image
