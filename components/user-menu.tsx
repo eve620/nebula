@@ -54,7 +54,12 @@ export function UserMenu() {
                     <div className="relative w-8 h-8" aria-expanded={null}>
                         <div
                             className="w-full h-full rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-80">
-                            <Image src={currentUser?.image || '/avatar.png'} alt="avatar" width={100} height={100}/>
+                            <Image src={currentUser?.image || '/avatar.png'}
+                                   alt="avatar" width={100} height={100}
+                                   placeholder={"blur"}
+                                   priority={true}
+                                   blurDataURL={'/avatar.png'}
+                            />
                         </div>
                         {hasNewNotifications() && (
                             <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>

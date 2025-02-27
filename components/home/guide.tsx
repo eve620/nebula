@@ -8,6 +8,7 @@ const Guide: React.FC = () => {
             <div className="overflow-hidden">
                 <Image className={"mx-auto mt-2 rounded-md"} width={150} height={150}
                        src={"/storage/avatar/avatar1.jpg"}
+                       loading={'lazy'}
                        alt={"picture"}/>
                 <p className={"text-center text-xl leading-loose font-semibold"}>开始使用Nebula</p>
                 <p className={"text-center text leading-loose font-semibold"}>探索知识的宇宙</p>
