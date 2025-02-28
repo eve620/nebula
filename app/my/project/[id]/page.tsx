@@ -137,7 +137,7 @@ export default function ProjectDetail() {
 function InfoItem({ icon: Icon, label, value }) {
     return (
         <div className="flex items-start space-x-3">
-            <Icon className="w-5 h-5 mt-1 text-muted-foreground" />
+            <Icon className="min-w-5 min-h-5 mt-1 text-muted-foreground" />
             <div>
                 <h3 className="font-semibold text-lg">{label}</h3>
                 <div className="text-sm text-muted-foreground text-wrap">{value}</div>
