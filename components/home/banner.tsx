@@ -31,15 +31,15 @@ export default function Banner() {
         }
     }
     return (
-        <div className={"group"}>
+        <div className={""}>
             <div className="absolute inset-0 z-0 overflow-hidden">
                 <Image
                     src={"/bg/bg6.jpeg"}
-                    alt="Cyberpunk city background"
+                    alt="background"
                     fill
                     priority={true}
                     style={{objectFit: "cover"}}
-                    className="opacity-95 dark:opacity-60 group-hover:scale-105 transition-transform duration-700"
+                    className="opacity-95 dark:opacity-60"
                 />
             </div>
             <div className="relative z-10 text-center">
@@ -52,5 +52,26 @@ export default function Banner() {
                 </Button>
             </div>
         </div>
+        // <div className={"group"}>
+        //     <div className="absolute inset-0 z-0 overflow-hidden">
+        //         <Image
+        //             src={"/bg/bg6.jpeg"}
+        //             alt="Cyberpunk city background"
+        //             fill
+        //             priority={true}
+        //             style={{objectFit: "cover"}}
+        //             className="opacity-95 dark:opacity-60 group-hover:scale-105 transition-transform duration-700"
+        //         />
+        //     </div>
+        //     <div className="relative z-10 text-center">
+        //         <h1 className="text-6xl font-bold mb-4 animate-pulse">NEBULA</h1>
+        //         <p className="text-xl mb-8">
+        //             <AnimatedText text="探索知识的海洋"/>
+        //         </p>
+        //         <Button onClick={scrollToDemo}>
+        //             开始体验
+        //         </Button>
+        //     </div>
+        // </div>
     );
 }

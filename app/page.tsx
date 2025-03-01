@@ -12,7 +12,7 @@ export default async function Home() {
     return (
         <div className="min-h-screen bg-background text-foreground">
             {/* Banner Section */}
-            <section className="relative h-[calc(100vh-4rem)] flex items-center justify-center bg-background">
+            <section className="relative max-h-[calc(100vh-4rem)] h-[100vh] flex items-center justify-center bg-background">
                 <Banner/>
             </section>
             {/* Features Section */}
