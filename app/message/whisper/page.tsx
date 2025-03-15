@@ -18,16 +18,24 @@ export default async function Page({searchParams}) {
                     image: true,
                     username: true,
                     nickname: true,
-                    bio:true
+                    bio: true
                 }
             },
         }
     }) || []
     const friendList = friends.map(item => item.friend)
-    const friend = friendList.find(item => item.id === Number(id))
+    let friend = friendList.find(item => item.id === Number(id))
+    if (id === "0") {
+        friend = {
+            id: 0,
+            username: "小星云",
+            nickname: "小星云",
+            image: "/star.png",
+        }
+    }
     let messages = []
     let totalCount = 0
-    if (id) {
+    if (id && id !== "0") {
         messages = await prisma.message.findMany({
             where: {
                 OR: [

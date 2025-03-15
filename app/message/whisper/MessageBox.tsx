@@ -165,6 +165,49 @@ export default function MessageBox({currentId, messageList, friend, more}) {
             type: "MESSAGE",
         }
         addOptimisticMessage(newMessage)
+        if (currentId === "0") {
+            const history = messages.map(item => ({
+                role: item.senderId === user?.id ? "user" : "model",
+                parts: [{
+                    text: item.content
+                }]
+            }))
+            history.push({
+                role: "user",
+                parts: [{
+                    text: inputValue.trim()
+                }]
+            })
+            try {
+                const res = await fetch(process.env.NEXT_PUBLIC_CHAT_API, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        contents: history
+                    })
+                })
+                const data = await res.json()
+                if (!res.ok) throw new Error(data.error.message || "Something went wrong!")
+                setMessages((prev) => [
+                    ...prev,
+                    newMessage,
+                    {
+                        id: Date.now(),
+                        content: data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, "$1").trim(),
+                        senderId: Number(currentId),
+                        createdAt: new Date(),
+                        type: "MESSAGE",
+                    }
+                ]);
+                setTimeout(() => {
+                    scrollToBottom()
+                }, 0)
+            } catch (error) {
+                console.log(error)
+            }
+            return
+        }
+        addOptimisticMessage(newMessage)
         setTimeout(() => {
             scrollToBottom()
         }, 0)
@@ -249,7 +292,7 @@ export default function MessageBox({currentId, messageList, friend, more}) {
                                 )}
                                 <div className="text-xs mt-1 opacity-70">
                                     {format(message.createdAt, "MM月dd日 HH:mm:ss")}
-                                    {message?.pending && " (发送中...)"}
+                                    {message?.pending && message.senderId === user?.id && " (发送中...)"}
                                 </div>
                             </div>
                             {user?.id === message.senderId && (
